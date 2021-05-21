@@ -27,9 +27,10 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:id="@+id/tv_title_main"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
+            android:layout_marginStart="10dp"
 
             android:fontFamily="@font/roboto_medium"
             android:text="@string/app_name"
