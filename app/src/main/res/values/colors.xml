@@ -7,4 +7,12 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="yellow_primary">#F3CE13</color>
+
+    <color name="black_primary">#1B1B1B</color>
+    <color name="black_taskbar">#141414</color>
+
+    <color name="gray_primary">#9F9F9F</color>
+
 </resources>

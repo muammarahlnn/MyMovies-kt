@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">MyMovies</string>
+    <string name="movies">Movies</string>
+    <string name="recent">Recent</string>
+    <string name="favorite">Favorite</string>
+    <string name="home">Home</string>
 </resources>

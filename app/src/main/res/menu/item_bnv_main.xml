@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/item_movies_main"
+        android:title="@string/home"
+        android:icon="@drawable/ic_home_yellow"
+        />
+
+    <item
+        android:id="@+id/item_recent_main"
+        android:title="@string/recent"
+        android:icon="@drawable/ic_recent_yellow"
+        />
+
+    <item
+        android:id="@+id/item_favorite_main"
+        android:title="@string/favorite"
+        android:icon="@drawable/ic_love_yellow"
+        />
+
+</menu>
