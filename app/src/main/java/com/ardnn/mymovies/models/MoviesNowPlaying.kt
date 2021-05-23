@@ -1,7 +1,10 @@
 package com.ardnn.mymovies.models
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class MoviesNowPlaying(
     @SerializedName("title")
     var title: String,
@@ -20,4 +23,4 @@ data class MoviesNowPlaying(
 
     @SerializedName("vote_average")
     var vote: Double
-)
+) : Parcelable

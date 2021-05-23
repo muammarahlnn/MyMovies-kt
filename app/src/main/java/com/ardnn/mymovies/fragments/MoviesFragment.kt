@@ -1,5 +1,6 @@
 package com.ardnn.mymovies.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,6 +10,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ardnn.mymovies.R
+import com.ardnn.mymovies.activities.DetailActivity
 import com.ardnn.mymovies.adapters.MoviesNowPlayingAdapter
 import com.ardnn.mymovies.helpers.Const
 import com.ardnn.mymovies.models.MoviesNowPlaying
@@ -80,7 +82,10 @@ class HomeFragment : Fragment(), MoviesNowPlayingAdapter.OnItemClick {
     }
 
     override fun onClick(position: Int) {
-        TODO("Not yet implemented")
+        // move to detail activity
+        val goToDetail = Intent(activity, DetailActivity::class.java)
+        goToDetail.putExtra(DetailActivity.EXTRA_MOVIE, movieList[position])
+        startActivity(goToDetail)
     }
 
 
