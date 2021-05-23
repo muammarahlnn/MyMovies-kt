@@ -8,7 +8,7 @@ import android.os.Looper
 import android.widget.ImageView
 import android.widget.TextView
 import com.ardnn.mymovies.R
-import com.ardnn.mymovies.utilities.Animation
+import com.ardnn.mymovies.helpers.Animation
 
 class SplashActivity : AppCompatActivity() {
     // classes

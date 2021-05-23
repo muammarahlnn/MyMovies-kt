@@ -1,4 +1,4 @@
-package com.ardnn.mymovies.utilities
+package com.ardnn.mymovies.helpers
 
 import android.content.Context
 import android.view.animation.Animation
