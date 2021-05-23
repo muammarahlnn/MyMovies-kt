@@ -4,7 +4,7 @@ import com.ardnn.mymovies.helpers.Const
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class MoviesNowPlayingApiClient {
+object MoviesNowPlayingApiClient {
     val retrofit: Retrofit
         get() {
             return Retrofit.Builder()

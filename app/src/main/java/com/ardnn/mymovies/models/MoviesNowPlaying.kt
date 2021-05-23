@@ -19,5 +19,5 @@ data class MoviesNowPlaying(
     var wallpaperUrl: String,
 
     @SerializedName("vote_average")
-    var vote: String
+    var vote: Double
 )
