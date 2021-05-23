@@ -74,6 +74,7 @@
                     android:id="@+id/iv_poster_detail"
                     android:layout_width="match_parent"
                     android:layout_height="150dp"
+                    android:scaleType="centerCrop"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -165,10 +166,12 @@
                 android:id="@+id/tv_synopsis_detail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="12dp"
+                android:paddingVertical="12dp"
+                android:paddingHorizontal="16dp"
                 android:fontFamily="@font/roboto_regular"
                 android:textColor="@color/white"
                 android:textSize="15sp"
+                android:lineSpacingExtra="5dp"
                 tools:text="haha wkwk lol\nini synopsis\nlorem bgsd" />
 
         </LinearLayout>

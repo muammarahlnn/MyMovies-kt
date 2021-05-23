@@ -2,11 +2,13 @@ package com.ardnn.mymovies.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import com.ardnn.mymovies.R
-import com.ardnn.mymovies.helpers.Const
+import com.ardnn.mymovies.helpers.Utils
 import com.ardnn.mymovies.models.MoviesNowPlaying
 import com.bumptech.glide.Glide
 
@@ -67,7 +69,7 @@ class DetailActivity : AppCompatActivity() {
         // list -> [title, releaseDate, synopsis, vote, wallpaperUrl, posterUrl]
         val movieData = listOf(
             movie.title,
-            movie.releaseDate,
+            Utils.convertToDate(movie.releaseDate),
             movie.synopsis,
             movie.vote.toString(),
             movie.wallpaperUrl,
@@ -80,10 +82,11 @@ class DetailActivity : AppCompatActivity() {
         tvSynopsis.text = movieData[2]
         tvVote.text = movieData[3]
         Glide.with(this)
-            .load("${Const.IMG_URL_500}${movieData[4]}")
+            .load("${Utils.IMG_URL_500}${movieData[4]}")
             .into(ivWallpaper)
         Glide.with(this)
-            .load("${Const.IMG_URL_300}${movieData[5]}")
+            .load("${Utils.IMG_URL_300}${movieData[5]}")
             .into(ivPoster)
+
     }
 }

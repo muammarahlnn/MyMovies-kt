@@ -4,7 +4,7 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
 data class MoviesNowPlayingResponse(
-    @SerializedName("result")
+    @SerializedName("results")
     @Expose
-    var moviesNowPlayingList: List<MoviesNowPlaying>?
+    val moviesNowPlayingList: List<MoviesNowPlaying>?
 )

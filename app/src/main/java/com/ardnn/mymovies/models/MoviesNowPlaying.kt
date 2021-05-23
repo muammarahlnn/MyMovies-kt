@@ -7,20 +7,20 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class MoviesNowPlaying(
     @SerializedName("title")
-    var title: String,
+    val title: String,
 
     @SerializedName("release_date")
-    var releaseDate: String,
+    val releaseDate: String,
 
     @SerializedName("overview")
-    var synopsis: String,
+    val synopsis: String,
 
     @SerializedName("poster_path")
-    var posterUrl: String,
+    val posterUrl: String,
 
     @SerializedName("backdrop_path")
-    var wallpaperUrl: String,
+    val wallpaperUrl: String,
 
     @SerializedName("vote_average")
-    var vote: Double
+    val vote: Double
 ) : Parcelable

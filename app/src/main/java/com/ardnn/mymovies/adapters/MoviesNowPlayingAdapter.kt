@@ -7,7 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.ardnn.mymovies.R
-import com.ardnn.mymovies.helpers.Const
+import com.ardnn.mymovies.helpers.Utils
 import com.ardnn.mymovies.models.MoviesNowPlaying
 import com.bumptech.glide.Glide
 
@@ -33,11 +33,11 @@ class MoviesNowPlayingAdapter(movieList: List<MoviesNowPlaying>, onItemClick: On
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         // set data from MoviesNowPlaying to widgets on item_rv_films
         Glide.with(holder.itemView.context)
-            .load("${Const.IMG_URL_300}${movieList[position].posterUrl}")
+            .load("${Utils.IMG_URL_300}${movieList[position].posterUrl}")
             .into(holder.ivPoster)
         holder.tvTitle.text = movieList[position].title
-        holder.tvTitle.text = movieList[position].releaseDate.substring(0, 4)
-        holder.tvTitle.text = movieList[position].vote.toString()
+        holder.tvYear.text = movieList[position].releaseDate.substring(0, 4)
+        holder.tvVote.text = movieList[position].vote.toString()
     }
 
     override fun getItemCount(): Int {

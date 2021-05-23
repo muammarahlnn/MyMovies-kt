@@ -6,13 +6,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ardnn.mymovies.R
 import com.ardnn.mymovies.activities.DetailActivity
 import com.ardnn.mymovies.adapters.MoviesNowPlayingAdapter
-import com.ardnn.mymovies.helpers.Const
+import com.ardnn.mymovies.helpers.Utils
 import com.ardnn.mymovies.models.MoviesNowPlaying
 import com.ardnn.mymovies.models.MoviesNowPlayingResponse
 import com.ardnn.mymovies.networks.MoviesNowPlayingApiClient
@@ -28,6 +29,7 @@ class HomeFragment : Fragment(), MoviesNowPlayingAdapter.OnItemClick {
 
     // widgets
     private lateinit var rvMovies: RecyclerView
+    private lateinit var pbMovies: ProgressBar
 
     // attributes
     private lateinit var movieList: List<MoviesNowPlaying>
@@ -41,6 +43,7 @@ class HomeFragment : Fragment(), MoviesNowPlayingAdapter.OnItemClick {
 
         // initialize widgets
         rvMovies = view.findViewById(R.id.rv_movies)
+        pbMovies = view.findViewById(R.id.pb_movies)
 
         // set recyclerview layout
         rvMovies.layoutManager = GridLayoutManager(activity, 2)
@@ -56,7 +59,7 @@ class HomeFragment : Fragment(), MoviesNowPlayingAdapter.OnItemClick {
             .create(MoviesNowPlayingApiInterface::class.java)
 
         val moviesNowPlayingResponseCall: Call<MoviesNowPlayingResponse> =
-            moviesNowPlayingApiInterface.getMoviesNowPlaying(Const.API_KEY)
+            moviesNowPlayingApiInterface.getMoviesNowPlaying(Utils.API_KEY)
         moviesNowPlayingResponseCall.enqueue(object : Callback<MoviesNowPlayingResponse> {
             override fun onResponse(
                 call: Call<MoviesNowPlayingResponse>,
@@ -72,6 +75,9 @@ class HomeFragment : Fragment(), MoviesNowPlayingAdapter.OnItemClick {
                 } else {
                     Toast.makeText(activity, "Response failed.", Toast.LENGTH_SHORT).show()
                 }
+
+                // remove progress bar
+                pbMovies.visibility = View.GONE
             }
 
             override fun onFailure(call: Call<MoviesNowPlayingResponse>, t: Throwable) {
