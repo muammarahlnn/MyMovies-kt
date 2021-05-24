@@ -56,34 +56,30 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        var tempFragment: Fragment? = null
         when (item.itemId) {
             R.id.item_home_main -> {
                 tvTitle.text = resources.getString(R.string.app_name)
-                fragmentManager.beginTransaction()
-                    .hide(fragmentActive)
-                    .show(fragmentMovies)
-                    .commit()
-                fragmentActive = fragmentMovies
-                return true
+                tempFragment = fragmentMovies
             }
             R.id.item_recent_main -> {
                 tvTitle.text = resources.getString(R.string.recent)
-                fragmentManager.beginTransaction()
-                    .hide(fragmentActive)
-                    .show(fragmentRecent)
-                    .commit()
-                fragmentActive = fragmentRecent
-                return true
+                tempFragment = fragmentRecent
             }
             R.id.item_favorite_main -> {
                 tvTitle.text = resources.getString(R.string.favorite)
-                fragmentManager.beginTransaction()
-                    .hide(fragmentActive)
-                    .show(fragmentFavorite)
-                    .commit()
-                fragmentActive = fragmentFavorite
-                return true
+                tempFragment = fragmentFavorite
             }
+        }
+
+        if (tempFragment != null) {
+            fragmentManager.beginTransaction()
+                .hide(fragmentActive)
+                .show(tempFragment)
+                .commit()
+            fragmentActive = tempFragment
+
+            return true
         }
 
         return false
