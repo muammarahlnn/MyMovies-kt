@@ -10,6 +10,7 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.ardnn.mymovies.R
 import com.ardnn.mymovies.activities.DetailActivity
 import com.ardnn.mymovies.adapters.MoviesNowPlayingAdapter
@@ -22,7 +23,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class HomeFragment : Fragment(), MoviesNowPlayingAdapter.OnItemClick {
+class MoviesFragment : Fragment(), MoviesNowPlayingAdapter.OnItemClick {
 
     // classes
     private lateinit var moviesNowPlayingAdapter: MoviesNowPlayingAdapter
@@ -30,6 +31,7 @@ class HomeFragment : Fragment(), MoviesNowPlayingAdapter.OnItemClick {
     // widgets
     private lateinit var rvMovies: RecyclerView
     private lateinit var pbMovies: ProgressBar
+    private lateinit var srlMovies: SwipeRefreshLayout
 
     // attributes
     private lateinit var movieList: List<MoviesNowPlaying>
@@ -44,6 +46,11 @@ class HomeFragment : Fragment(), MoviesNowPlayingAdapter.OnItemClick {
         // initialize widgets
         rvMovies = view.findViewById(R.id.rv_movies)
         pbMovies = view.findViewById(R.id.pb_movies)
+        srlMovies = view.findViewById(R.id.srl_movies)
+        srlMovies.setOnRefreshListener {
+            loadData()
+            srlMovies.isRefreshing = false
+        }
 
         // set recyclerview layout
         rvMovies.layoutManager = GridLayoutManager(activity, 2)
@@ -70,7 +77,7 @@ class HomeFragment : Fragment(), MoviesNowPlayingAdapter.OnItemClick {
                     movieList = response.body()!!.moviesNowPlayingList!!
 
                     // set recyclerview adapter
-                    moviesNowPlayingAdapter = MoviesNowPlayingAdapter(movieList, this@HomeFragment)
+                    moviesNowPlayingAdapter = MoviesNowPlayingAdapter(movieList, this@MoviesFragment)
                     rvMovies.adapter = moviesNowPlayingAdapter
                 } else {
                     Toast.makeText(activity, "Response failed.", Toast.LENGTH_SHORT).show()
