@@ -9,7 +9,7 @@ android {
     buildToolsVersion "30.0.3"
 
     defaultConfig {
-        applicationId "com.ardnn.mymovies"
+        applicationId "com.ardnn.mymovieskt"
         minSdkVersion 21
         targetSdkVersion 30
         versionCode 1

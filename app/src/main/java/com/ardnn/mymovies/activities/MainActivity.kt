@@ -8,6 +8,7 @@ import com.ardnn.mymovies.R
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.ardnn.mymovies.fragments.FavoriteFragment
+import com.ardnn.mymovies.fragments.HomeFragment
 import com.ardnn.mymovies.fragments.MoviesFragment
 import com.ardnn.mymovies.fragments.RecentFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -19,11 +20,11 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
     private lateinit var tvTitle: TextView
 
     // fragments
-    private val fragmentMovies: Fragment = MoviesFragment()
+    private val fragmentHome: Fragment = HomeFragment()
     private val fragmentRecent: Fragment = RecentFragment()
     private val fragmentFavorite: Fragment = FavoriteFragment()
     private val fragmentManager: FragmentManager = supportFragmentManager
-    private var fragmentActive: Fragment = fragmentMovies
+    private var fragmentActive: Fragment = fragmentHome
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +44,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
     private fun addFragmentsToFragmentManager() {
         // add main fragments and hide other fragments
         fragmentManager.beginTransaction()
-            .add(R.id.fl_content_main, fragmentMovies)
+            .add(R.id.fl_content_main, fragmentHome)
             .commit()
         fragmentManager.beginTransaction()
             .add(R.id.fl_content_main, fragmentRecent)
@@ -60,7 +61,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         when (item.itemId) {
             R.id.item_home_main -> {
                 tvTitle.text = resources.getString(R.string.app_name)
-                tempFragment = fragmentMovies
+                tempFragment = fragmentHome
             }
             R.id.item_recent_main -> {
                 tvTitle.text = resources.getString(R.string.recent)
