@@ -19,13 +19,6 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
     private lateinit var bnvNavigation: BottomNavigationView
     private lateinit var tvTitle: TextView
 
-    // fragments
-    private val fragmentHome: Fragment = HomeFragment()
-    private val fragmentRecent: Fragment = RecentFragment()
-    private val fragmentFavorite: Fragment = FavoriteFragment()
-    private val fragmentManager: FragmentManager = supportFragmentManager
-    private var fragmentActive: Fragment = fragmentHome
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -34,54 +27,62 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         bnvNavigation = findViewById(R.id.bnv_navigation_main)
         tvTitle = findViewById(R.id.tv_title_main)
 
-        // add fragments to fragment manager
-        addFragmentsToFragmentManager()
-
         // if navigation clicked
         bnvNavigation.setOnNavigationItemSelectedListener(this)
-    }
-
-    private fun addFragmentsToFragmentManager() {
-        // add main fragments and hide other fragments
-        fragmentManager.beginTransaction()
-            .add(R.id.fl_content_main, fragmentHome)
-            .commit()
-        fragmentManager.beginTransaction()
-            .add(R.id.fl_content_main, fragmentRecent)
-            .hide(fragmentRecent)
-            .commit()
-        fragmentManager.beginTransaction()
-            .add(R.id.fl_content_main, fragmentFavorite)
-            .hide(fragmentFavorite)
-            .commit()
+        bnvNavigation.itemIconTintList = null
+        bnvNavigation.selectedItemId = R.id.item_movies_main
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        var tempFragment: Fragment? = null
+        var selectedFragment: Fragment? = null
         when (item.itemId) {
-            R.id.item_home_main -> {
+            R.id.item_movies_main -> {
                 tvTitle.text = resources.getString(R.string.app_name)
-                tempFragment = fragmentHome
+                selectedFragment = HomeFragment()
             }
             R.id.item_recent_main -> {
                 tvTitle.text = resources.getString(R.string.recent)
-                tempFragment = fragmentRecent
+                selectedFragment = RecentFragment()
             }
             R.id.item_favorite_main -> {
                 tvTitle.text = resources.getString(R.string.favorite)
-                tempFragment = fragmentFavorite
+                selectedFragment = FavoriteFragment()
             }
         }
 
-        if (tempFragment != null) {
-            fragmentManager.beginTransaction()
-                .hide(fragmentActive)
-                .show(tempFragment)
+        if (selectedFragment != null) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fl_content_main, selectedFragment)
                 .commit()
-            fragmentActive = tempFragment
 
             return true
         }
+
+//        var tempFragment: Fragment? = null
+//        when (item.itemId) {
+//            R.id.item_movies_main -> {
+//                tvTitle.text = resources.getString(R.string.app_name)
+//                tempFragment = fragmentHome
+//            }
+//            R.id.item_recent_main -> {
+//                tvTitle.text = resources.getString(R.string.recent)
+//                tempFragment = fragmentRecent
+//            }
+//            R.id.item_favorite_main -> {
+//                tvTitle.text = resources.getString(R.string.favorite)
+//                tempFragment = fragmentFavorite
+//            }
+//        }
+//
+//        if (tempFragment != null) {
+//            fragmentManager.beginTransaction()
+//                .hide(fragmentActive)
+//                .show(tempFragment)
+//                .commit()
+//            fragmentActive = tempFragment
+//
+//            return true
+//        }
 
         return false
     }

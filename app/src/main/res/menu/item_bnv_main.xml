@@ -2,21 +2,27 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/item_home_main"
-        android:title="@string/home"
-        android:icon="@drawable/ic_home_yellow"
+        android:id="@+id/item_movies_main"
+        android:title="@string/movies"
+        android:icon="@drawable/selector_item_movies"
+        />
+
+    <item
+        android:id="@+id/item_tv_shows_main"
+        android:title="@string/tv_shows"
+        android:icon="@drawable/selector_item_tv_shows"
         />
 
     <item
         android:id="@+id/item_recent_main"
         android:title="@string/recent"
-        android:icon="@drawable/ic_recent_yellow"
+        android:icon="@drawable/selector_item_recent"
         />
 
     <item
         android:id="@+id/item_favorite_main"
         android:title="@string/favorite"
-        android:icon="@drawable/ic_love_yellow"
+        android:icon="@drawable/selector_item_favorite"
         />
 
 </menu>

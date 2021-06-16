@@ -58,11 +58,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/black_primary"
-
         app:menu="@menu/item_bnv_main"
-        app:itemIconTint="@color/yellow_primary"
-        app:itemTextColor="@color/yellow_primary"
-
+        app:itemTextColor="@color/bnv_selector_color"
+        app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
