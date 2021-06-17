@@ -18,12 +18,13 @@
         android:id="@+id/srl_movies"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center">
+        android:paddingHorizontal="12dp">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_movies"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            tools:itemCount="2"
             tools:listitem="@layout/item_rv_films" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
