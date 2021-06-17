@@ -7,5 +7,5 @@ import com.ardnn.mymovies.R
 
 class Animation(private val context: Context) {
     val fadeIn: Animation = AnimationUtils.loadAnimation(context, R.anim.fade_in)
-
+    val fadeOut: Animation = AnimationUtils.loadAnimation(context, R.anim.fade_out)
 }

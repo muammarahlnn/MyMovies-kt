@@ -11,8 +11,6 @@ import com.ardnn.mymovies.R
 import com.ardnn.mymovies.helpers.Animation
 
 class SplashActivity : AppCompatActivity() {
-    // classes
-    private lateinit var animation: Animation
 
     // widgets
     private lateinit var tvTitle: TextView
@@ -23,20 +21,16 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
-        // initialization
-        animation = Animation(this)
+        // initialization\
         ivMovies = findViewById(R.id.iv_movies_splash)
         tvTitle = findViewById(R.id.tv_title_splash)
-
-        // set animation to widgets
-        ivMovies.animation = animation.fadeIn
-        tvTitle.animation = animation.fadeIn
 
         // set timer for 2 seconds
         Handler(Looper.getMainLooper()).postDelayed({
             val goToMain = Intent(this@SplashActivity, MainActivity::class.java)
             startActivity(goToMain)
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
             finish()
-        }, 1800)
+        }, 2000)
     }
 }
