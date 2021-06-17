@@ -8,18 +8,16 @@ import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
 import androidx.viewpager2.widget.ViewPager2
 import com.ardnn.mymovies.R
-import com.ardnn.mymovies.adapters.HomeAdapter
+import com.ardnn.mymovies.adapters.MoviesPagerAdapter
 import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 
 class HomeFragment : Fragment() {
 
-    // classes
-    private lateinit var homeAdapter: HomeAdapter
-
-    // widgets
-    private lateinit var tlHome: TabLayout
-    private lateinit var vp2Home: ViewPager2
-
+    // viewpager2 attr
+    private lateinit var moviesPagerAdapter: MoviesPagerAdapter
+    private lateinit var tlMovies: TabLayout
+    private lateinit var moviesPager: ViewPager2
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,45 +26,22 @@ class HomeFragment : Fragment() {
         // Inflate the layout for this fragment
         val view: View = inflater.inflate(R.layout.fragment_home, container, false)
 
-        // initialize widgets
-        tlHome = view.findViewById(R.id.tl_home)
-        vp2Home = view.findViewById(R.id.vp2_home)
+        // set viewpager
+        moviesPagerAdapter = MoviesPagerAdapter(activity)
+        moviesPager = view.findViewById(R.id.vp2_home)
+        moviesPager.adapter = moviesPagerAdapter
+        moviesPager.currentItem = 0
 
-        // set home adapter
-        val fragmentManager: FragmentManager? = activity?.supportFragmentManager
-        if (fragmentManager != null) {
-            homeAdapter = HomeAdapter(fragmentManager, lifecycle)
-            vp2Home.adapter = homeAdapter
-        }
-
-        // add tablayout's tab
-        tlHome.addTab(tlHome.newTab().setText("Movies"))
-        tlHome.addTab(tlHome.newTab().setText("Tv Shows"))
-        tlHome.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                if (tab != null) {
-                    vp2Home.currentItem = tab.position
-                }
+        // set tablayout
+        tlMovies = view.findViewById(R.id.tl_home)
+        TabLayoutMediator(tlMovies, moviesPager) { tab, position ->
+            run {
+                tab.text = "OBJECT ${(position + 1)}"
             }
+        }.attach()
+        tlMovies.getTabAt(0)?.text = "Movies"
+        tlMovies.getTabAt(1)?.text = "TV Shows"
 
-            override fun onTabUnselected(tab: TabLayout.Tab?) {
-                // do nothing
-            }
-
-            override fun onTabReselected(tab: TabLayout.Tab?) {
-                // do nothing
-            }
-
-        })
-
-        // if pager slided
-        vp2Home.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                super.onPageSelected(position)
-
-                tlHome.selectTab(tlHome.getTabAt(position))
-            }
-        })
 
         return view
     }
