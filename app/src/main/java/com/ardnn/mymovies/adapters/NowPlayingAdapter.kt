@@ -11,8 +11,8 @@ import com.ardnn.mymovies.helpers.Utils
 import com.ardnn.mymovies.models.MoviesNowPlaying
 import com.bumptech.glide.Glide
 
-class MoviesNowPlayingAdapter(movieList: List<MoviesNowPlaying>, onItemClick: OnItemClick)
-    : RecyclerView.Adapter<MoviesNowPlayingAdapter.ViewHolder>() {
+class NowPlayingAdapter(movieList: List<MoviesNowPlaying>, onItemClick: OnItemClick)
+    : RecyclerView.Adapter<NowPlayingAdapter.ViewHolder>() {
 
     // attributes
     private var movieList: List<MoviesNowPlaying>

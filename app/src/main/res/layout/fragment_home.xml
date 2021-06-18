@@ -4,16 +4,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".fragments.HomeFragment">
+    tools:context=".fragments.movies.MoviesFragment">
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tl_home"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/black_primary"
+        app:tabTextAppearance="@style/MyCustomTextAppearance"
+        app:tabMode="scrollable"
+        app:tabGravity="fill"
+        app:tabMaxWidth="0dp"
         app:tabTextColor="@color/gray_primary"
         app:tabSelectedTextColor="@color/yellow_primary"
         app:tabIndicatorColor="@color/gray_border"
-        android:background="@color/black_primary"/>
+        />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/vp2_home"

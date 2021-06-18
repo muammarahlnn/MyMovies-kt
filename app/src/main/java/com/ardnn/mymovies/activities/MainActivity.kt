@@ -6,11 +6,10 @@ import android.view.MenuItem
 import android.widget.TextView
 import com.ardnn.mymovies.R
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import com.ardnn.mymovies.fragments.FavoriteFragment
-import com.ardnn.mymovies.fragments.HomeFragment
-import com.ardnn.mymovies.fragments.MoviesFragment
+import com.ardnn.mymovies.fragments.movies.MoviesFragment
 import com.ardnn.mymovies.fragments.RecentFragment
+import com.ardnn.mymovies.fragments.TvShowsFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener {
@@ -38,7 +37,11 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         when (item.itemId) {
             R.id.item_movies_main -> {
                 tvTitle.text = resources.getString(R.string.app_name)
-                selectedFragment = HomeFragment()
+                selectedFragment = MoviesFragment()
+            }
+            R.id.item_tv_shows_main -> {
+                tvTitle.text = resources.getString(R.string.tv_shows)
+                selectedFragment = TvShowsFragment()
             }
             R.id.item_recent_main -> {
                 tvTitle.text = resources.getString(R.string.recent)
@@ -57,32 +60,6 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
             return true
         }
-
-//        var tempFragment: Fragment? = null
-//        when (item.itemId) {
-//            R.id.item_movies_main -> {
-//                tvTitle.text = resources.getString(R.string.app_name)
-//                tempFragment = fragmentHome
-//            }
-//            R.id.item_recent_main -> {
-//                tvTitle.text = resources.getString(R.string.recent)
-//                tempFragment = fragmentRecent
-//            }
-//            R.id.item_favorite_main -> {
-//                tvTitle.text = resources.getString(R.string.favorite)
-//                tempFragment = fragmentFavorite
-//            }
-//        }
-//
-//        if (tempFragment != null) {
-//            fragmentManager.beginTransaction()
-//                .hide(fragmentActive)
-//                .show(tempFragment)
-//                .commit()
-//            fragmentActive = tempFragment
-//
-//            return true
-//        }
 
         return false
     }

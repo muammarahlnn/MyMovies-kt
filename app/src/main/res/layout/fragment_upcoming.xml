@@ -4,13 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black_taskbar"
-    tools:context=".fragments.TvShowsFragment">
+    android:background="@color/black_taskbar">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/tv_shows"
+        android:text="Upcoming Movies"
         android:textSize="21sp"
         android:textColor="@color/yellow_primary"
         android:fontFamily="@font/roboto_medium"

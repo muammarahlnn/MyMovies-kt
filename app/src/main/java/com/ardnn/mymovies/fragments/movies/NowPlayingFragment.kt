@@ -1,4 +1,4 @@
-package com.ardnn.mymovies.fragments
+package com.ardnn.mymovies.fragments.movies
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,13 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.Toast
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.ardnn.mymovies.R
 import com.ardnn.mymovies.activities.DetailActivity
-import com.ardnn.mymovies.adapters.MoviesNowPlayingAdapter
+import com.ardnn.mymovies.adapters.NowPlayingAdapter
 import com.ardnn.mymovies.helpers.Utils
 import com.ardnn.mymovies.models.MoviesNowPlaying
 import com.ardnn.mymovies.models.MoviesNowPlayingResponse
@@ -24,37 +23,37 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MoviesFragment : Fragment(), MoviesNowPlayingAdapter.OnItemClick {
+class NowPlayingFragment : Fragment(), NowPlayingAdapter.OnItemClick {
 
     // classes
-    private lateinit var moviesNowPlayingAdapter: MoviesNowPlayingAdapter
+    private lateinit var nowPlayingAdapter: NowPlayingAdapter
 
     // widgets
-    private lateinit var rvMovies: RecyclerView
-    private lateinit var pbMovies: ProgressBar
-    private lateinit var srlMovies: SwipeRefreshLayout
+    private lateinit var rvNowPlaying: RecyclerView
+    private lateinit var pbNowPlaying: ProgressBar
+    private lateinit var srlNowPlaying: SwipeRefreshLayout
 
     // attributes
-    private lateinit var movieList: List<MoviesNowPlaying>
+    private lateinit var nowPlayingList: List<MoviesNowPlaying>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        val view: View =  inflater.inflate(R.layout.fragment_movies, container, false)
+        val view: View =  inflater.inflate(R.layout.fragment_now_playing, container, false)
 
         // initialize widgets
-        rvMovies = view.findViewById(R.id.rv_movies)
-        pbMovies = view.findViewById(R.id.pb_movies)
-        srlMovies = view.findViewById(R.id.srl_movies)
-        srlMovies.setOnRefreshListener {
+        rvNowPlaying = view.findViewById(R.id.rv_now_playing)
+        pbNowPlaying = view.findViewById(R.id.pb_now_playing)
+        srlNowPlaying = view.findViewById(R.id.srl_now_playing)
+        srlNowPlaying.setOnRefreshListener {
             loadData()
-            srlMovies.isRefreshing = false
+            srlNowPlaying.isRefreshing = false
         }
 
         // set recyclerview layout
-        rvMovies.layoutManager = GridLayoutManager(activity, 2)
+        rvNowPlaying.layoutManager = GridLayoutManager(activity, 2)
 
         // load MoviesNowPlaying's data from TMDB API
         loadData()
@@ -75,17 +74,17 @@ class MoviesFragment : Fragment(), MoviesNowPlayingAdapter.OnItemClick {
             ) {
                 if (response.isSuccessful && response.body()?.moviesNowPlayingList != null) {
                     // put MoviesNowPlaying's data to list
-                    movieList = response.body()!!.moviesNowPlayingList!!
+                    nowPlayingList = response.body()!!.moviesNowPlayingList!!
 
                     // set recyclerview adapter
-                    moviesNowPlayingAdapter = MoviesNowPlayingAdapter(movieList, this@MoviesFragment)
-                    rvMovies.adapter = moviesNowPlayingAdapter
+                    nowPlayingAdapter = NowPlayingAdapter(nowPlayingList, this@NowPlayingFragment)
+                    rvNowPlaying.adapter = nowPlayingAdapter
                 } else {
                     Toast.makeText(activity, "Response failed.", Toast.LENGTH_SHORT).show()
                 }
 
                 // remove progress bar
-                pbMovies.visibility = View.GONE
+                pbNowPlaying.visibility = View.GONE
             }
 
             override fun onFailure(call: Call<MoviesNowPlayingResponse>, t: Throwable) {
@@ -98,7 +97,7 @@ class MoviesFragment : Fragment(), MoviesNowPlayingAdapter.OnItemClick {
     override fun onClick(position: Int) {
         // move to detail activity
         val goToDetail = Intent(activity, DetailActivity::class.java)
-        goToDetail.putExtra(DetailActivity.EXTRA_MOVIE, movieList[position])
+        goToDetail.putExtra(DetailActivity.EXTRA_MOVIE, nowPlayingList[position])
         startActivity(goToDetail)
     }
 
