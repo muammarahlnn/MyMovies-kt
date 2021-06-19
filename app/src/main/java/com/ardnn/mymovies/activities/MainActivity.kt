@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import com.ardnn.mymovies.fragments.FavoriteFragment
 import com.ardnn.mymovies.fragments.movies.MoviesFragment
 import com.ardnn.mymovies.fragments.RecentFragment
-import com.ardnn.mymovies.fragments.TvShowsFragment
+import com.ardnn.mymovies.fragments.tvshows.TvShowsFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener {

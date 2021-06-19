@@ -1,6 +1,12 @@
 package com.ardnn.mymovies.helpers
 
+import android.view.View
+import android.view.ViewGroup
+import android.widget.LinearLayout
+import com.google.android.material.tabs.TabLayout
+
 object Utils {
+    // consts
     const val BASE_URL_MOVIE = "https://api.themoviedb.org/3/movie/"
     const val BASE_URL_TV_SHOW = "https://api.themoviedb.org/3/tv/"
     const val API_KEY = "ddd13ad36a890e5208e5bad8ac1cc614"
@@ -24,5 +30,15 @@ object Utils {
         }
 
         return "$day $month, $year"
+    }
+
+    fun equalingEachTabWidth(tabLayout: TabLayout) {
+        val slidingTab: ViewGroup = tabLayout.getChildAt(0) as ViewGroup
+        for (i in 0 until tabLayout.tabCount) {
+            val tab: View = slidingTab.getChildAt(i)
+            val layoutParams: LinearLayout.LayoutParams = tab.layoutParams as LinearLayout.LayoutParams
+            layoutParams.weight = 1F
+            tab.layoutParams = layoutParams
+        }
     }
 }

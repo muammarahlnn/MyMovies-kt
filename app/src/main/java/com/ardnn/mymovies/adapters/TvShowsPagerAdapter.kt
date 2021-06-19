@@ -3,10 +3,10 @@ package com.ardnn.mymovies.adapters
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.ardnn.mymovies.fragments.AiringTodayFragment
-import com.ardnn.mymovies.fragments.OnTheAirFragment
-import com.ardnn.mymovies.fragments.PopularTvShowsFragment
-import com.ardnn.mymovies.fragments.TopRatedTvShowsFragment
+import com.ardnn.mymovies.fragments.tvshows.AiringTodayFragment
+import com.ardnn.mymovies.fragments.tvshows.OnTheAirFragment
+import com.ardnn.mymovies.fragments.tvshows.PopularTvShowsFragment
+import com.ardnn.mymovies.fragments.tvshows.TopRatedTvShowsFragment
 
 class TvShowsPagerAdapter(fragmentActivity: FragmentActivity?) :
     FragmentStateAdapter(fragmentActivity!!) {

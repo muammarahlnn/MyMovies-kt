@@ -1,4 +1,4 @@
-package com.ardnn.mymovies.fragments
+package com.ardnn.mymovies.fragments.tvshows
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

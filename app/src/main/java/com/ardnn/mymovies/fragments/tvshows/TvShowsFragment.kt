@@ -1,14 +1,14 @@
-package com.ardnn.mymovies.fragments
+package com.ardnn.mymovies.fragments.tvshows
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import androidx.viewpager2.widget.ViewPager2
 import com.ardnn.mymovies.R
 import com.ardnn.mymovies.adapters.TvShowsPagerAdapter
+import com.ardnn.mymovies.helpers.Utils
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -41,21 +41,13 @@ class TvShowsFragment : Fragment() {
         tlTvShows.getTabAt(1)?.text = "On The Air"
         tlTvShows.getTabAt(2)?.text = "Popular"
         tlTvShows.getTabAt(3)?.text = "Top Rated"
-        equalingEachTabWidth()
+        Utils.equalingEachTabWidth(tlTvShows) // to allow equal width for each tab, while (TabLayout.MODE_SCROLLABLE)
+
 
         return view
     }
 
-    // to allow equal width for each tab, while (TabLayout.MODE_SCROLLABLE)
-    private fun equalingEachTabWidth() {
-        val slidingTab: ViewGroup = tlTvShows.getChildAt(0) as ViewGroup
-        for (i in 0 until tlTvShows.tabCount) {
-            val tab: View = slidingTab.getChildAt(i)
-            val layoutParams: LinearLayout.LayoutParams = tab.layoutParams as LinearLayout.LayoutParams
-            layoutParams.weight = 1F
-            tab.layoutParams = layoutParams
-        }
-    }
+
 
 
 }

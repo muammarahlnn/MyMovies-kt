@@ -3,7 +3,6 @@
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.ardnn.mymovies.fragments.*
 import com.ardnn.mymovies.fragments.movies.NowPlayingFragment
 import com.ardnn.mymovies.fragments.movies.PopularMoviesFragment
 import com.ardnn.mymovies.fragments.movies.TopRatedMoviesFragment

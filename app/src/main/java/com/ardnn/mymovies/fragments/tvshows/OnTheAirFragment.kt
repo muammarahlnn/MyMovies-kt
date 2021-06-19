@@ -1,4 +1,4 @@
-package com.ardnn.mymovies.fragments
+package com.ardnn.mymovies.fragments.tvshows
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -14,10 +14,10 @@ private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
- * Use the [PopularTvShowsFragment.newInstance] factory method to
+ * Use the [OnTheAirFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class PopularTvShowsFragment : Fragment() {
+class OnTheAirFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -35,7 +35,7 @@ class PopularTvShowsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_popular_tv_shows, container, false)
+        return inflater.inflate(R.layout.fragment_on_the_air, container, false)
     }
 
     companion object {
@@ -45,12 +45,12 @@ class PopularTvShowsFragment : Fragment() {
          *
          * @param param1 Parameter 1.
          * @param param2 Parameter 2.
-         * @return A new instance of fragment PopularTvShowsFragment.
+         * @return A new instance of fragment OnTheAirFragment.
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            PopularTvShowsFragment().apply {
+            OnTheAirFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)
