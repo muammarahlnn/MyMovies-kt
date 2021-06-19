@@ -5,56 +5,57 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import androidx.viewpager2.widget.ViewPager2
 import com.ardnn.mymovies.R
+import com.ardnn.mymovies.adapters.TvShowsPagerAdapter
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [TvShowsFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class TvShowsFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    // viewpager2 attr
+    private lateinit var tvShowsPagerAdapter: TvShowsPagerAdapter
+    private lateinit var tlTvShows: TabLayout
+    private lateinit var tvShowsPager: ViewPager2
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_tv_shows, container, false)
+        val view: View = inflater.inflate(R.layout.fragment_tv_shows, container, false)
+
+        // set viewpager
+        tvShowsPagerAdapter = TvShowsPagerAdapter(activity)
+        tvShowsPager = view.findViewById(R.id.vp2_tv_shows)
+        tvShowsPager.adapter = tvShowsPagerAdapter
+        tvShowsPager.currentItem = 0
+
+        // set tablayout
+        tlTvShows = view.findViewById(R.id.tl_tv_shows)
+        TabLayoutMediator(tlTvShows, tvShowsPager) { tab: TabLayout.Tab, position: Int ->
+            tab.text = "OBJECT ${(position + 1)}"
+        }.attach()
+        tlTvShows.getTabAt(0)?.text = "Airing Today"
+        tlTvShows.getTabAt(1)?.text = "On The Air"
+        tlTvShows.getTabAt(2)?.text = "Popular"
+        tlTvShows.getTabAt(3)?.text = "Top Rated"
+        equalingEachTabWidth()
+
+        return view
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment TvShowsFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            TvShowsFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    // to allow equal width for each tab, while (TabLayout.MODE_SCROLLABLE)
+    private fun equalingEachTabWidth() {
+        val slidingTab: ViewGroup = tlTvShows.getChildAt(0) as ViewGroup
+        for (i in 0 until tlTvShows.tabCount) {
+            val tab: View = slidingTab.getChildAt(i)
+            val layoutParams: LinearLayout.LayoutParams = tab.layoutParams as LinearLayout.LayoutParams
+            layoutParams.weight = 1F
+            tab.layoutParams = layoutParams
+        }
     }
+
+
 }

@@ -1,22 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black_taskbar"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.TvShowsFragment">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tl_tv_shows"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/tv_shows"
-        android:textSize="21sp"
-        android:textColor="@color/yellow_primary"
-        android:fontFamily="@font/roboto_medium"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:background="@color/black_primary"
+        app:tabTextAppearance="@style/MyCustomTextAppearance"
+        app:tabMode="scrollable"
+        app:tabGravity="fill"
+        app:tabMaxWidth="0dp"
+        app:tabTextColor="@color/gray_primary"
+        app:tabSelectedTextColor="@color/yellow_primary"
+        app:tabIndicatorColor="@color/gray_border"
+        />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/vp2_tv_shows"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/tl_tv_shows" />
+
+</RelativeLayout>

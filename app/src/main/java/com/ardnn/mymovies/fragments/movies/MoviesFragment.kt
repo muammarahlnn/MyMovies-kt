@@ -35,10 +35,8 @@ class MoviesFragment : Fragment() {
 
         // set tablayout
         tlMovies = view.findViewById(R.id.tl_movies)
-        TabLayoutMediator(tlMovies, moviesPager) { tab, position ->
-            run {
-                tab.text = "OBJECT ${(position + 1)}"
-            }
+        TabLayoutMediator(tlMovies, moviesPager) { tab: TabLayout.Tab, position: Int ->
+            tab.text = "OBJECT ${(position + 1)}"
         }.attach()
         tlMovies.getTabAt(0)?.text = "Now Playing"
         tlMovies.getTabAt(1)?.text = "Upcoming"
