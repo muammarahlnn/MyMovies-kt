@@ -25,16 +25,16 @@ class MoviesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        val view: View = inflater.inflate(R.layout.fragment_home, container, false)
+        val view: View = inflater.inflate(R.layout.fragment_movies, container, false)
 
         // set viewpager
         moviesPagerAdapter = MoviesPagerAdapter(activity)
-        moviesPager = view.findViewById(R.id.vp2_home)
+        moviesPager = view.findViewById(R.id.vp2_movies)
         moviesPager.adapter = moviesPagerAdapter
         moviesPager.currentItem = 0
 
         // set tablayout
-        tlMovies = view.findViewById(R.id.tl_home)
+        tlMovies = view.findViewById(R.id.tl_movies)
         TabLayoutMediator(tlMovies, moviesPager) { tab, position ->
             run {
                 tab.text = "OBJECT ${(position + 1)}"
