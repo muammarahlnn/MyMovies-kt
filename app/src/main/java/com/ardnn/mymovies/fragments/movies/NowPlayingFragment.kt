@@ -1,6 +1,5 @@
 package com.ardnn.mymovies.fragments.movies
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -12,29 +11,27 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.ardnn.mymovies.R
-import com.ardnn.mymovies.activities.DetailActivity
-import com.ardnn.mymovies.adapters.NowPlayingAdapter
+import com.ardnn.mymovies.adapters.MoviesOutlineAdapter
+import com.ardnn.mymovies.adapters.OnItemClick
 import com.ardnn.mymovies.helpers.Utils
-import com.ardnn.mymovies.models.MoviesNowPlaying
-import com.ardnn.mymovies.models.MoviesNowPlayingResponse
-import com.ardnn.mymovies.networks.MoviesNowPlayingApiClient
-import com.ardnn.mymovies.networks.MoviesNowPlayingApiInterface
+import com.ardnn.mymovies.models.MoviesOutline
+import com.ardnn.mymovies.models.MoviesOutlineResponse
+import com.ardnn.mymovies.networks.MoviesOutlineApiClient
+import com.ardnn.mymovies.networks.MoviesOutlineApiInterface
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class NowPlayingFragment : Fragment(), NowPlayingAdapter.OnItemClick {
+class NowPlayingFragment : Fragment(), OnItemClick<MoviesOutline> {
 
-    // classes
-    private lateinit var nowPlayingAdapter: NowPlayingAdapter
+    // recyclerview attr
+    private lateinit var rvNowPlaying: RecyclerView
+    private lateinit var moviesOutlineAdapter: MoviesOutlineAdapter
+    private lateinit var moviesOutlineList: List<MoviesOutline>
 
     // widgets
-    private lateinit var rvNowPlaying: RecyclerView
     private lateinit var pbNowPlaying: ProgressBar
     private lateinit var srlNowPlaying: SwipeRefreshLayout
-
-    // attributes
-    private lateinit var nowPlayingList: List<MoviesNowPlaying>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -62,23 +59,23 @@ class NowPlayingFragment : Fragment(), NowPlayingAdapter.OnItemClick {
     }
 
     private fun loadData() {
-        val moviesNowPlayingApiInterface: MoviesNowPlayingApiInterface = MoviesNowPlayingApiClient.retrofit
-            .create(MoviesNowPlayingApiInterface::class.java)
+        val moviesOutlineApiInterface: MoviesOutlineApiInterface = MoviesOutlineApiClient.retrofit
+            .create(MoviesOutlineApiInterface::class.java)
 
-        val moviesNowPlayingResponseCall: Call<MoviesNowPlayingResponse> =
-            moviesNowPlayingApiInterface.getMoviesNowPlaying(Utils.API_KEY)
-        moviesNowPlayingResponseCall.enqueue(object : Callback<MoviesNowPlayingResponse> {
+        val moviesOutlineResponseCall: Call<MoviesOutlineResponse> =
+            moviesOutlineApiInterface.getNowPlayingMovies(Utils.API_KEY)
+        moviesOutlineResponseCall.enqueue(object : Callback<MoviesOutlineResponse> {
             override fun onResponse(
-                call: Call<MoviesNowPlayingResponse>,
-                response: Response<MoviesNowPlayingResponse>
+                call: Call<MoviesOutlineResponse>,
+                response: Response<MoviesOutlineResponse>
             ) {
-                if (response.isSuccessful && response.body()?.moviesNowPlayingList != null) {
+                if (response.isSuccessful && response.body()?.moviesOutlineList != null) {
                     // put MoviesNowPlaying's data to list
-                    nowPlayingList = response.body()!!.moviesNowPlayingList!!
+                    moviesOutlineList = response.body()!!.moviesOutlineList!!
 
                     // set recyclerview adapter
-                    nowPlayingAdapter = NowPlayingAdapter(nowPlayingList, this@NowPlayingFragment)
-                    rvNowPlaying.adapter = nowPlayingAdapter
+                    moviesOutlineAdapter = MoviesOutlineAdapter(moviesOutlineList, this@NowPlayingFragment)
+                    rvNowPlaying.adapter = moviesOutlineAdapter
                 } else {
                     Toast.makeText(activity, "Response failed.", Toast.LENGTH_SHORT).show()
                 }
@@ -87,18 +84,15 @@ class NowPlayingFragment : Fragment(), NowPlayingAdapter.OnItemClick {
                 pbNowPlaying.visibility = View.GONE
             }
 
-            override fun onFailure(call: Call<MoviesNowPlayingResponse>, t: Throwable) {
+            override fun onFailure(call: Call<MoviesOutlineResponse>, t: Throwable) {
                 Toast.makeText(activity, "Response failed.", Toast.LENGTH_SHORT).show()
             }
 
         })
     }
 
-    override fun onClick(position: Int) {
-        // move to detail activity
-        val goToDetail = Intent(activity, DetailActivity::class.java)
-        goToDetail.putExtra(DetailActivity.EXTRA_MOVIE, nowPlayingList[position])
-        startActivity(goToDetail)
+    override fun itemClicked(data: MoviesOutline) {
+        Toast.makeText(activity, "You clicked ${data.title}", Toast.LENGTH_SHORT).show()
     }
 
 

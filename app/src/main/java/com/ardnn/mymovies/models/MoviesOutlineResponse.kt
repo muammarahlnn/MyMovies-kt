@@ -3,8 +3,8 @@ package com.ardnn.mymovies.models
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-data class MoviesNowPlayingResponse(
+data class MoviesOutlineResponse(
     @SerializedName("results")
     @Expose
-    val moviesNowPlayingList: List<MoviesNowPlaying>?
+    val moviesOutlineList: List<MoviesOutline>?
 )

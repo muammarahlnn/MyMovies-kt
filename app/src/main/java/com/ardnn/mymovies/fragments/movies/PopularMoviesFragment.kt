@@ -5,56 +5,95 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
+import android.widget.Toast
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.ardnn.mymovies.R
+import com.ardnn.mymovies.adapters.MoviesOutlineAdapter
+import com.ardnn.mymovies.adapters.OnItemClick
+import com.ardnn.mymovies.helpers.Utils
+import com.ardnn.mymovies.models.MoviesOutline
+import com.ardnn.mymovies.models.MoviesOutlineResponse
+import com.ardnn.mymovies.networks.MoviesOutlineApiClient
+import com.ardnn.mymovies.networks.MoviesOutlineApiInterface
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+class PopularMoviesFragment : Fragment(), OnItemClick<MoviesOutline> {
 
-/**
- * A simple [Fragment] subclass.
- * Use the [PopularMoviesFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class PopularMoviesFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    // recyclerview attr
+    private lateinit var rvPopular: RecyclerView
+    private lateinit var moviesOutlineAdapter: MoviesOutlineAdapter
+    private lateinit var moviesOutlineList: List<MoviesOutline>
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    // widgets
+    private lateinit var pbPopular: ProgressBar
+    private lateinit var srlPopular: SwipeRefreshLayout
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_popular_movies, container, false)
+        val view: View =  inflater.inflate(R.layout.fragment_popular_movies, container, false)
+
+        // initialize widgets
+        rvPopular = view.findViewById(R.id.rv_popular_movies)
+        pbPopular = view.findViewById(R.id.pb_popular_movies)
+        srlPopular = view.findViewById(R.id.srl_popular_movies)
+        srlPopular.setOnRefreshListener {
+            loadData()
+            srlPopular.isRefreshing = false
+        }
+
+        // set recyclerview layout
+        rvPopular.layoutManager = GridLayoutManager(activity, 2)
+
+        // load MoviesNowPlaying's data from TMDB API
+        loadData()
+
+        return view
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment PopularMoviesFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            PopularMoviesFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    private fun loadData() {
+
+        val moviesOutlineApiInterface: MoviesOutlineApiInterface = MoviesOutlineApiClient.retrofit
+            .create(MoviesOutlineApiInterface::class.java)
+
+        val moviesOutlineResponseCall: Call<MoviesOutlineResponse> =
+            moviesOutlineApiInterface.getPopularMovies(Utils.API_KEY)
+        moviesOutlineResponseCall.enqueue(object : Callback<MoviesOutlineResponse> {
+            override fun onResponse(
+                call: Call<MoviesOutlineResponse>,
+                response: Response<MoviesOutlineResponse>
+            ) {
+                if (response.isSuccessful && response.body()?.moviesOutlineList != null) {
+                    // put MoviesNowPlaying's data to list
+                    moviesOutlineList = response.body()!!.moviesOutlineList!!
+
+                    // set recyclerview adapter
+                    moviesOutlineAdapter = MoviesOutlineAdapter(moviesOutlineList, this@PopularMoviesFragment)
+                    rvPopular.adapter = moviesOutlineAdapter
+                } else {
+                    Toast.makeText(activity, "Response failed.", Toast.LENGTH_SHORT).show()
                 }
+
+                // remove progress bar
+                pbPopular.visibility = View.GONE
             }
+
+            override fun onFailure(call: Call<MoviesOutlineResponse>, t: Throwable) {
+                Toast.makeText(activity, "Response failed.", Toast.LENGTH_SHORT).show()
+            }
+
+        })
     }
+
+    override fun itemClicked(data: MoviesOutline) {
+        Toast.makeText(activity, "You clicked ${data.title}", Toast.LENGTH_SHORT).show()
+    }
+
 }

@@ -2,14 +2,12 @@ package com.ardnn.mymovies.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import android.widget.ImageView
-import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import com.ardnn.mymovies.R
 import com.ardnn.mymovies.helpers.Utils
-import com.ardnn.mymovies.models.MoviesNowPlaying
+import com.ardnn.mymovies.models.MoviesOutline
 import com.bumptech.glide.Glide
 
 class DetailActivity : AppCompatActivity() {
@@ -18,7 +16,7 @@ class DetailActivity : AppCompatActivity() {
     }
 
     // classes
-    private lateinit var movie: MoviesNowPlaying
+    private lateinit var movie: MoviesOutline
 
     // widgets
     private lateinit var tvTitle: TextView
@@ -38,7 +36,7 @@ class DetailActivity : AppCompatActivity() {
         initializeWidgets()
 
         // set data to widgets
-        setDataToWidgets()
+//        setDataToWidgets()
         
         // if button clicked
         btnBack.setOnClickListener { 
@@ -62,31 +60,31 @@ class DetailActivity : AppCompatActivity() {
         btnFavorite = findViewById(R.id.btn_favorite_detail)
     }
 
-    private fun setDataToWidgets() {
-        // get MoviesNowPlaying's parcelable from previous intent
-        movie = intent.getParcelableExtra<MoviesNowPlaying>(EXTRA_MOVIE) as MoviesNowPlaying
-
-        // list -> [title, releaseDate, synopsis, vote, wallpaperUrl, posterUrl]
-        val movieData = listOf(
-            movie.title,
-            Utils.convertToDate(movie.releaseDate),
-            movie.synopsis,
-            movie.vote.toString(),
-            movie.wallpaperUrl,
-            movie.posterUrl
-        )
-
-        // set to widgets
-        tvTitle.text = movieData[0]
-        tvReleaseDate.text = movieData[1]
-        tvSynopsis.text = movieData[2]
-        tvVote.text = movieData[3]
-        Glide.with(this)
-            .load("${Utils.IMG_URL_500}${movieData[4]}")
-            .into(ivWallpaper)
-        Glide.with(this)
-            .load("${Utils.IMG_URL_300}${movieData[5]}")
-            .into(ivPoster)
-
-    }
+//    private fun setDataToWidgets() {
+//        // get MoviesNowPlaying's parcelable from previous intent
+//        movie = intent.getParcelableExtra<MoviesOutline>(EXTRA_MOVIE) as MoviesOutline
+//
+//        // list -> [title, releaseDate, synopsis, vote, wallpaperUrl, posterUrl]
+//        val movieData = listOf(
+//            movie.title,
+//            Utils.convertToDate(movie.releaseDate),
+//            movie.synopsis,
+//            movie.vote.toString(),
+//            movie.wallpaperUrl,
+//            movie.posterUrl
+//        )
+//
+//        // set to widgets
+//        tvTitle.text = movieData[0]
+//        tvReleaseDate.text = movieData[1]
+//        tvSynopsis.text = movieData[2]
+//        tvVote.text = movieData[3]
+//        Glide.with(this)
+//            .load("${Utils.IMG_URL_500}${movieData[4]}")
+//            .into(ivWallpaper)
+//        Glide.with(this)
+//            .load("${Utils.IMG_URL_300}${movieData[5]}")
+//            .into(ivPoster)
+//
+//    }
 }
