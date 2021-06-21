@@ -5,56 +5,98 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
+import android.widget.Toast
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.ardnn.mymovies.R
+import com.ardnn.mymovies.adapters.MoviesOutlineAdapter
+import com.ardnn.mymovies.adapters.OnItemClick
+import com.ardnn.mymovies.adapters.TvShowsOutlineAdapter
+import com.ardnn.mymovies.helpers.Utils
+import com.ardnn.mymovies.models.MoviesOutline
+import com.ardnn.mymovies.models.MoviesOutlineResponse
+import com.ardnn.mymovies.models.TvShowsOutline
+import com.ardnn.mymovies.models.TvShowsOutlineResponse
+import com.ardnn.mymovies.networks.MoviesOutlineApiClient
+import com.ardnn.mymovies.networks.MoviesOutlineApiInterface
+import com.ardnn.mymovies.networks.TvShowsOutlineApiClient
+import com.ardnn.mymovies.networks.TvShowsOutlineApiInterface
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+class PopularTvShowsFragment : Fragment(), OnItemClick<TvShowsOutline> {
 
-/**
- * A simple [Fragment] subclass.
- * Use the [PopularTvShowsFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class PopularTvShowsFragment : Fragment() {
-// TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    // recyclerview attr
+    private lateinit var rvPopular: RecyclerView
+    private lateinit var tvShowsOutlineAdapter: TvShowsOutlineAdapter
+    private lateinit var tvShowsOutlineList: List<TvShowsOutline>
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    // widgets
+    private lateinit var pbPopular: ProgressBar
+    private lateinit var srlPopular: SwipeRefreshLayout
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_popular_tv_shows, container, false)
+        val view: View =  inflater.inflate(R.layout.fragment_popular_tv_shows, container, false)
+
+        // initialize widgets
+        rvPopular = view.findViewById(R.id.rv_popular_tv_shows)
+        pbPopular = view.findViewById(R.id.pb_popular_tv_shows)
+        srlPopular = view.findViewById(R.id.srl_popular_tv_shows)
+        srlPopular.setOnRefreshListener {
+            loadData()
+            srlPopular.isRefreshing = false
+        }
+
+        // set recyclerview layout
+        rvPopular.layoutManager = GridLayoutManager(activity, 2)
+
+        // load MoviesNowPlaying's data from TMDB API
+        loadData()
+
+        return view
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment PopularTvShowsFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            PopularTvShowsFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    private fun loadData() {
+        val tvShowsOutlineApiInterface: TvShowsOutlineApiInterface = TvShowsOutlineApiClient.retrofit
+            .create(TvShowsOutlineApiInterface::class.java)
+
+        val tvShowsOutlineResponseCall: Call<TvShowsOutlineResponse> =
+            tvShowsOutlineApiInterface.getPopularTvShows(Utils.API_KEY)
+        tvShowsOutlineResponseCall.enqueue(object : Callback<TvShowsOutlineResponse> {
+            override fun onResponse(
+                call: Call<TvShowsOutlineResponse>,
+                response: Response<TvShowsOutlineResponse>
+            ) {
+                if (response.isSuccessful && response.body()?.tvShowsOutlineList != null) {
+                    // put data to list
+                    tvShowsOutlineList = response.body()!!.tvShowsOutlineList!!
+
+                    // set recyclerview
+                    tvShowsOutlineAdapter = TvShowsOutlineAdapter(tvShowsOutlineList, this@PopularTvShowsFragment)
+                    rvPopular.adapter = tvShowsOutlineAdapter
+                } else {
+                    Toast.makeText(activity, "Response failed.", Toast.LENGTH_SHORT).show()
                 }
+
+                // remove progress bar
+                pbPopular.visibility = View.GONE
             }
+
+            override fun onFailure(call: Call<TvShowsOutlineResponse>, t: Throwable) {
+                Toast.makeText(activity, "Response failure.", Toast.LENGTH_SHORT).show()
+            }
+
+        })
+    }
+
+    override fun itemClicked(data: TvShowsOutline) {
+        Toast.makeText(activity, "You clicked ${data.title}", Toast.LENGTH_SHORT).show()
     }
 }
