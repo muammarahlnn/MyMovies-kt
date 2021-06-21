@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.ardnn.mymovies.R
 import com.ardnn.mymovies.helpers.Utils
+import com.ardnn.mymovies.models.ImageSize
 import com.ardnn.mymovies.models.TvShowsOutline
 import com.bumptech.glide.Glide
 
@@ -50,7 +51,7 @@ class TvShowsOutlineAdapter(
         fun onBind(tvShowsOutline: TvShowsOutline) {
             // set data to widgets
             Glide.with(itemView.context)
-                .load("${Utils.IMG_URL_300}${tvShowsOutline.posterUrl}")
+                .load(tvShowsOutline.getPosterUrl(ImageSize.W342))
                 .into(ivPoster)
             tvTitle.text = tvShowsOutline.title
             tvYear.text = tvShowsOutline.releaseDate.substring(0, 4)
