@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/black_taskbar"
     tools:background="@color/white"
-    tools:context=".activities.DetailActivity" >
+    tools:context=".activities.MovieDetailActivity" >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

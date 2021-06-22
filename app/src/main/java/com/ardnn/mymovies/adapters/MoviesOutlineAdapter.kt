@@ -7,14 +7,13 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.ardnn.mymovies.R
-import com.ardnn.mymovies.helpers.Utils
 import com.ardnn.mymovies.models.ImageSize
-import com.ardnn.mymovies.models.MoviesOutline
+import com.ardnn.mymovies.models.MovieOutline
 import com.bumptech.glide.Glide
 
 class MoviesOutlineAdapter(
-    private var movieList: List<MoviesOutline>,
-    private var onItemClick: OnItemClick<MoviesOutline>
+    private var movieList: List<MovieOutline>,
+    private var onItemClick: OnItemClick<MovieOutline>
     ) : RecyclerView.Adapter<MoviesOutlineAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -32,7 +31,7 @@ class MoviesOutlineAdapter(
         return movieList.size
     }
 
-    inner class ViewHolder(itemView: View, onItemClick: OnItemClick<MoviesOutline>) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View, onItemClick: OnItemClick<MovieOutline>) : RecyclerView.ViewHolder(itemView) {
         private val ivPoster: ImageView
         private val tvTitle: TextView
         private val tvYear: TextView
@@ -48,14 +47,14 @@ class MoviesOutlineAdapter(
             tvVote = itemView.findViewById(R.id.tv_vote_item_films)
         }
 
-        fun onBind(moviesOutline: MoviesOutline) {
+        fun onBind(movieOutline: MovieOutline) {
             // set data to widgets
             Glide.with(itemView.context)
-                .load(moviesOutline.getPosterUrl(ImageSize.W342))
+                .load(movieOutline.getPosterUrl(ImageSize.W342))
                 .into(ivPoster)
-            tvTitle.text = moviesOutline.title
-            tvYear.text = moviesOutline.releaseDate.substring(0, 4)
-            tvVote.text = moviesOutline.rating.toString()
+            tvTitle.text = movieOutline.title
+            tvYear.text = movieOutline.releaseDate.substring(0, 4)
+            tvVote.text = movieOutline.rating.toString()
         }
 
     }

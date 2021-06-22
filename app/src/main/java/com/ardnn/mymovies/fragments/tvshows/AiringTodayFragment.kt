@@ -11,16 +11,11 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.ardnn.mymovies.R
-import com.ardnn.mymovies.adapters.MoviesOutlineAdapter
 import com.ardnn.mymovies.adapters.OnItemClick
 import com.ardnn.mymovies.adapters.TvShowsOutlineAdapter
 import com.ardnn.mymovies.helpers.Utils
-import com.ardnn.mymovies.models.MoviesOutline
-import com.ardnn.mymovies.models.MoviesOutlineResponse
 import com.ardnn.mymovies.models.TvShowsOutline
 import com.ardnn.mymovies.models.TvShowsOutlineResponse
-import com.ardnn.mymovies.networks.MoviesOutlineApiClient
-import com.ardnn.mymovies.networks.MoviesOutlineApiInterface
 import com.ardnn.mymovies.networks.TvShowsOutlineApiClient
 import com.ardnn.mymovies.networks.TvShowsOutlineApiInterface
 import retrofit2.Call

@@ -3,7 +3,7 @@ package com.ardnn.mymovies.models
 import com.ardnn.mymovies.helpers.Utils
 import com.google.gson.annotations.SerializedName
 
-data class MoviesOutline(
+data class MovieOutline(
     @SerializedName("id")
     val id: Int,
 

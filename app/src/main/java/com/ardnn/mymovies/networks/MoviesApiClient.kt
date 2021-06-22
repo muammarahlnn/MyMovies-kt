@@ -4,7 +4,7 @@ import com.ardnn.mymovies.helpers.Utils
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-object MoviesOutlineApiClient {
+object MoviesApiClient {
     val retrofit: Retrofit
         get() {
             return Retrofit.Builder()
