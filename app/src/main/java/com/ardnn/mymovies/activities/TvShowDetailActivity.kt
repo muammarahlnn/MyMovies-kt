@@ -2,11 +2,13 @@ package com.ardnn.mymovies.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import com.ardnn.mymovies.R
 import com.ardnn.mymovies.helpers.Utils
+import com.ardnn.mymovies.models.Cast
 import com.ardnn.mymovies.models.ImageSize
 import com.ardnn.mymovies.models.Movie
 import com.ardnn.mymovies.models.TvShow
@@ -24,8 +26,12 @@ class TvShowDetailActivity : AppCompatActivity() {
         const val EXTRA_ID = "extra_id"
     }
 
-    // classes
+    // tv show
     private lateinit var tvShow: TvShow
+    private lateinit var tvShowApiInterface: TvShowsApiInterface
+
+    // cast
+    private lateinit var castList: List<Cast>
 
     // widgets
     private lateinit var tvTitle: TextView
@@ -44,14 +50,12 @@ class TvShowDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tv_show_detail)
 
-        // get tvShow id
-        tvShowId = intent.getIntExtra(EXTRA_ID, 0)
+        // initialization
+        initialization()
 
-        // load movies detail data
-        loadTvShowDetailData()
-
-        // initialize widgets
-        initializeWidgets()
+        // load tv show data
+        loadTvShowDetail()
+        loadTvShowCast()
 
         // if button clicked
         btnBack.setOnClickListener {
@@ -62,7 +66,13 @@ class TvShowDetailActivity : AppCompatActivity() {
         }
     }
 
-    private fun initializeWidgets() {
+    private fun initialization() {
+        // tv show
+        tvShowId = intent.getIntExtra(EXTRA_ID, 0)
+        tvShowApiInterface = TvShowsApiClient.retrofit
+            .create(TvShowsApiInterface::class.java)
+
+        // widgets
         tvTitle = findViewById(R.id.tv_title_tv_show_detail)
         tvReleaseDate = findViewById(R.id.tv_release_date_tv_show_detail)
         tvSynopsis = findViewById(R.id.tv_synopsis_tv_show_detail)
@@ -75,7 +85,7 @@ class TvShowDetailActivity : AppCompatActivity() {
         btnFavorite = findViewById(R.id.btn_favorite_tv_show_detail)
     }
 
-    private fun loadTvShowDetailData() {
+    private fun loadTvShowDetail() {
         val tvShowsApiInterface: TvShowsApiInterface = TvShowsApiClient.retrofit
             .create(TvShowsApiInterface::class.java)
 
@@ -94,6 +104,28 @@ class TvShowDetailActivity : AppCompatActivity() {
                 Toast.makeText(this@TvShowDetailActivity, "Response failure.", Toast.LENGTH_SHORT).show()
             }
 
+        })
+    }
+
+    private fun loadTvShowCast() {
+        val castCall: Call<Cast> = tvShowApiInterface.getTvShowsCast(tvShowId, Utils.API_KEY)
+        castCall.enqueue(object : Callback<Cast> {
+            override fun onResponse(call: Call<Cast>, response: Response<Cast>) {
+                if (response.isSuccessful && response.body()?.castList != null) {
+                    castList = response.body()!!.castList
+
+                    // debug
+                    for (cast in castList) {
+                        Log.d("CAST", cast.name)
+                    }
+                } else {
+                    Toast.makeText(this@TvShowDetailActivity, "Response failed.", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<Cast>, t: Throwable) {
+                Toast.makeText(this@TvShowDetailActivity, "Response failure.", Toast.LENGTH_SHORT).show()
+            }
         })
     }
 

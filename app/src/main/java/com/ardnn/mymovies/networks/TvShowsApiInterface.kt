@@ -1,5 +1,6 @@
 package com.ardnn.mymovies.networks
 
+import com.ardnn.mymovies.models.Cast
 import com.ardnn.mymovies.models.Movie
 import com.ardnn.mymovies.models.TvShow
 import com.ardnn.mymovies.models.TvShowsOutlineResponse
@@ -14,6 +15,12 @@ interface TvShowsApiInterface {
         @Path("tv_id") tvShowId: Int,
         @Query("api_key") apiKey: String
     ): Call<TvShow>
+
+    @GET("{tv_id}/credits")
+    fun getTvShowsCast(
+        @Path("tv_id") tvShowId: Int,
+        @Query("api_key") apiKey: String
+    ): Call<Cast>
 
     @GET("airing_today")
     fun getAiringTodayTvShows(
