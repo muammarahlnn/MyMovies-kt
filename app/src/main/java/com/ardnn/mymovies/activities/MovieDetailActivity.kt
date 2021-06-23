@@ -9,7 +9,6 @@ import com.ardnn.mymovies.R
 import com.ardnn.mymovies.helpers.Utils
 import com.ardnn.mymovies.models.ImageSize
 import com.ardnn.mymovies.models.Movie
-import com.ardnn.mymovies.models.MovieOutline
 import com.ardnn.mymovies.networks.MoviesApiClient
 import com.ardnn.mymovies.networks.MoviesApiInterface
 import com.bumptech.glide.Glide
@@ -40,7 +39,7 @@ class MovieDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_detail)
+        setContentView(R.layout.activity_movie_detail)
 
         // get movie id
         movieId = intent.getIntExtra(EXTRA_ID, 0)
@@ -61,16 +60,16 @@ class MovieDetailActivity : AppCompatActivity() {
     }
 
     private fun initializeWidgets() {
-        tvTitle = findViewById(R.id.tv_title_detail)
-        tvReleaseDate = findViewById(R.id.tv_release_date_detail)
-        tvSynopsis = findViewById(R.id.tv_synopsis_detail)
-        tvVote = findViewById(R.id.tv_vote_detail)
+        tvTitle = findViewById(R.id.tv_title_movie_detail)
+        tvReleaseDate = findViewById(R.id.tv_release_date_movie_detail)
+        tvSynopsis = findViewById(R.id.tv_synopsis_movie_detail)
+        tvVote = findViewById(R.id.tv_vote_movie_detail)
 
-        ivWallpaper = findViewById(R.id.iv_wallpaper_detail)
-        ivPoster = findViewById(R.id.iv_poster_detail)
+        ivWallpaper = findViewById(R.id.iv_wallpaper_movie_detail)
+        ivPoster = findViewById(R.id.iv_poster_movie_detail)
 
-        btnBack = findViewById(R.id.btn_back_detail)
-        btnFavorite = findViewById(R.id.btn_favorite_detail)
+        btnBack = findViewById(R.id.btn_back_movie_detail)
+        btnFavorite = findViewById(R.id.btn_favorite_movie_detail)
     }
 
     private fun loadMoviesDetailData() {
