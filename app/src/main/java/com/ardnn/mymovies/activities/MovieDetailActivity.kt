@@ -9,6 +9,7 @@ import android.widget.Toast
 import com.ardnn.mymovies.R
 import com.ardnn.mymovies.helpers.Utils
 import com.ardnn.mymovies.models.Cast
+import com.ardnn.mymovies.models.Genre
 import com.ardnn.mymovies.models.ImageSize
 import com.ardnn.mymovies.models.Movie
 import com.ardnn.mymovies.networks.MoviesApiClient
@@ -130,13 +131,19 @@ class MovieDetailActivity : AppCompatActivity() {
 
     private fun setDataToWidgets() {
         // movie detail
-        val title = movie.title
-        val releaseDate = Utils.convertToDate(movie.releaseDate)
-        val runtime = movie.runtime
-        val overview = movie.overview
-        val rating = movie.rating
-        val wallpaperUrl = movie.getWallpaperUrl(ImageSize.W780)
-        val posterUrl = movie.getPosterUrl(ImageSize.W342)
+        val title: String = movie.title
+        val releaseDate: String = Utils.convertToDate(movie.releaseDate)
+        val runtime: Int = movie.runtime
+        val overview: String = movie.overview
+        val rating: Float = movie.rating
+        val wallpaperUrl: String = movie.getWallpaperUrl(ImageSize.W780)
+        val posterUrl: String = movie.getPosterUrl(ImageSize.W342)
+
+        val genreList: List<Genre> = movie.genreList
+        for (genre in genreList) { // debug
+            Log.d("GENRE", genre.name)
+        }
+
 
         // set to widgets
         tvTitle.text = title

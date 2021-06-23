@@ -17,7 +17,7 @@ data class Movie(
     val releaseDate: String,
 
     @SerializedName("runtime")
-    val runtime: String,
+    val runtime: Int,
 
     @SerializedName("vote_average")
     val rating: Float,
@@ -27,6 +27,9 @@ data class Movie(
 
     @SerializedName("backdrop_path")
     val wallpaperUrl: String,
+
+    @SerializedName("genres")
+    val genreList: List<Genre>
 ) {
     fun getPosterUrl(size: ImageSize): String {
         return "${Utils.IMG_URL}${size.getValue()}${posterUrl}"
