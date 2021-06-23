@@ -2,11 +2,13 @@ package com.ardnn.mymovies.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import com.ardnn.mymovies.R
 import com.ardnn.mymovies.helpers.Utils
+import com.ardnn.mymovies.models.Cast
 import com.ardnn.mymovies.models.ImageSize
 import com.ardnn.mymovies.models.Movie
 import com.ardnn.mymovies.networks.MoviesApiClient
@@ -21,8 +23,12 @@ class MovieDetailActivity : AppCompatActivity() {
         const val EXTRA_ID = "extra_id"
     }
 
-    // classes
+    // movie
     private lateinit var movie: Movie
+    private lateinit var moviesApiInterface: MoviesApiInterface
+
+    // cast
+    private lateinit var castList: List<Cast>
 
     // widgets
     private lateinit var tvTitle: TextView
@@ -41,14 +47,12 @@ class MovieDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movie_detail)
 
-        // get movie id
-        movieId = intent.getIntExtra(EXTRA_ID, 0)
+        // initialization
+        initialization()
 
-        // load movies detail data
-        loadMoviesDetailData()
-
-        // initialize widgets
-        initializeWidgets()
+        // load movies data
+        loadMovieDetail()
+        loadMoviesCast()
 
         // if button clicked
         btnBack.setOnClickListener { 
@@ -59,7 +63,14 @@ class MovieDetailActivity : AppCompatActivity() {
         }
     }
 
-    private fun initializeWidgets() {
+    private fun initialization() {
+        // movie
+        movieId = intent.getIntExtra(EXTRA_ID, 0)
+        moviesApiInterface = MoviesApiClient.retrofit
+            .create(MoviesApiInterface::class.java)
+
+
+        // widgets
         tvTitle = findViewById(R.id.tv_title_movie_detail)
         tvReleaseDate = findViewById(R.id.tv_release_date_movie_detail)
         tvSynopsis = findViewById(R.id.tv_synopsis_movie_detail)
@@ -72,7 +83,7 @@ class MovieDetailActivity : AppCompatActivity() {
         btnFavorite = findViewById(R.id.btn_favorite_movie_detail)
     }
 
-    private fun loadMoviesDetailData() {
+    private fun loadMovieDetail() {
         val moviesApiInterface: MoviesApiInterface = MoviesApiClient.retrofit
             .create(MoviesApiInterface::class.java)
 
@@ -92,6 +103,29 @@ class MovieDetailActivity : AppCompatActivity() {
             }
 
         })
+    }
+
+    private fun loadMoviesCast() {
+        val castCall: Call<Cast> = moviesApiInterface.getMoviesCast(movieId, Utils.API_KEY)
+        castCall.enqueue(object : Callback<Cast> {
+            override fun onResponse(call: Call<Cast>, response: Response<Cast>) {
+                if (response.isSuccessful && response.body()?.castList != null) {
+                    castList = response.body()!!.castList
+
+                    // debug
+                    for (cast in castList) {
+                        Log.d("CAST", cast.name)
+                    }
+                } else {
+                    Toast.makeText(this@MovieDetailActivity, "Response failed.", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<Cast>, t: Throwable) {
+                Toast.makeText(this@MovieDetailActivity, "Response failure.", Toast.LENGTH_SHORT).show()
+            }
+        })
+
     }
 
     private fun setDataToWidgets() {

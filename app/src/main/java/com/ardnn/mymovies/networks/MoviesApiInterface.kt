@@ -1,5 +1,6 @@
 package com.ardnn.mymovies.networks
 
+import com.ardnn.mymovies.models.Cast
 import com.ardnn.mymovies.models.Movie
 import com.ardnn.mymovies.models.MovieOutlineResponse
 import retrofit2.Call
@@ -13,6 +14,12 @@ interface MoviesApiInterface {
         @Path("movie_id") movieId: Int,
         @Query("api_key") apiKey: String
     ): Call<Movie>
+
+    @GET("{movie_id}/credits")
+    fun getMoviesCast(
+        @Path("movie_id") movieId: Int,
+        @Query("api_key") apiKey: String
+    ): Call<Cast>
 
     @GET("now_playing")
     fun getNowPlayingMovies(
