@@ -17,7 +17,6 @@ import com.ardnn.mymovies.adapters.MoviesOutlineAdapter
 import com.ardnn.mymovies.adapters.OnItemClick
 import com.ardnn.mymovies.helpers.Utils
 import com.ardnn.mymovies.models.MovieOutline
-import com.ardnn.mymovies.models.MovieOutlineResponse
 import com.ardnn.mymovies.networks.MoviesApiClient
 import com.ardnn.mymovies.networks.MoviesApiInterface
 import retrofit2.Call
@@ -65,16 +64,16 @@ class TopRatedMoviesFragment : Fragment(), OnItemClick<MovieOutline> {
         val moviesApiInterface: MoviesApiInterface = MoviesApiClient.retrofit
             .create(MoviesApiInterface::class.java)
 
-        val movieOutlineResponseCall: Call<MovieOutlineResponse> =
+        val movieOutlineCall: Call<MovieOutline> =
             moviesApiInterface.getTopRatedMovies(Utils.API_KEY)
-        movieOutlineResponseCall.enqueue(object : Callback<MovieOutlineResponse> {
+        movieOutlineCall.enqueue(object : Callback<MovieOutline> {
             override fun onResponse(
-                call: Call<MovieOutlineResponse>,
-                response: Response<MovieOutlineResponse>
+                call: Call<MovieOutline>,
+                response: Response<MovieOutline>
             ) {
                 if (response.isSuccessful && response.body()?.movieOutlineList != null) {
                     // put MoviesNowPlaying's data to list
-                    movieOutlineList = response.body()!!.movieOutlineList!!
+                    movieOutlineList = response.body()!!.movieOutlineList
 
                     // set recyclerview adapter
                     moviesOutlineAdapter = MoviesOutlineAdapter(movieOutlineList, this@TopRatedMoviesFragment)
@@ -87,7 +86,7 @@ class TopRatedMoviesFragment : Fragment(), OnItemClick<MovieOutline> {
                 pbTopRated.visibility = View.GONE
             }
 
-            override fun onFailure(call: Call<MovieOutlineResponse>, t: Throwable) {
+            override fun onFailure(call: Call<MovieOutline>, t: Throwable) {
                 Toast.makeText(activity, "Response failed.", Toast.LENGTH_SHORT).show()
             }
 

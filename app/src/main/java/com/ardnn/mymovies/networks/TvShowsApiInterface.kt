@@ -1,9 +1,8 @@
 package com.ardnn.mymovies.networks
 
 import com.ardnn.mymovies.models.Cast
-import com.ardnn.mymovies.models.Movie
 import com.ardnn.mymovies.models.TvShow
-import com.ardnn.mymovies.models.TvShowsOutlineResponse
+import com.ardnn.mymovies.models.TvShowsOutline
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -25,20 +24,20 @@ interface TvShowsApiInterface {
     @GET("airing_today")
     fun getAiringTodayTvShows(
         @Query("api_key") apiKey: String
-    ): Call<TvShowsOutlineResponse>
+    ): Call<TvShowsOutline>
 
     @GET("on_the_air")
     fun getOnTheAirTvShows(
         @Query("api_key") apiKey: String
-    ): Call<TvShowsOutlineResponse>
+    ): Call<TvShowsOutline>
 
     @GET("popular")
     fun getPopularTvShows(
         @Query("api_key") apiKey: String
-    ): Call<TvShowsOutlineResponse>
+    ): Call<TvShowsOutline>
 
     @GET("top_rated")
     fun getTopRatedTvShows(
         @Query("api_key") apiKey: String
-    ): Call<TvShowsOutlineResponse>
+    ): Call<TvShowsOutline>
 }

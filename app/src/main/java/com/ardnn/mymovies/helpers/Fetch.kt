@@ -2,7 +2,6 @@ package com.ardnn.mymovies.helpers
 
 import com.ardnn.mymovies.adapters.MoviesOutlineAdapter
 import com.ardnn.mymovies.models.MovieOutline
-import com.ardnn.mymovies.models.MovieOutlineResponse
 import com.ardnn.mymovies.networks.MoviesApiClient
 import com.ardnn.mymovies.networks.MoviesApiInterface
 import retrofit2.Call
@@ -11,15 +10,15 @@ import retrofit2.Response
 
 object Fetch {
 
-    // its still error
-    fun loadMoviesData(responseCall: Call<MovieOutlineResponse>, list: List<MovieOutline>, adapter: MoviesOutlineAdapter) {
+    /* its still error
+    fun loadMovieOutline(responseCall: Call<MovieOutline>, list: List<MovieOutline>, adapter: MoviesOutlineAdapter) {
         val moviesApiInterface: MoviesApiInterface = MoviesApiClient.retrofit
             .create(MoviesApiInterface::class.java)
 
-        responseCall.enqueue(object : Callback<MovieOutlineResponse> {
+        responseCall.enqueue(object : Callback<MovieOutline> {
             override fun onResponse(
-                call: Call<MovieOutlineResponse>,
-                response: Response<MovieOutlineResponse>
+                call: Call<MovieOutline>,
+                response: Response<MovieOutline>
             ) {
                 if (response.isSuccessful && response.body()?.movieOutlineList != null) {
                     // put movies' data to list
@@ -31,10 +30,11 @@ object Fetch {
                 }
             }
 
-            override fun onFailure(call: Call<MovieOutlineResponse>, t: Throwable) {
+            override fun onFailure(call: Call<MovieOutline>, t: Throwable) {
                 // response failure
             }
 
         })
     }
+    */
 }

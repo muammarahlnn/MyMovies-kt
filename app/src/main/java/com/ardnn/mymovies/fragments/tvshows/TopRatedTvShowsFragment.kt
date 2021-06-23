@@ -15,7 +15,6 @@ import com.ardnn.mymovies.adapters.OnItemClick
 import com.ardnn.mymovies.adapters.TvShowsOutlineAdapter
 import com.ardnn.mymovies.helpers.Utils
 import com.ardnn.mymovies.models.TvShowsOutline
-import com.ardnn.mymovies.models.TvShowsOutlineResponse
 import com.ardnn.mymovies.networks.TvShowsApiClient
 import com.ardnn.mymovies.networks.TvShowsApiInterface
 import retrofit2.Call
@@ -62,16 +61,16 @@ class TopRatedTvShowsFragment : Fragment(), OnItemClick<TvShowsOutline> {
         val tvShowsApiInterface: TvShowsApiInterface = TvShowsApiClient.retrofit
             .create(TvShowsApiInterface::class.java)
 
-        val tvShowsOutlineResponseCall: Call<TvShowsOutlineResponse> =
+        val tvShowsOutlineCall: Call<TvShowsOutline> =
             tvShowsApiInterface.getTopRatedTvShows(Utils.API_KEY)
-        tvShowsOutlineResponseCall.enqueue(object : Callback<TvShowsOutlineResponse> {
+        tvShowsOutlineCall.enqueue(object : Callback<TvShowsOutline> {
             override fun onResponse(
-                call: Call<TvShowsOutlineResponse>,
-                response: Response<TvShowsOutlineResponse>
+                call: Call<TvShowsOutline>,
+                response: Response<TvShowsOutline>
             ) {
                 if (response.isSuccessful && response.body()?.tvShowsOutlineList != null) {
                     // put data to list
-                    tvShowsOutlineList = response.body()!!.tvShowsOutlineList!!
+                    tvShowsOutlineList = response.body()!!.tvShowsOutlineList
 
                     // set recyclerview
                     tvShowsOutlineAdapter = TvShowsOutlineAdapter(tvShowsOutlineList, this@TopRatedTvShowsFragment)
@@ -84,7 +83,7 @@ class TopRatedTvShowsFragment : Fragment(), OnItemClick<TvShowsOutline> {
                 pbTopRated.visibility = View.GONE
             }
 
-            override fun onFailure(call: Call<TvShowsOutlineResponse>, t: Throwable) {
+            override fun onFailure(call: Call<TvShowsOutline>, t: Throwable) {
                 Toast.makeText(activity, "Response failure.", Toast.LENGTH_SHORT).show()
             }
 
