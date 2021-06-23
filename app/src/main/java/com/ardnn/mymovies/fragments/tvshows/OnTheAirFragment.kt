@@ -16,8 +16,8 @@ import com.ardnn.mymovies.adapters.TvShowsOutlineAdapter
 import com.ardnn.mymovies.helpers.Utils
 import com.ardnn.mymovies.models.TvShowsOutline
 import com.ardnn.mymovies.models.TvShowsOutlineResponse
-import com.ardnn.mymovies.networks.TvShowsOutlineApiClient
-import com.ardnn.mymovies.networks.TvShowsOutlineApiInterface
+import com.ardnn.mymovies.networks.TvShowsApiClient
+import com.ardnn.mymovies.networks.TvShowsApiInterface
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -59,11 +59,11 @@ class OnTheAirFragment : Fragment(), OnItemClick<TvShowsOutline> {
     }
 
     private fun loadData() {
-        val tvShowsOutlineApiInterface: TvShowsOutlineApiInterface = TvShowsOutlineApiClient.retrofit
-            .create(TvShowsOutlineApiInterface::class.java)
+        val tvShowsApiInterface: TvShowsApiInterface = TvShowsApiClient.retrofit
+            .create(TvShowsApiInterface::class.java)
 
         val tvShowsOutlineResponseCall: Call<TvShowsOutlineResponse> =
-            tvShowsOutlineApiInterface.getOnTheAirTvShows(Utils.API_KEY)
+            tvShowsApiInterface.getOnTheAirTvShows(Utils.API_KEY)
         tvShowsOutlineResponseCall.enqueue(object : Callback<TvShowsOutlineResponse> {
             override fun onResponse(
                 call: Call<TvShowsOutlineResponse>,

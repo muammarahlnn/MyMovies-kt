@@ -1,5 +1,6 @@
 package com.ardnn.mymovies.fragments.tvshows
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,13 +12,14 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.ardnn.mymovies.R
+import com.ardnn.mymovies.activities.TvShowDetailActivity
 import com.ardnn.mymovies.adapters.OnItemClick
 import com.ardnn.mymovies.adapters.TvShowsOutlineAdapter
 import com.ardnn.mymovies.helpers.Utils
 import com.ardnn.mymovies.models.TvShowsOutline
 import com.ardnn.mymovies.models.TvShowsOutlineResponse
-import com.ardnn.mymovies.networks.TvShowsOutlineApiClient
-import com.ardnn.mymovies.networks.TvShowsOutlineApiInterface
+import com.ardnn.mymovies.networks.TvShowsApiClient
+import com.ardnn.mymovies.networks.TvShowsApiInterface
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -59,11 +61,11 @@ class AiringTodayFragment : Fragment(), OnItemClick<TvShowsOutline> {
     }
 
     private fun loadData() {
-        val tvShowsOutlineApiInterface: TvShowsOutlineApiInterface = TvShowsOutlineApiClient.retrofit
-            .create(TvShowsOutlineApiInterface::class.java)
+        val tvShowsApiInterface: TvShowsApiInterface = TvShowsApiClient.retrofit
+            .create(TvShowsApiInterface::class.java)
 
         val tvShowsOutlineResponseCall: Call<TvShowsOutlineResponse> =
-            tvShowsOutlineApiInterface.getAiringTodayTvShows(Utils.API_KEY)
+            tvShowsApiInterface.getAiringTodayTvShows(Utils.API_KEY)
         tvShowsOutlineResponseCall.enqueue(object : Callback<TvShowsOutlineResponse> {
             override fun onResponse(
                 call: Call<TvShowsOutlineResponse>,
@@ -92,6 +94,9 @@ class AiringTodayFragment : Fragment(), OnItemClick<TvShowsOutline> {
     }
 
     override fun itemClicked(data: TvShowsOutline) {
-        Toast.makeText(activity, "You clicked ${data.title}", Toast.LENGTH_SHORT).show()
+        // go to tv show detail
+        val goToTvShowDetail = Intent(activity, TvShowDetailActivity::class.java)
+        goToTvShowDetail.putExtra(TvShowDetailActivity.EXTRA_ID, data.id)
+        startActivity(goToTvShowDetail)
     }
 }

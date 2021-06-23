@@ -7,14 +7,14 @@
     android:layout_height="match_parent"
     android:background="@color/black_taskbar"
     tools:background="@color/white"
-    tools:context=".activities.MovieDetailActivity" >
+    tools:context=".activities.TvShowDetailActivity" >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/iv_wallpaper_detail"
+            android:id="@+id/iv_wallpaper_tv_show_detail"
             android:layout_width="match_parent"
             android:layout_height="300dp"
             android:scaleType="centerCrop"
@@ -26,13 +26,13 @@
             android:layout_width="match_parent"
             android:layout_height="300dp"
             android:background="@drawable/bg_wallpaper_films"
-            app:layout_constraintBottom_toBottomOf="@+id/iv_wallpaper_detail"
-            app:layout_constraintEnd_toEndOf="@id/iv_wallpaper_detail"
-            app:layout_constraintStart_toStartOf="@id/iv_wallpaper_detail"
-            app:layout_constraintTop_toTopOf="@id/iv_wallpaper_detail" />
+            app:layout_constraintBottom_toBottomOf="@+id/iv_wallpaper_tv_show_detail"
+            app:layout_constraintEnd_toEndOf="@id/iv_wallpaper_tv_show_detail"
+            app:layout_constraintStart_toStartOf="@id/iv_wallpaper_tv_show_detail"
+            app:layout_constraintTop_toTopOf="@id/iv_wallpaper_tv_show_detail" />
 
         <ImageView
-            android:id="@+id/btn_back_detail"
+            android:id="@+id/btn_back_tv_show_detail"
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:layout_marginStart="16dp"
@@ -44,7 +44,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/btn_favorite_detail"
+            android:id="@+id/btn_favorite_tv_show_detail"
             android:layout_width="52dp"
             android:layout_height="52dp"
             android:layout_marginEnd="16dp"
@@ -63,7 +63,7 @@
             android:layout_marginBottom="12dp"
             app:cardCornerRadius="10dp"
             android:foreground="@drawable/bg_border_gray"
-            app:layout_constraintBottom_toBottomOf="@+id/iv_wallpaper_detail"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_wallpaper_tv_show_detail"
             app:layout_constraintStart_toStartOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -71,7 +71,7 @@
                 android:layout_height="match_parent">
 
                 <ImageView
-                    android:id="@+id/iv_poster_detail"
+                    android:id="@+id/iv_poster_tv_show_detail"
                     android:layout_width="match_parent"
                     android:layout_height="150dp"
                     android:scaleType="centerCrop"
@@ -97,7 +97,7 @@
                         android:src="@drawable/ic_star_yellow" />
 
                     <TextView
-                        android:id="@+id/tv_vote_detail"
+                        android:id="@+id/tv_vote_tv_show_detail"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         tools:text="8.2"
@@ -112,7 +112,7 @@
         </androidx.cardview.widget.CardView>
 
         <TextView
-            android:id="@+id/tv_title_detail"
+            android:id="@+id/tv_title_tv_show_detail"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
@@ -123,21 +123,21 @@
             android:textColor="@color/yellow_primary"
             android:textSize="21sp"
 
-            app:layout_constraintBottom_toTopOf="@+id/tv_release_date_detail"
+            app:layout_constraintBottom_toTopOf="@+id/tv_release_date_tv_show_detail"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/cardView2"
             tools:text="Title" />
 
         <TextView
-            android:id="@+id/tv_release_date_detail"
+            android:id="@+id/tv_release_date_tv_show_detail"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto_regular"
             android:textColor="@color/gray_primary"
             android:textSize="17sp"
             app:layout_constraintBottom_toBottomOf="@+id/cardView2"
-            app:layout_constraintEnd_toEndOf="@+id/tv_title_detail"
-            app:layout_constraintStart_toStartOf="@+id/tv_title_detail"
+            app:layout_constraintEnd_toEndOf="@+id/tv_title_tv_show_detail"
+            app:layout_constraintStart_toStartOf="@+id/tv_title_tv_show_detail"
             tools:text="2021-10-1" />
 
         <LinearLayout
@@ -149,7 +149,7 @@
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/iv_wallpaper_detail">
+            app:layout_constraintTop_toBottomOf="@+id/iv_wallpaper_tv_show_detail">
 
             <TextView
                 android:layout_width="match_parent"
@@ -163,7 +163,7 @@
                 android:textSize="16sp" />
 
             <TextView
-                android:id="@+id/tv_synopsis_detail"
+                android:id="@+id/tv_synopsis_tv_show_detail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingVertical="12dp"
