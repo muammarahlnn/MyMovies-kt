@@ -20,7 +20,7 @@ data class TvShow(
     val lastAirDate: String,
 
     @SerializedName("episode_run_time")
-    val runtimes: List<String>,
+    val runtimes: List<Int>,
 
     @SerializedName("vote_average")
     val rating: Float,
@@ -35,7 +35,10 @@ data class TvShow(
     val numberOfEpisodes: Int,
 
     @SerializedName("number_of_seasons")
-    val numberOfSeasons: Int
+    val numberOfSeasons: Int,
+
+    @SerializedName("genres")
+    val genreList: List<Genre>
 ) {
     fun getPosterUrl(size: ImageSize): String {
         return "${Utils.IMG_URL}${size.getValue()}${posterUrl}"

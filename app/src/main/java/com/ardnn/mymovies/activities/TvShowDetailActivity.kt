@@ -8,10 +8,7 @@ import android.widget.TextView
 import android.widget.Toast
 import com.ardnn.mymovies.R
 import com.ardnn.mymovies.helpers.Utils
-import com.ardnn.mymovies.models.Cast
-import com.ardnn.mymovies.models.ImageSize
-import com.ardnn.mymovies.models.Movie
-import com.ardnn.mymovies.models.TvShow
+import com.ardnn.mymovies.models.*
 import com.ardnn.mymovies.networks.MoviesApiClient
 import com.ardnn.mymovies.networks.MoviesApiInterface
 import com.ardnn.mymovies.networks.TvShowsApiClient
@@ -131,13 +128,18 @@ class TvShowDetailActivity : AppCompatActivity() {
 
     private fun setDataToWidgets() {
         // tvShow detail
-        val title = tvShow.title
-        val releaseDate = Utils.convertToDate(tvShow.firstAirDate)
-        val runtime = tvShow.runtimes[0]
-        val overview = tvShow.overview
-        val rating = tvShow.rating
-        val wallpaperUrl = tvShow.getWallpaperUrl(ImageSize.W780)
-        val posterUrl = tvShow.getPosterUrl(ImageSize.W342)
+        val title: String = tvShow.title
+        val releaseDate: String = Utils.convertToDate(tvShow.firstAirDate)
+        val runtime: Int = tvShow.runtimes[0]
+        val overview: String = tvShow.overview
+        val rating: Float = tvShow.rating
+        val wallpaperUrl: String = tvShow.getWallpaperUrl(ImageSize.W780)
+        val posterUrl: String = tvShow.getPosterUrl(ImageSize.W342)
+
+        val genreList: List<Genre> = tvShow.genreList
+        for (genre in genreList) { // debug
+            Log.d("GENRE", genre.name)
+        }
 
         // set to widgets
         tvTitle.text = title
