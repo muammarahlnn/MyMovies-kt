@@ -1,5 +1,6 @@
 package com.ardnn.mymovies.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -52,9 +53,9 @@ class MoviesOutlineAdapter(
             Glide.with(itemView.context)
                 .load(movieOutline.getPosterUrl(ImageSize.W342))
                 .into(ivPoster)
-            tvTitle.text = movieOutline.title
-            tvYear.text = movieOutline.releaseDate.substring(0, 4)
-            tvVote.text = movieOutline.rating.toString()
+            tvTitle.text = movieOutline.title ?: "null"
+            tvYear.text = movieOutline.releaseDate?.substring(0, 4) ?: "null"
+            tvVote.text = movieOutline.rating?.toString() ?: "0.0"
         }
 
     }

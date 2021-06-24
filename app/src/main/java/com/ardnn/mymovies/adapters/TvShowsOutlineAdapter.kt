@@ -53,9 +53,9 @@ class TvShowsOutlineAdapter(
             Glide.with(itemView.context)
                 .load(tvShowsOutline.getPosterUrl(ImageSize.W342))
                 .into(ivPoster)
-            tvTitle.text = tvShowsOutline.title
-            tvYear.text = tvShowsOutline.releaseDate.substring(0, 4)
-            tvVote.text = tvShowsOutline.rating.toString()
+            tvTitle.text = tvShowsOutline.title ?: "null"
+            tvYear.text = tvShowsOutline.releaseDate?.substring(0, 4) ?: "null"
+            tvVote.text = tvShowsOutline.rating?.toString() ?: "0.0"
         }
     }
 }
