@@ -17,13 +17,13 @@ data class TvShow(
     val firstAirDate: String,
 
     @SerializedName("last_air_date")
-    val lastAirDate: String,
+    val lastAirDate: String?,
 
     @SerializedName("episode_run_time")
     val runtimes: List<Int>,
 
     @SerializedName("vote_average")
-    val rating: Float,
+    val rating: Float?,
 
     @SerializedName("poster_path")
     val posterUrl: String,
