@@ -16,6 +16,9 @@ import com.ardnn.mymovies.activities.TvShowDetailActivity
 import com.ardnn.mymovies.adapters.OnItemClick
 import com.ardnn.mymovies.adapters.TvShowsOutlineAdapter
 import com.ardnn.mymovies.helpers.Utils
+import com.ardnn.mymovies.models.Cast
+import com.ardnn.mymovies.models.Genre
+import com.ardnn.mymovies.models.MovieOutline
 import com.ardnn.mymovies.models.TvShowsOutline
 import com.ardnn.mymovies.networks.TvShowsApiClient
 import com.ardnn.mymovies.networks.TvShowsApiInterface
@@ -23,7 +26,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class AiringTodayFragment : Fragment(), OnItemClick<TvShowsOutline> {
+class AiringTodayFragment : Fragment(), OnItemClick {
 
     // recyclerview attr
     private lateinit var rvAiringToday: RecyclerView
@@ -92,10 +95,22 @@ class AiringTodayFragment : Fragment(), OnItemClick<TvShowsOutline> {
         })
     }
 
-    override fun itemClicked(data: TvShowsOutline) {
+    override fun itemClicked(movieOutline: MovieOutline) {
+        // do nothing
+    }
+
+    override fun itemClicked(tvShowOutline: TvShowsOutline) {
         // go to tv show detail
         val goToTvShowDetail = Intent(activity, TvShowDetailActivity::class.java)
-        goToTvShowDetail.putExtra(TvShowDetailActivity.EXTRA_ID, data.id)
+        goToTvShowDetail.putExtra(TvShowDetailActivity.EXTRA_ID, tvShowOutline.id)
         startActivity(goToTvShowDetail)
+    }
+
+    override fun itemClicked(genre: Genre) {
+        // do nothing
+    }
+
+    override fun itemClicked(cast: Cast) {
+        // do nothing
     }
 }

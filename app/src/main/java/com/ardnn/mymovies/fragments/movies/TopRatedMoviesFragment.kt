@@ -16,14 +16,17 @@ import com.ardnn.mymovies.activities.MovieDetailActivity
 import com.ardnn.mymovies.adapters.MoviesOutlineAdapter
 import com.ardnn.mymovies.adapters.OnItemClick
 import com.ardnn.mymovies.helpers.Utils
+import com.ardnn.mymovies.models.Cast
+import com.ardnn.mymovies.models.Genre
 import com.ardnn.mymovies.models.MovieOutline
+import com.ardnn.mymovies.models.TvShowsOutline
 import com.ardnn.mymovies.networks.MoviesApiClient
 import com.ardnn.mymovies.networks.MoviesApiInterface
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class TopRatedMoviesFragment : Fragment(), OnItemClick<MovieOutline> {
+class TopRatedMoviesFragment : Fragment(), OnItemClick {
 
     // recyclerview attr
     private lateinit var rvTopRated: RecyclerView
@@ -93,11 +96,23 @@ class TopRatedMoviesFragment : Fragment(), OnItemClick<MovieOutline> {
         })
     }
 
-    override fun itemClicked(data: MovieOutline) {
+    override fun itemClicked(movieOutline: MovieOutline) {
         // go to movies detail
         val goToMovieDetail = Intent(activity, MovieDetailActivity::class.java)
-        goToMovieDetail.putExtra(MovieDetailActivity.EXTRA_ID, data.id)
+        goToMovieDetail.putExtra(MovieDetailActivity.EXTRA_ID, movieOutline.id)
         startActivity(goToMovieDetail)
+    }
+
+    override fun itemClicked(tvShowOutline: TvShowsOutline) {
+        // do nothing
+    }
+
+    override fun itemClicked(genre: Genre) {
+        // do nothing
+    }
+
+    override fun itemClicked(cast: Cast) {
+        // do nothing
     }
 
 }

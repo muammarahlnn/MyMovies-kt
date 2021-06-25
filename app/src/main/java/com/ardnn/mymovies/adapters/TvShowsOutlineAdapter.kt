@@ -14,7 +14,7 @@ import com.bumptech.glide.Glide
 
 class TvShowsOutlineAdapter(
     private var tvShowsList: List<TvShowsOutline>,
-    private var onItemClick: OnItemClick<TvShowsOutline>
+    private var onItemClick: OnItemClick
 ) : RecyclerView.Adapter<TvShowsOutlineAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -32,7 +32,7 @@ class TvShowsOutlineAdapter(
         return tvShowsList.size
     }
 
-    inner class ViewHolder(itemView: View, onItemClick: OnItemClick<TvShowsOutline>) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View, onItemClick: OnItemClick) : RecyclerView.ViewHolder(itemView) {
         private val ivPoster: ImageView
         private val tvTitle: TextView
         private val tvYear: TextView

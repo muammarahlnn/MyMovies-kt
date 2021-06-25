@@ -14,7 +14,7 @@ import com.bumptech.glide.Glide
 
 class MoviesOutlineAdapter(
     private var movieList: List<MovieOutline>,
-    private var onItemClick: OnItemClick<MovieOutline>
+    private var onItemClick: OnItemClick
     ) : RecyclerView.Adapter<MoviesOutlineAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -32,7 +32,7 @@ class MoviesOutlineAdapter(
         return movieList.size
     }
 
-    inner class ViewHolder(itemView: View, onItemClick: OnItemClick<MovieOutline>) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View, onItemClick: OnItemClick) : RecyclerView.ViewHolder(itemView) {
         private val ivPoster: ImageView
         private val tvTitle: TextView
         private val tvYear: TextView

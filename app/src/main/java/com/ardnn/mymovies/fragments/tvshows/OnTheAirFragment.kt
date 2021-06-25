@@ -1,5 +1,6 @@
 package com.ardnn.mymovies.fragments.tvshows
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,9 +12,13 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.ardnn.mymovies.R
+import com.ardnn.mymovies.activities.TvShowDetailActivity
 import com.ardnn.mymovies.adapters.OnItemClick
 import com.ardnn.mymovies.adapters.TvShowsOutlineAdapter
 import com.ardnn.mymovies.helpers.Utils
+import com.ardnn.mymovies.models.Cast
+import com.ardnn.mymovies.models.Genre
+import com.ardnn.mymovies.models.MovieOutline
 import com.ardnn.mymovies.models.TvShowsOutline
 import com.ardnn.mymovies.networks.TvShowsApiClient
 import com.ardnn.mymovies.networks.TvShowsApiInterface
@@ -21,7 +26,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class OnTheAirFragment : Fragment(), OnItemClick<TvShowsOutline> {
+class OnTheAirFragment : Fragment(), OnItemClick {
 
     // recyclerview attr
     private lateinit var rvOnTheAir: RecyclerView
@@ -90,7 +95,22 @@ class OnTheAirFragment : Fragment(), OnItemClick<TvShowsOutline> {
         })
     }
 
-    override fun itemClicked(data: TvShowsOutline) {
-        Toast.makeText(activity, "You clicked ${data.title}", Toast.LENGTH_SHORT).show()
+    override fun itemClicked(movieOutline: MovieOutline) {
+        // do nothing
+    }
+
+    override fun itemClicked(tvShowOutline: TvShowsOutline) {
+        // go to tv show detail
+        val goToTvShowDetail = Intent(activity, TvShowDetailActivity::class.java)
+        goToTvShowDetail.putExtra(TvShowDetailActivity.EXTRA_ID, tvShowOutline.id)
+        startActivity(goToTvShowDetail)
+    }
+
+    override fun itemClicked(genre: Genre) {
+        // do nothing
+    }
+
+    override fun itemClicked(cast: Cast) {
+        // do nothing
     }
 }
