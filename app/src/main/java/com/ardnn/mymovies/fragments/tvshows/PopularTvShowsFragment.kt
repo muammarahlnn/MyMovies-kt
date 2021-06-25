@@ -19,7 +19,7 @@ import com.ardnn.mymovies.helpers.Utils
 import com.ardnn.mymovies.models.Cast
 import com.ardnn.mymovies.models.Genre
 import com.ardnn.mymovies.models.MovieOutline
-import com.ardnn.mymovies.models.TvShowsOutline
+import com.ardnn.mymovies.models.TvShowOutline
 import com.ardnn.mymovies.networks.TvShowsApiClient
 import com.ardnn.mymovies.networks.TvShowsApiInterface
 import retrofit2.Call
@@ -31,7 +31,7 @@ class PopularTvShowsFragment : Fragment(), OnItemClick {
     // recyclerview attr
     private lateinit var rvPopular: RecyclerView
     private lateinit var tvShowsOutlineAdapter: TvShowsOutlineAdapter
-    private lateinit var tvShowsOutlineList: List<TvShowsOutline>
+    private lateinit var tvShowOutlineList: List<TvShowOutline>
 
     // widgets
     private lateinit var pbPopular: ProgressBar
@@ -66,19 +66,19 @@ class PopularTvShowsFragment : Fragment(), OnItemClick {
         val tvShowsApiInterface: TvShowsApiInterface = TvShowsApiClient.retrofit
             .create(TvShowsApiInterface::class.java)
 
-        val tvShowsOutlineCall: Call<TvShowsOutline> =
+        val tvShowOutlineCall: Call<TvShowOutline> =
             tvShowsApiInterface.getPopularTvShows(Utils.API_KEY)
-        tvShowsOutlineCall.enqueue(object : Callback<TvShowsOutline> {
+        tvShowOutlineCall.enqueue(object : Callback<TvShowOutline> {
             override fun onResponse(
-                call: Call<TvShowsOutline>,
-                response: Response<TvShowsOutline>
+                call: Call<TvShowOutline>,
+                response: Response<TvShowOutline>
             ) {
-                if (response.isSuccessful && response.body()?.tvShowsOutlineList != null) {
+                if (response.isSuccessful && response.body()?.tvShowOutlineList != null) {
                     // put data to list
-                    tvShowsOutlineList = response.body()!!.tvShowsOutlineList
+                    tvShowOutlineList = response.body()!!.tvShowOutlineList
 
                     // set recyclerview
-                    tvShowsOutlineAdapter = TvShowsOutlineAdapter(tvShowsOutlineList, this@PopularTvShowsFragment)
+                    tvShowsOutlineAdapter = TvShowsOutlineAdapter(tvShowOutlineList, this@PopularTvShowsFragment)
                     rvPopular.adapter = tvShowsOutlineAdapter
                 } else {
                     Toast.makeText(activity, "Response failed.", Toast.LENGTH_SHORT).show()
@@ -88,7 +88,7 @@ class PopularTvShowsFragment : Fragment(), OnItemClick {
                 pbPopular.visibility = View.GONE
             }
 
-            override fun onFailure(call: Call<TvShowsOutline>, t: Throwable) {
+            override fun onFailure(call: Call<TvShowOutline>, t: Throwable) {
                 Toast.makeText(activity, "Response failure.", Toast.LENGTH_SHORT).show()
             }
 
@@ -99,7 +99,7 @@ class PopularTvShowsFragment : Fragment(), OnItemClick {
         // do nothing
     }
 
-    override fun itemClicked(tvShowOutline: TvShowsOutline) {
+    override fun itemClicked(tvShowOutline: TvShowOutline) {
         // go to tv show detail
         val goToTvShowDetail = Intent(activity, TvShowDetailActivity::class.java)
         goToTvShowDetail.putExtra(TvShowDetailActivity.EXTRA_ID, tvShowOutline.id)

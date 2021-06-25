@@ -1,10 +1,9 @@
 package com.ardnn.mymovies.models
 
 import com.ardnn.mymovies.helpers.Utils
-import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-data class TvShowsOutline(
+data class TvShowOutline(
     @SerializedName("id")
     val id: Int?,
 
@@ -21,7 +20,7 @@ data class TvShowsOutline(
     val rating: Double?,
 
     @SerializedName("results")
-    val tvShowsOutlineList: List<TvShowsOutline>
+    val tvShowOutlineList: List<TvShowOutline>
 ) {
     fun getPosterUrl(size: ImageSize) : String {
         return "${Utils.IMG_URL}${size.getValue()}${posterUrl}"

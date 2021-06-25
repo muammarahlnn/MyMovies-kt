@@ -19,7 +19,7 @@ import com.ardnn.mymovies.helpers.Utils
 import com.ardnn.mymovies.models.Cast
 import com.ardnn.mymovies.models.Genre
 import com.ardnn.mymovies.models.MovieOutline
-import com.ardnn.mymovies.models.TvShowsOutline
+import com.ardnn.mymovies.models.TvShowOutline
 import com.ardnn.mymovies.networks.MoviesApiClient
 import com.ardnn.mymovies.networks.MoviesApiInterface
 import retrofit2.Call
@@ -103,7 +103,7 @@ class PopularMoviesFragment : Fragment(), OnItemClick {
         startActivity(goToMovieDetail)
     }
 
-    override fun itemClicked(tvShowOutline: TvShowsOutline) {
+    override fun itemClicked(tvShowOutline: TvShowOutline) {
         // do nothing
     }
 

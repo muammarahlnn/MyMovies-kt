@@ -230,7 +230,7 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, OnItemCli
         // do nothing
     }
 
-    override fun itemClicked(tvShowOutline: TvShowsOutline) {
+    override fun itemClicked(tvShowOutline: TvShowOutline) {
         // do nothing
     }
 

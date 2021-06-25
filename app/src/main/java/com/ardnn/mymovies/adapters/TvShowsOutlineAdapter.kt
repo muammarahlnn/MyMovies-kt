@@ -7,13 +7,12 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.ardnn.mymovies.R
-import com.ardnn.mymovies.helpers.Utils
 import com.ardnn.mymovies.models.ImageSize
-import com.ardnn.mymovies.models.TvShowsOutline
+import com.ardnn.mymovies.models.TvShowOutline
 import com.bumptech.glide.Glide
 
 class TvShowsOutlineAdapter(
-    private var tvShowsList: List<TvShowsOutline>,
+    private var tvShowList: List<TvShowOutline>,
     private var onItemClick: OnItemClick
 ) : RecyclerView.Adapter<TvShowsOutlineAdapter.ViewHolder>() {
 
@@ -25,11 +24,11 @@ class TvShowsOutlineAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.onBind(tvShowsList[position])
+        holder.onBind(tvShowList[position])
     }
 
     override fun getItemCount(): Int {
-        return tvShowsList.size
+        return tvShowList.size
     }
 
     inner class ViewHolder(itemView: View, onItemClick: OnItemClick) : RecyclerView.ViewHolder(itemView) {
@@ -40,7 +39,7 @@ class TvShowsOutlineAdapter(
 
         init {
             itemView.setOnClickListener {
-                onItemClick.itemClicked(tvShowsList[absoluteAdapterPosition])
+                onItemClick.itemClicked(tvShowList[absoluteAdapterPosition])
             }
             ivPoster = itemView.findViewById(R.id.iv_poster_item_films)
             tvTitle = itemView.findViewById(R.id.tv_title_item_films)
@@ -48,14 +47,14 @@ class TvShowsOutlineAdapter(
             tvVote = itemView.findViewById(R.id.tv_vote_item_films)
         }
 
-        fun onBind(tvShowsOutline: TvShowsOutline) {
+        fun onBind(tvShowOutline: TvShowOutline) {
             // set data to widgets
             Glide.with(itemView.context)
-                .load(tvShowsOutline.getPosterUrl(ImageSize.W342))
+                .load(tvShowOutline.getPosterUrl(ImageSize.W342))
                 .into(ivPoster)
-            tvTitle.text = tvShowsOutline.title ?: "null"
-            tvYear.text = tvShowsOutline.releaseDate?.substring(0, 4) ?: "null"
-            tvVote.text = tvShowsOutline.rating?.toString() ?: "0.0"
+            tvTitle.text = tvShowOutline.title ?: "null"
+            tvYear.text = tvShowOutline.releaseDate?.substring(0, 4) ?: "null"
+            tvVote.text = tvShowOutline.rating?.toString() ?: "0.0"
         }
     }
 }
