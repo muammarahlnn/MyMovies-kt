@@ -1,6 +1,6 @@
 package com.ardnn.mymovies.models
 
-import com.ardnn.mymovies.helpers.Utils
+import com.ardnn.mymovies.api.repositories.Consts
 import com.google.gson.annotations.SerializedName
 
 data class Movie(
@@ -32,10 +32,10 @@ data class Movie(
     val genreList: List<Genre>
 ) {
     fun getPosterUrl(size: ImageSize): String {
-        return "${Utils.IMG_URL}${size.getValue()}${posterUrl}"
+        return "${Consts.IMG_URL}${size.getValue()}${posterUrl}"
     }
 
     fun getWallpaperUrl(size: ImageSize): String {
-        return "${Utils.IMG_URL}${size.getValue()}${wallpaperUrl}"
+        return "${Consts.IMG_URL}${size.getValue()}${wallpaperUrl}"
     }
 }

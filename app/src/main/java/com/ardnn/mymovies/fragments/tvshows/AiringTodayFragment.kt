@@ -15,27 +15,22 @@ import com.ardnn.mymovies.R
 import com.ardnn.mymovies.activities.TvShowDetailActivity
 import com.ardnn.mymovies.adapters.OnItemClick
 import com.ardnn.mymovies.adapters.TvShowsOutlineAdapter
-import com.ardnn.mymovies.helpers.Utils
 import com.ardnn.mymovies.models.Cast
 import com.ardnn.mymovies.models.Genre
 import com.ardnn.mymovies.models.MovieOutline
 import com.ardnn.mymovies.models.TvShowOutline
-import com.ardnn.mymovies.networks.TvShowsApiClient
-import com.ardnn.mymovies.networks.TvShowsApiInterface
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.ardnn.mymovies.api.repositories.TvShowRepository
+import com.ardnn.mymovies.api.callbacks.tvshows.AiringTodayTvShowsCallback
 
-class AiringTodayFragment : Fragment(), OnItemClick {
+class AiringTodayFragment : Fragment(), OnItemClick, SwipeRefreshLayout.OnRefreshListener {
 
     // recyclerview attr
-    private lateinit var rvAiringToday: RecyclerView
-    private lateinit var tvShowsOutlineAdapter: TvShowsOutlineAdapter
-    private lateinit var tvShowOutlineList: List<TvShowOutline>
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: TvShowsOutlineAdapter
 
     // widgets
-    private lateinit var pbAiringToday: ProgressBar
-    private lateinit var srlAiringToday: SwipeRefreshLayout
+    private lateinit var progressBar: ProgressBar
+    private lateinit var swipeRefresh: SwipeRefreshLayout
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,16 +40,13 @@ class AiringTodayFragment : Fragment(), OnItemClick {
         val view: View =  inflater.inflate(R.layout.fragment_now_playing, container, false)
 
         // initialize widgets
-        rvAiringToday = view.findViewById(R.id.rv_now_playing)
-        pbAiringToday = view.findViewById(R.id.pb_now_playing)
-        srlAiringToday = view.findViewById(R.id.srl_now_playing)
-        srlAiringToday.setOnRefreshListener {
-            loadData()
-            srlAiringToday.isRefreshing = false
-        }
+        recyclerView = view.findViewById(R.id.rv_now_playing)
+        progressBar = view.findViewById(R.id.pb_now_playing)
+        swipeRefresh = view.findViewById(R.id.srl_now_playing)
+        swipeRefresh.setOnRefreshListener(this)
 
         // set recyclerview layout
-        rvAiringToday.layoutManager = GridLayoutManager(activity, 2)
+        recyclerView.layoutManager = GridLayoutManager(activity, 2)
 
         // load MoviesNowPlaying's data from TMDB API
         loadData()
@@ -63,40 +55,26 @@ class AiringTodayFragment : Fragment(), OnItemClick {
     }
 
     private fun loadData() {
-        val tvShowsApiInterface: TvShowsApiInterface = TvShowsApiClient.retrofit
-            .create(TvShowsApiInterface::class.java)
-
-        val tvShowOutlineCall: Call<TvShowOutline> =
-            tvShowsApiInterface.getAiringTodayTvShows(Utils.API_KEY)
-        tvShowOutlineCall.enqueue(object : Callback<TvShowOutline> {
-            override fun onResponse(
-                call: Call<TvShowOutline>,
-                response: Response<TvShowOutline>
-            ) {
-                if (response.isSuccessful && response.body()?.tvShowOutlineList != null) {
-                    // put data to list
-                    tvShowOutlineList = response.body()!!.tvShowOutlineList
-
-                    // set recyclerview
-                    tvShowsOutlineAdapter = TvShowsOutlineAdapter(tvShowOutlineList, this@AiringTodayFragment)
-                    rvAiringToday.adapter = tvShowsOutlineAdapter
-                } else {
-                    Toast.makeText(activity, "Response failed.", Toast.LENGTH_SHORT).show()
-                }
+        TvShowRepository.getAiringTodayTvShows(object : AiringTodayTvShowsCallback {
+            override fun onSuccess(airingTodayList: List<TvShowOutline>) {
+                // setup recyclerview
+                adapter = TvShowsOutlineAdapter(airingTodayList, this@AiringTodayFragment)
+                recyclerView.adapter = adapter
 
                 // remove progress bar
-                pbAiringToday.visibility = View.GONE
+                progressBar.visibility = View.GONE
             }
 
-            override fun onFailure(call: Call<TvShowOutline>, t: Throwable) {
-                Toast.makeText(activity, "Response failure.", Toast.LENGTH_SHORT).show()
+            override fun onFailure(message: String) {
+                Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
             }
 
         })
     }
 
-    override fun itemClicked(movieOutline: MovieOutline) {
-        // do nothing
+    override fun onRefresh() {
+        loadData()
+        swipeRefresh.isRefreshing = false
     }
 
     override fun itemClicked(tvShowOutline: TvShowOutline) {
@@ -106,11 +84,9 @@ class AiringTodayFragment : Fragment(), OnItemClick {
         startActivity(goToTvShowDetail)
     }
 
-    override fun itemClicked(genre: Genre) {
-        // do nothing
-    }
+    // do nothing
+    override fun itemClicked(movieOutline: MovieOutline) {}
+    override fun itemClicked(genre: Genre) {}
+    override fun itemClicked(cast: Cast) {}
 
-    override fun itemClicked(cast: Cast) {
-        // do nothing
-    }
 }

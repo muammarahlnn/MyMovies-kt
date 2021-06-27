@@ -15,27 +15,22 @@ import com.ardnn.mymovies.R
 import com.ardnn.mymovies.activities.MovieDetailActivity
 import com.ardnn.mymovies.adapters.MoviesOutlineAdapter
 import com.ardnn.mymovies.adapters.OnItemClick
-import com.ardnn.mymovies.helpers.Utils
 import com.ardnn.mymovies.models.Cast
 import com.ardnn.mymovies.models.Genre
 import com.ardnn.mymovies.models.MovieOutline
 import com.ardnn.mymovies.models.TvShowOutline
-import com.ardnn.mymovies.networks.MoviesApiClient
-import com.ardnn.mymovies.networks.MoviesApiInterface
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.ardnn.mymovies.api.repositories.MovieRepository
+import com.ardnn.mymovies.api.callbacks.movies.TopRatedMoviesCallback
 
-class TopRatedMoviesFragment : Fragment(), OnItemClick {
+class TopRatedMoviesFragment : Fragment(), OnItemClick, SwipeRefreshLayout.OnRefreshListener {
 
     // recyclerview attr
-    private lateinit var rvTopRated: RecyclerView
-    private lateinit var moviesOutlineAdapter: MoviesOutlineAdapter
-    private lateinit var movieOutlineList: List<MovieOutline>
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: MoviesOutlineAdapter
 
     // widgets
-    private lateinit var pbTopRated: ProgressBar
-    private lateinit var srlTopRated: SwipeRefreshLayout
+    private lateinit var progressBar: ProgressBar
+    private lateinit var swipeRefresh: SwipeRefreshLayout
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,16 +40,13 @@ class TopRatedMoviesFragment : Fragment(), OnItemClick {
         val view: View =  inflater.inflate(R.layout.fragment_top_rated_movies, container, false)
 
         // initialize widgets
-        rvTopRated = view.findViewById(R.id.rv_top_rated_movies)
-        pbTopRated = view.findViewById(R.id.pb_top_rated_movies)
-        srlTopRated = view.findViewById(R.id.srl_top_rated_movies)
-        srlTopRated.setOnRefreshListener {
-            loadData()
-            srlTopRated.isRefreshing = false
-        }
+        recyclerView = view.findViewById(R.id.rv_top_rated_movies)
+        progressBar = view.findViewById(R.id.pb_top_rated_movies)
+        swipeRefresh = view.findViewById(R.id.srl_top_rated_movies)
+        swipeRefresh.setOnRefreshListener(this)
 
         // set recyclerview layout
-        rvTopRated.layoutManager = GridLayoutManager(activity, 2)
+        recyclerView.layoutManager = GridLayoutManager(activity, 2)
 
         // load MoviesNowPlaying's data from TMDB API
         loadData()
@@ -64,36 +56,26 @@ class TopRatedMoviesFragment : Fragment(), OnItemClick {
 
 
     private fun loadData() {
-        val moviesApiInterface: MoviesApiInterface = MoviesApiClient.retrofit
-            .create(MoviesApiInterface::class.java)
-
-        val movieOutlineCall: Call<MovieOutline> =
-            moviesApiInterface.getTopRatedMovies(Utils.API_KEY)
-        movieOutlineCall.enqueue(object : Callback<MovieOutline> {
-            override fun onResponse(
-                call: Call<MovieOutline>,
-                response: Response<MovieOutline>
-            ) {
-                if (response.isSuccessful && response.body()?.movieOutlineList != null) {
-                    // put MoviesNowPlaying's data to list
-                    movieOutlineList = response.body()!!.movieOutlineList
-
-                    // set recyclerview adapter
-                    moviesOutlineAdapter = MoviesOutlineAdapter(movieOutlineList, this@TopRatedMoviesFragment)
-                    rvTopRated.adapter = moviesOutlineAdapter
-                } else {
-                    Toast.makeText(activity, "Response failed.", Toast.LENGTH_SHORT).show()
-                }
+        MovieRepository.getTopRatedMovies(object : TopRatedMoviesCallback {
+            override fun onSuccess(topRatedMoviesList: List<MovieOutline>) {
+                // setup recyclerview
+                adapter = MoviesOutlineAdapter(topRatedMoviesList, this@TopRatedMoviesFragment)
+                recyclerView.adapter = adapter
 
                 // remove progress bar
-                pbTopRated.visibility = View.GONE
+                progressBar.visibility = View.GONE
             }
 
-            override fun onFailure(call: Call<MovieOutline>, t: Throwable) {
-                Toast.makeText(activity, "Response failed.", Toast.LENGTH_SHORT).show()
+            override fun onFailure(message: String) {
+                Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
             }
 
         })
+    }
+
+    override fun onRefresh() {
+        loadData()
+        swipeRefresh.isRefreshing = false
     }
 
     override fun itemClicked(movieOutline: MovieOutline) {
@@ -103,16 +85,8 @@ class TopRatedMoviesFragment : Fragment(), OnItemClick {
         startActivity(goToMovieDetail)
     }
 
-    override fun itemClicked(tvShowOutline: TvShowOutline) {
-        // do nothing
-    }
-
-    override fun itemClicked(genre: Genre) {
-        // do nothing
-    }
-
-    override fun itemClicked(cast: Cast) {
-        // do nothing
-    }
+    override fun itemClicked(tvShowOutline: TvShowOutline) {}
+    override fun itemClicked(genre: Genre) {}
+    override fun itemClicked(cast: Cast) {}
 
 }

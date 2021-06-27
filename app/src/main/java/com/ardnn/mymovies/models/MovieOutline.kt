@@ -1,7 +1,6 @@
 package com.ardnn.mymovies.models
 
-import com.ardnn.mymovies.helpers.Utils
-import com.google.gson.annotations.Expose
+import com.ardnn.mymovies.api.repositories.Consts
 import com.google.gson.annotations.SerializedName
 
 data class MovieOutline(
@@ -24,7 +23,7 @@ data class MovieOutline(
     val movieOutlineList: List<MovieOutline>
 ) {
     fun getPosterUrl(size: ImageSize) : String {
-        return "${Utils.IMG_URL}${size.getValue()}${posterUrl}"
+        return "${Consts.IMG_URL}${size.getValue()}${posterUrl}"
     }
 }
 

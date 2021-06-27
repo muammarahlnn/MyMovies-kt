@@ -1,6 +1,6 @@
 package com.ardnn.mymovies.models
 
-import com.ardnn.mymovies.helpers.Utils
+import com.ardnn.mymovies.api.repositories.Consts
 import com.google.gson.annotations.SerializedName
 
 data class Cast(
@@ -20,7 +20,7 @@ data class Cast(
     val castList: List<Cast>
 ) {
     fun getImageUrl(size: ImageSize) : String {
-        return "${Utils.IMG_URL}${size.getValue()}${imageUrl}"
+        return "${Consts.IMG_URL}${size.getValue()}${imageUrl}"
     }
 }
 

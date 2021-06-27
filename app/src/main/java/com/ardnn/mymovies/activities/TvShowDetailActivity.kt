@@ -15,16 +15,13 @@ import com.ardnn.mymovies.R
 import com.ardnn.mymovies.adapters.CastsAdapter
 import com.ardnn.mymovies.adapters.GenresAdapter
 import com.ardnn.mymovies.adapters.OnItemClick
+import com.ardnn.mymovies.api.callbacks.tvshows.TvShowCastsCallback
+import com.ardnn.mymovies.api.callbacks.tvshows.TvShowDetailsCallback
+import com.ardnn.mymovies.api.repositories.TvShowRepository
 import com.ardnn.mymovies.helpers.Utils
 import com.ardnn.mymovies.models.*
-import com.ardnn.mymovies.networks.MoviesApiClient
-import com.ardnn.mymovies.networks.MoviesApiInterface
-import com.ardnn.mymovies.networks.TvShowsApiClient
-import com.ardnn.mymovies.networks.TvShowsApiInterface
+import com.ardnn.mymovies.api.services.TvShowApiServices
 import com.bumptech.glide.Glide
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class TvShowDetailActivity : AppCompatActivity(), OnItemClick, View.OnClickListener {
     companion object {
@@ -33,7 +30,8 @@ class TvShowDetailActivity : AppCompatActivity(), OnItemClick, View.OnClickListe
 
     // tv show
     private lateinit var tvShow: TvShow
-    private lateinit var tvShowApiInterface: TvShowsApiInterface
+    private var tvShowId: Int = 0
+
 
     // genres
     private lateinit var rvGenres: RecyclerView
@@ -43,7 +41,6 @@ class TvShowDetailActivity : AppCompatActivity(), OnItemClick, View.OnClickListe
     // casts
     private lateinit var rvCasts: RecyclerView
     private lateinit var castsAdapter: CastsAdapter
-    private lateinit var castList: List<Cast>
 
     // widgets
     private lateinit var tvTitle: TextView
@@ -63,7 +60,6 @@ class TvShowDetailActivity : AppCompatActivity(), OnItemClick, View.OnClickListe
     private lateinit var pbDetail: ProgressBar
 
     // variables
-    private var tvShowId: Int = 0
     private var isSynopsisExtended: Boolean = false
     private var isFavorite: Boolean = false
 
@@ -75,8 +71,8 @@ class TvShowDetailActivity : AppCompatActivity(), OnItemClick, View.OnClickListe
         initialization()
 
         // load tv show data
-        loadTvShowDetail()
-        loadTvShowCast()
+        loadTvShowDetails()
+        loadTvShowCasts()
 
         // if button clicked
         btnBack.setOnClickListener(this)
@@ -115,8 +111,6 @@ class TvShowDetailActivity : AppCompatActivity(), OnItemClick, View.OnClickListe
     private fun initialization() {
         // tv show
         tvShowId = intent.getIntExtra(EXTRA_ID, 0)
-        tvShowApiInterface = TvShowsApiClient.retrofit
-            .create(TvShowsApiInterface::class.java)
 
         // genres
         rvGenres = findViewById(R.id.rv_genre_tv_show_detail)
@@ -152,48 +146,33 @@ class TvShowDetailActivity : AppCompatActivity(), OnItemClick, View.OnClickListe
         pbDetail = findViewById(R.id.pb_tv_show_detail)
     }
 
-    private fun loadTvShowDetail() {
-        val tvShowsApiInterface: TvShowsApiInterface = TvShowsApiClient.retrofit
-            .create(TvShowsApiInterface::class.java)
-
-        val tvShowCall: Call<TvShow> = tvShowsApiInterface.getDetailTvShows(tvShowId, Utils.API_KEY)
-        tvShowCall.enqueue(object : Callback<TvShow>{
-            override fun onResponse(call: Call<TvShow>, response: Response<TvShow>) {
-                if (response.isSuccessful && response.body() != null) {
-                    tvShow = response.body()!!
-                    setDataToWidgets()
-                } else {
-                    Toast.makeText(this@TvShowDetailActivity, "Response failed.", Toast.LENGTH_SHORT).show()
-                }
+    private fun loadTvShowDetails() {
+        TvShowRepository.getTvShowDetails(tvShowId, object : TvShowDetailsCallback {
+            override fun onSuccess(tvShow: TvShow) {
+                // get details and set it to widgets
+                this@TvShowDetailActivity.tvShow = tvShow
+                setDataToWidgets()
             }
 
-            override fun onFailure(call: Call<TvShow>, t: Throwable) {
-                Toast.makeText(this@TvShowDetailActivity, "Response failure.", Toast.LENGTH_SHORT).show()
+            override fun onFailure(message: String) {
+                Toast.makeText(this@TvShowDetailActivity, message, Toast.LENGTH_SHORT).show()
             }
 
         })
     }
 
-    private fun loadTvShowCast() {
-        val castCall: Call<Cast> = tvShowApiInterface.getTvShowsCast(tvShowId, Utils.API_KEY)
-        castCall.enqueue(object : Callback<Cast> {
-            override fun onResponse(call: Call<Cast>, response: Response<Cast>) {
-                if (response.isSuccessful && response.body()?.castList != null) {
-                    // set rv casts
-                    castList = response.body()!!.castList
-                    castsAdapter = CastsAdapter(castList, this@TvShowDetailActivity)
-                    rvCasts.adapter = castsAdapter
-                    for (cast in castList) { // debug
-                        Log.d("CAST", cast.name)
-                    }
-                } else {
-                    Toast.makeText(this@TvShowDetailActivity, "Response failed.", Toast.LENGTH_SHORT).show()
-                }
+    private fun loadTvShowCasts() {
+        TvShowRepository.getTvShowCasts(tvShowId, object : TvShowCastsCallback {
+            override fun onSuccess(castList: List<Cast>) {
+                // set recyclerview casts
+                castsAdapter = CastsAdapter(castList, this@TvShowDetailActivity)
+                rvCasts.adapter = castsAdapter
             }
 
-            override fun onFailure(call: Call<Cast>, t: Throwable) {
-                Toast.makeText(this@TvShowDetailActivity, "Response failure.", Toast.LENGTH_SHORT).show()
+            override fun onFailure(message: String) {
+                Toast.makeText(this@TvShowDetailActivity, message, Toast.LENGTH_SHORT).show()
             }
+
         })
     }
 
@@ -241,14 +220,6 @@ class TvShowDetailActivity : AppCompatActivity(), OnItemClick, View.OnClickListe
 
     }
 
-    override fun itemClicked(movieOutline: MovieOutline) {
-        TODO("Not yet implemented")
-    }
-
-    override fun itemClicked(tvShowOutline: TvShowOutline) {
-        TODO("Not yet implemented")
-    }
-
     override fun itemClicked(genre: Genre) {
         Toast.makeText(this, genre.name, Toast.LENGTH_SHORT).show()
     }
@@ -256,5 +227,10 @@ class TvShowDetailActivity : AppCompatActivity(), OnItemClick, View.OnClickListe
     override fun itemClicked(cast: Cast) {
         Toast.makeText(this, cast.name, Toast.LENGTH_SHORT).show()
     }
+
+
+    // do nothing
+    override fun itemClicked(movieOutline: MovieOutline) {}
+    override fun itemClicked(tvShowOutline: TvShowOutline) {}
 
 }

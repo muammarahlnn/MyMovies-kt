@@ -15,10 +15,12 @@ import com.ardnn.mymovies.R
 import com.ardnn.mymovies.adapters.CastsAdapter
 import com.ardnn.mymovies.adapters.GenresAdapter
 import com.ardnn.mymovies.adapters.OnItemClick
+import com.ardnn.mymovies.api.callbacks.movies.MovieCastsCallback
+import com.ardnn.mymovies.api.callbacks.movies.MovieDetailsCallback
+import com.ardnn.mymovies.api.repositories.MovieRepository
 import com.ardnn.mymovies.helpers.Utils
 import com.ardnn.mymovies.models.*
-import com.ardnn.mymovies.networks.MoviesApiClient
-import com.ardnn.mymovies.networks.MoviesApiInterface
+import com.ardnn.mymovies.api.services.MovieApiServices
 import com.bumptech.glide.Glide
 import retrofit2.Call
 import retrofit2.Callback
@@ -31,17 +33,15 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, OnItemCli
 
     // movie
     private lateinit var movie: Movie
-    private lateinit var moviesApiInterface: MoviesApiInterface
+    private var movieId: Int = 0
 
     // genres
     private lateinit var rvGenres: RecyclerView
     private lateinit var genresAdapter: GenresAdapter
-    private lateinit var genreList: List<Genre>
 
     // casts
     private lateinit var rvCasts: RecyclerView
     private lateinit var castsAdapter: CastsAdapter
-    private lateinit var castList: List<Cast>
 
     // widgets
     private lateinit var tvTitle: TextView
@@ -58,7 +58,6 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, OnItemCli
     private lateinit var clWrapperSynopsis: ConstraintLayout
 
     // variables
-    private var movieId: Int = 0
     private var isSynopsisExtended: Boolean = false
     private var isFavorite: Boolean = false
 
@@ -70,8 +69,8 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, OnItemCli
         initialization()
 
         // load movies data
-        loadMovieDetail()
-        loadMoviesCast()
+        loadMovieDetails()
+        loadMovieCasts()
 
         // if button clicked
         btnBack.setOnClickListener(this)
@@ -110,8 +109,6 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, OnItemCli
     private fun initialization() {
         // movie
         movieId = intent.getIntExtra(EXTRA_ID, 0)
-        moviesApiInterface = MoviesApiClient.retrofit
-            .create(MoviesApiInterface::class.java)
 
         // genres
         rvGenres = findViewById(R.id.rv_genre_movie_detail)
@@ -144,48 +141,33 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, OnItemCli
         pbDetail = findViewById(R.id.pb_movie_detail)
     }
 
-    private fun loadMovieDetail() {
-        val moviesApiInterface: MoviesApiInterface = MoviesApiClient.retrofit
-            .create(MoviesApiInterface::class.java)
-
-        val movieCall: Call<Movie> = moviesApiInterface.getDetailMovies(movieId, Utils.API_KEY)
-        movieCall.enqueue(object : Callback<Movie> {
-            override fun onResponse(call: Call<Movie>, response: Response<Movie>) {
-                if (response.isSuccessful && response.body() != null) {
-                    movie = response.body()!!
-                    setDataToWidgets()
-                } else {
-                    Toast.makeText(this@MovieDetailActivity, "Response failed.", Toast.LENGTH_SHORT).show()
-                }
+    private fun loadMovieDetails() {
+        MovieRepository.getMovieDetails(movieId, object : MovieDetailsCallback {
+            override fun onSuccess(movie: Movie) {
+                // get details and set it to widgets
+                this@MovieDetailActivity.movie = movie
+                setDataToWidgets()
             }
 
-            override fun onFailure(call: Call<Movie>, t: Throwable) {
-                Toast.makeText(this@MovieDetailActivity, "Response failure.", Toast.LENGTH_SHORT).show()
+            override fun onFailure(message: String) {
+                Toast.makeText(this@MovieDetailActivity, message, Toast.LENGTH_SHORT).show()
             }
 
         })
     }
 
-    private fun loadMoviesCast() {
-        val castCall: Call<Cast> = moviesApiInterface.getMoviesCast(movieId, Utils.API_KEY)
-        castCall.enqueue(object : Callback<Cast> {
-            override fun onResponse(call: Call<Cast>, response: Response<Cast>) {
-                if (response.isSuccessful && response.body()?.castList != null) {
-                    // set rv casts
-                    castList = response.body()!!.castList
-                    castsAdapter = CastsAdapter(castList, this@MovieDetailActivity)
-                    rvCasts.adapter = castsAdapter
-                    for (cast in castList) { // debug
-                        Log.d("CAST", cast.name)
-                    }
-                } else {
-                    Toast.makeText(this@MovieDetailActivity, "Response failed.", Toast.LENGTH_SHORT).show()
-                }
+    private fun loadMovieCasts() {
+        MovieRepository.getMovieCasts(movieId, object : MovieCastsCallback {
+            override fun onSuccess(castList: List<Cast>) {
+                // setup recyclerview casts
+                castsAdapter = CastsAdapter(castList, this@MovieDetailActivity)
+                rvCasts.adapter = castsAdapter
             }
 
-            override fun onFailure(call: Call<Cast>, t: Throwable) {
-                Toast.makeText(this@MovieDetailActivity, "Response failure.", Toast.LENGTH_SHORT).show()
+            override fun onFailure(message: String) {
+                Toast.makeText(this@MovieDetailActivity, message, Toast.LENGTH_SHORT).show()
             }
+
         })
 
     }
@@ -201,12 +183,8 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, OnItemCli
         val posterUrl: String = movie.getPosterUrl(ImageSize.W342)
 
         // set rv genres
-        genreList = movie.genreList
-        genresAdapter = GenresAdapter(genreList, this@MovieDetailActivity)
+        genresAdapter = GenresAdapter(movie.genreList, this@MovieDetailActivity)
         rvGenres.adapter = genresAdapter
-        for (genre in genreList) { // debug
-            Log.d("GENRE", genre.name)
-        }
 
         // set to widgets
         tvTitle.text = title
@@ -226,14 +204,6 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, OnItemCli
         pbDetail.visibility = View.GONE
     }
 
-    override fun itemClicked(movieOutline: MovieOutline) {
-        // do nothing
-    }
-
-    override fun itemClicked(tvShowOutline: TvShowOutline) {
-        // do nothing
-    }
-
     override fun itemClicked(genre: Genre) {
         Toast.makeText(this@MovieDetailActivity, genre.name, Toast.LENGTH_SHORT).show()
     }
@@ -241,4 +211,8 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, OnItemCli
     override fun itemClicked(cast: Cast) {
         Toast.makeText(this@MovieDetailActivity, cast.name, Toast.LENGTH_SHORT).show()
     }
+
+    // do nothing
+    override fun itemClicked(movieOutline: MovieOutline) {}
+    override fun itemClicked(tvShowOutline: TvShowOutline) {}
 }

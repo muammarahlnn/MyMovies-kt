@@ -1,4 +1,4 @@
-package com.ardnn.mymovies.networks
+package com.ardnn.mymovies.api.services
 
 import com.ardnn.mymovies.models.Cast
 import com.ardnn.mymovies.models.TvShow
@@ -8,15 +8,15 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface TvShowsApiInterface {
+interface TvShowApiServices {
     @GET("{tv_id}")
-    fun getDetailTvShows(
+    fun getTvShowDetails(
         @Path("tv_id") tvShowId: Int,
         @Query("api_key") apiKey: String
     ): Call<TvShow>
 
     @GET("{tv_id}/credits")
-    fun getTvShowsCast(
+    fun getTvShowCasts(
         @Path("tv_id") tvShowId: Int,
         @Query("api_key") apiKey: String
     ): Call<Cast>
