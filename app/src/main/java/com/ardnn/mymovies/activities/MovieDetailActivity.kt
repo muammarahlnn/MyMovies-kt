@@ -173,32 +173,31 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, OnItemCli
     }
 
     private fun setDataToWidgets() {
-        // movie detail
-        val title: String = movie.title
-        val releaseDate: String = Utils.convertToDate(movie.releaseDate)
-        val runtime: Int = movie.runtime
-        val overview: String = movie.overview
-        val rating: Float = movie.rating
-        val wallpaperUrl: String = movie.getWallpaperUrl(ImageSize.W780)
-        val posterUrl: String = movie.getPosterUrl(ImageSize.W342)
+        // set to widgets
+        tvTitle.text = movie.title ?: "-"
+        tvReleaseDate.text =
+            if (movie.releaseDate != null)
+                Utils.convertToDate(movie.releaseDate)
+            else
+                "-"
+        tvRuntime.text =
+            if (movie.runtime != null)
+                "${movie.runtime} mins"
+            else
+                "-"
+        tvRating.text = (movie.rating ?: "-").toString()
+        tvSynopsis.text = movie.overview ?: "-"
+        Glide.with(this)
+            .load(movie.getWallpaperUrl(ImageSize.W780))
+            .into(ivWallpaper)
+        Glide.with(this)
+            .load(movie.getPosterUrl(ImageSize.W342))
+            .into(ivPoster)
+
 
         // set rv genres
         genresAdapter = GenresAdapter(movie.genreList, this@MovieDetailActivity)
         rvGenres.adapter = genresAdapter
-
-        // set to widgets
-        tvTitle.text = title
-        tvReleaseDate.text = releaseDate
-        tvRuntime.text = "$runtime mins"
-        tvRating.text = rating.toString()
-        tvSynopsis.text = overview
-        Glide.with(this)
-            .load(wallpaperUrl)
-            .into(ivWallpaper)
-        Glide.with(this)
-            .load(posterUrl)
-            .into(ivPoster)
-
 
         // remove progress bar
         pbDetail.visibility = View.GONE

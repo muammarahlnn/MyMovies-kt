@@ -6,13 +6,15 @@ import android.widget.LinearLayout
 import com.google.android.material.tabs.TabLayout
 
 object Utils {
-    fun convertToDate(date: String): String {
+    fun convertToDate(date: String?): String {
+        if (date == null || date == "") return "-"
+
         val months = listOf("",
             "January", "February", "March", "April",
             "May", "June", "July", "August",
             "September", "October", "November", "December"
         )
-        val splittedDate = date.split("-") // [year, month, day]
+        val splittedDate = date!!.split("-") // [year, month, day]
         val year = splittedDate[0]
         val month = months[splittedDate[1].toInt()]
         var day = splittedDate[2]

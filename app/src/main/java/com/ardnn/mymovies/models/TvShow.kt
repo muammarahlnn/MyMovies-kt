@@ -8,19 +8,19 @@ data class TvShow(
     val id: Int,
 
     @SerializedName("name")
-    val title: String,
+    val title: String?,
 
     @SerializedName("overview")
-    val overview: String,
+    val overview: String?,
 
     @SerializedName("first_air_date")
-    val firstAirDate: String,
+    val firstAirDate: String?,
 
     @SerializedName("last_air_date")
     val lastAirDate: String?,
 
     @SerializedName("episode_run_time")
-    val runtimes: List<Int>,
+    val runtimes: List<Int>?,
 
     @SerializedName("vote_average")
     val rating: Float?,
@@ -32,10 +32,10 @@ data class TvShow(
     val wallpaperUrl: String,
 
     @SerializedName("number_of_episodes")
-    val numberOfEpisodes: Int,
+    val numberOfEpisodes: Int?,
 
     @SerializedName("number_of_seasons")
-    val numberOfSeasons: Int,
+    val numberOfSeasons: Int?,
 
     @SerializedName("genres")
     val genreList: List<Genre>

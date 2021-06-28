@@ -8,19 +8,19 @@ data class Movie(
     val id: Int,
 
     @SerializedName("title")
-    val title: String,
+    val title: String?,
 
     @SerializedName("overview")
-    val overview: String,
+    val overview: String?,
 
     @SerializedName("release_date")
-    val releaseDate: String,
+    val releaseDate: String?,
 
     @SerializedName("runtime")
-    val runtime: Int,
+    val runtime: Int?,
 
     @SerializedName("vote_average")
-    val rating: Float,
+    val rating: Float?,
 
     @SerializedName("poster_path")
     val posterUrl: String,

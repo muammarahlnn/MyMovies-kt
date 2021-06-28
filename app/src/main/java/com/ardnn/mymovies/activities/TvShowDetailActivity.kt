@@ -36,7 +36,6 @@ class TvShowDetailActivity : AppCompatActivity(), OnItemClick, View.OnClickListe
     // genres
     private lateinit var rvGenres: RecyclerView
     private lateinit var genresAdapter: GenresAdapter
-    private lateinit var genreList: List<Genre>
 
     // casts
     private lateinit var rvCasts: RecyclerView
@@ -177,43 +176,37 @@ class TvShowDetailActivity : AppCompatActivity(), OnItemClick, View.OnClickListe
     }
 
     private fun setDataToWidgets() {
-        // tvShow detail
-        val title: String = tvShow.title
-        val episodes: Int = tvShow.numberOfEpisodes
-        val seasons: Int = tvShow.numberOfSeasons
-        val runtime: Int = tvShow.runtimes[0]
-        val rating: Float = tvShow.rating ?: 0.0F
-        val firstAiring: String = Utils.convertToDate(tvShow.firstAirDate)
-        val lastAiring: String =
-            if (tvShow.lastAirDate != null) Utils.convertToDate(tvShow.lastAirDate!!)
-            else "Not yet known"
-        val overview: String = tvShow.overview
-        val wallpaperUrl: String = tvShow.getWallpaperUrl(ImageSize.W780)
-        val posterUrl: String = tvShow.getPosterUrl(ImageSize.W342)
-
-        // set rv genres
-        genreList = tvShow.genreList
-        genresAdapter = GenresAdapter(genreList, this)
-        rvGenres.adapter = genresAdapter
-        for (genre in genreList) { // debug
-            Log.d("GENRE", genre.name)
-        }
-
         // set to widgets
-        tvTitle.text = title
-        tvEpisodes.text = episodes.toString()
-        tvSeasons.text = seasons.toString()
-        tvRuntime.text = "$runtime mins"
-        tvRating.text = rating.toString()
-        tvFirstAiring.text = firstAiring
-        tvLastAiring.text = lastAiring
-        tvSynopsis.text = overview
+        tvTitle.text = tvShow.title ?: "-"
+        tvEpisodes.text = (tvShow.numberOfEpisodes ?: "-").toString()
+        tvSeasons.text = (tvShow.numberOfSeasons ?: "-").toString()
+        tvRuntime.text =
+            if (tvShow.runtimes != null && tvShow.runtimes?.size != 0)
+                "${tvShow.runtimes?.get(0)} mins"
+            else
+                "-"
+        tvRating.text = (tvShow.rating ?: "-").toString()
+        tvFirstAiring.text =
+            if (tvShow.firstAirDate != null)
+                Utils.convertToDate(tvShow.firstAirDate)
+            else
+                "-"
+        tvLastAiring.text =
+            if (tvShow.lastAirDate != null)
+                Utils.convertToDate(tvShow.lastAirDate)
+            else
+                "-"
+        tvSynopsis.text = tvShow.overview ?: "-"
         Glide.with(this)
-            .load(wallpaperUrl)
+            .load(tvShow.getWallpaperUrl(ImageSize.W780))
             .into(ivWallpaper)
         Glide.with(this)
-            .load(posterUrl)
+            .load(tvShow.getPosterUrl(ImageSize.W342))
             .into(ivPoster)
+
+        // set rv genres
+        genresAdapter = GenresAdapter(tvShow.genreList, this)
+        rvGenres.adapter = genresAdapter
 
         // remove progress bar
         pbDetail.visibility = View.GONE
