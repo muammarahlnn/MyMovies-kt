@@ -23,8 +23,8 @@ object MovieRepository {
 
 
     // method to get now playing movies
-    fun getNowPlayingMovies(callback: NowPlayingMoviesCallback) {
-        MOVIE_SERVICE.getNowPlayingMovies(Consts.API_KEY).enqueue(object : Callback<MovieOutline> {
+    fun getNowPlayingMovies(page: Int, callback: NowPlayingMoviesCallback) {
+        MOVIE_SERVICE.getNowPlayingMovies(Consts.API_KEY, page).enqueue(object : Callback<MovieOutline> {
             override fun onResponse(call: Call<MovieOutline>, response: Response<MovieOutline>) {
                 if (response.isSuccessful) {
                     if (response.body() != null) {
@@ -49,8 +49,8 @@ object MovieRepository {
     }
 
     // method to get upcoming movies
-    fun getUpcomingMovies(callback: UpcomingMoviesCallback) {
-        MOVIE_SERVICE.getUpcomingMovies(Consts.API_KEY).enqueue(object : Callback<MovieOutline> {
+    fun getUpcomingMovies(page: Int, callback: UpcomingMoviesCallback) {
+        MOVIE_SERVICE.getUpcomingMovies(Consts.API_KEY, page).enqueue(object : Callback<MovieOutline> {
             override fun onResponse(call: Call<MovieOutline>, response: Response<MovieOutline>) {
                 if (response.isSuccessful) {
                     if (response.body() != null) {
@@ -74,8 +74,8 @@ object MovieRepository {
     }
 
     // method to get popular movies
-    fun getPopularMovies(callback: PopularMoviesCallback) {
-        MOVIE_SERVICE.getPopularMovies(Consts.API_KEY).enqueue(object : Callback<MovieOutline> {
+    fun getPopularMovies(page: Int, callback: PopularMoviesCallback) {
+        MOVIE_SERVICE.getPopularMovies(Consts.API_KEY, page).enqueue(object : Callback<MovieOutline> {
             override fun onResponse(call: Call<MovieOutline>, response: Response<MovieOutline>) {
                 if (response.isSuccessful) {
                     if (response.body() != null) {
@@ -99,8 +99,8 @@ object MovieRepository {
     }
 
     // method to get top rated movies
-    fun getTopRatedMovies(callback: TopRatedMoviesCallback) {
-        MOVIE_SERVICE.getTopRatedMovies(Consts.API_KEY).enqueue(object : Callback<MovieOutline> {
+    fun getTopRatedMovies(page: Int, callback: TopRatedMoviesCallback) {
+        MOVIE_SERVICE.getTopRatedMovies(Consts.API_KEY, page).enqueue(object : Callback<MovieOutline> {
             override fun onResponse(call: Call<MovieOutline>, response: Response<MovieOutline>) {
                 if (response.isSuccessful) {
                     if (response.body() != null) {

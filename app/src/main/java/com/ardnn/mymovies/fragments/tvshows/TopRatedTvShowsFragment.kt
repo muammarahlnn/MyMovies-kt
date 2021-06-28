@@ -26,11 +26,15 @@ class TopRatedTvShowsFragment : Fragment(), OnItemClick, SwipeRefreshLayout.OnRe
 
     // recyclerview attr
     private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: TvShowsOutlineAdapter
+    private var adapter: TvShowsOutlineAdapter? = null
 
     // widgets
     private lateinit var progressBar: ProgressBar
     private lateinit var swipeRefresh: SwipeRefreshLayout
+
+    // variables
+    private var currentPage: Int = 1
+    private var isFetching: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,29 +44,39 @@ class TopRatedTvShowsFragment : Fragment(), OnItemClick, SwipeRefreshLayout.OnRe
         val view: View =  inflater.inflate(R.layout.fragment_top_rated_tv_shows, container, false)
 
         // initialize widgets
-        recyclerView = view.findViewById(R.id.rv_top_rated_tv_shows)
         progressBar = view.findViewById(R.id.pb_top_rated_tv_shows)
+
+        // set swipe refresh layout
         swipeRefresh = view.findViewById(R.id.srl_top_rated_tv_shows)
         swipeRefresh.setOnRefreshListener(this)
 
         // set recyclerview layout
-        recyclerView.layoutManager = GridLayoutManager(activity, 2)
+        recyclerView = view.findViewById(R.id.rv_top_rated_tv_shows)
+        setRecyclerView()
 
         // load MoviesNowPlaying's data from TMDB API
-        loadData()
+        loadData(currentPage)
 
         return view
     }
 
-    private fun loadData() {
-        TvShowRepository.getTopRatedTvShows(object : TopRatedTvShowsCallback {
-            override fun onSuccess(topRatedTvShowsList: List<TvShowOutline>) {
-                // setup recyclerview
-                adapter = TvShowsOutlineAdapter(topRatedTvShowsList, this@TopRatedTvShowsFragment)
-                recyclerView.adapter = adapter
+    private fun loadData(page: Int) {
+        TvShowRepository.getTopRatedTvShows(page, object : TopRatedTvShowsCallback {
+            override fun onSuccess(topRatedTvShowsList: MutableList<TvShowOutline>) {
+                if (adapter == null) {
+                    // setup recyclerview
+                    adapter = TvShowsOutlineAdapter(topRatedTvShowsList, this@TopRatedTvShowsFragment)
+                    adapter?.notifyDataSetChanged()
+                    recyclerView.adapter = adapter
+                } else {
+                    // append adapter list with new list from next page
+                    adapter?.appendList(topRatedTvShowsList)
+                }
 
-                // remove progress bar
+                // done fetching
                 progressBar.visibility = View.GONE
+                isFetching = false
+                swipeRefresh.isRefreshing = false
             }
 
             override fun onFailure(message: String) {
@@ -72,9 +86,36 @@ class TopRatedTvShowsFragment : Fragment(), OnItemClick, SwipeRefreshLayout.OnRe
         })
     }
 
+    private fun setRecyclerView() {
+        // set recyclerview layout
+        val layoutManager = GridLayoutManager(activity, 2)
+        recyclerView.layoutManager = layoutManager
+
+        // listener if recyclerview reached last item then fetch next page
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                val totalItem: Int = layoutManager.itemCount
+                val visibleItem: Int = layoutManager.childCount
+                val firstVisibleItem: Int = layoutManager.findFirstVisibleItemPosition()
+
+                if (firstVisibleItem + visibleItem >= totalItem / 2) {
+                    if (!isFetching) {
+                        isFetching = true
+                        loadData(++currentPage)
+                        isFetching = false
+                    }
+                }
+
+            }
+        })
+    }
+
     override fun onRefresh() {
-        loadData()
-        swipeRefresh.isRefreshing = false
+        // reset adapter
+        adapter = null
+        currentPage = 1
+        progressBar.visibility = View.VISIBLE
+        loadData(currentPage)
     }
 
     override fun itemClicked(tvShowOutline: TvShowOutline) {

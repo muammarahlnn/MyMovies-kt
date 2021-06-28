@@ -26,11 +26,15 @@ class TopRatedMoviesFragment : Fragment(), OnItemClick, SwipeRefreshLayout.OnRef
 
     // recyclerview attr
     private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: MoviesOutlineAdapter
+    private var adapter: MoviesOutlineAdapter? = null
 
     // widgets
     private lateinit var progressBar: ProgressBar
     private lateinit var swipeRefresh: SwipeRefreshLayout
+
+    // variables
+    private var currentPage: Int = 1
+    private var isFetching: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,30 +44,40 @@ class TopRatedMoviesFragment : Fragment(), OnItemClick, SwipeRefreshLayout.OnRef
         val view: View =  inflater.inflate(R.layout.fragment_top_rated_movies, container, false)
 
         // initialize widgets
-        recyclerView = view.findViewById(R.id.rv_top_rated_movies)
         progressBar = view.findViewById(R.id.pb_top_rated_movies)
+
+        // set swipe refresh layout
         swipeRefresh = view.findViewById(R.id.srl_top_rated_movies)
         swipeRefresh.setOnRefreshListener(this)
 
         // set recyclerview layout
-        recyclerView.layoutManager = GridLayoutManager(activity, 2)
+        recyclerView = view.findViewById(R.id.rv_top_rated_movies)
+        setRecyclerView()
 
         // load MoviesNowPlaying's data from TMDB API
-        loadData()
+        loadData(currentPage)
 
         return view
     }
 
+    private fun loadData(page: Int) {
+        MovieRepository.getTopRatedMovies(page, object : TopRatedMoviesCallback {
+            override fun onSuccess(topRatedMoviesList: MutableList<MovieOutline>) {
+                if (adapter == null) {
+                    // setup recyclerview
+                    adapter = MoviesOutlineAdapter(topRatedMoviesList, this@TopRatedMoviesFragment)
+                    adapter?.notifyDataSetChanged()
+                    recyclerView.adapter = adapter
+                } else {
+                    // append adapter list with new list from next page
+                    adapter?.appendList(topRatedMoviesList)
+                }
 
-    private fun loadData() {
-        MovieRepository.getTopRatedMovies(object : TopRatedMoviesCallback {
-            override fun onSuccess(topRatedMoviesList: List<MovieOutline>) {
-                // setup recyclerview
-                adapter = MoviesOutlineAdapter(topRatedMoviesList, this@TopRatedMoviesFragment)
-                recyclerView.adapter = adapter
-
-                // remove progress bar
+                // done fetching
                 progressBar.visibility = View.GONE
+                currentPage = page
+                isFetching = false
+                swipeRefresh.isRefreshing = false
             }
 
             override fun onFailure(message: String) {
@@ -73,9 +87,36 @@ class TopRatedMoviesFragment : Fragment(), OnItemClick, SwipeRefreshLayout.OnRef
         })
     }
 
+    private fun setRecyclerView() {
+        // set recyclerview layout
+        val layoutManager = GridLayoutManager(activity, 2)
+        recyclerView.layoutManager = layoutManager
+
+        // listener if recyclerview reached last item then fetch next page
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                val totalItem: Int = layoutManager.itemCount
+                val visibleItem: Int = layoutManager.childCount
+                val firstVisibleItem: Int = layoutManager.findFirstVisibleItemPosition()
+
+                if (firstVisibleItem + visibleItem >= totalItem / 2) {
+                    if (!isFetching) {
+                        isFetching = true
+                        loadData(++currentPage)
+                        isFetching = false
+                    }
+                }
+
+            }
+        })
+    }
+
     override fun onRefresh() {
-        loadData()
-        swipeRefresh.isRefreshing = false
+        // reset adapter
+        adapter = null
+        currentPage = 1
+        progressBar.visibility = View.VISIBLE
+        loadData(currentPage)
     }
 
     override fun itemClicked(movieOutline: MovieOutline) {

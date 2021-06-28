@@ -12,9 +12,14 @@ import com.ardnn.mymovies.models.TvShowOutline
 import com.bumptech.glide.Glide
 
 class TvShowsOutlineAdapter(
-    private var tvShowList: List<TvShowOutline>,
+    private var tvShowList: MutableList<TvShowOutline>,
     private var onItemClick: OnItemClick
 ) : RecyclerView.Adapter<TvShowsOutlineAdapter.ViewHolder>() {
+
+    fun appendList(listToAppend: List<TvShowOutline>) {
+        tvShowList.addAll(listToAppend)
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view: View = LayoutInflater.from(parent.context)
@@ -52,9 +57,11 @@ class TvShowsOutlineAdapter(
             Glide.with(itemView.context)
                 .load(tvShowOutline.getPosterUrl(ImageSize.W342))
                 .into(ivPoster)
-            tvTitle.text = tvShowOutline.title ?: "null"
-            tvYear.text = tvShowOutline.releaseDate?.substring(0, 4) ?: "null"
-            tvVote.text = tvShowOutline.rating?.toString() ?: "0.0"
+            tvTitle.text = tvShowOutline.title ?: "-"
+            tvYear.text =
+                if (tvShowOutline.releaseDate == null || tvShowOutline.releaseDate == "") "-"
+                else tvShowOutline.releaseDate.substring(0, 4)
+            tvVote.text = tvShowOutline.rating?.toString() ?: "-"
         }
     }
 }

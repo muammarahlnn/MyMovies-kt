@@ -1,6 +1,5 @@
 package com.ardnn.mymovies.adapters
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,9 +12,14 @@ import com.ardnn.mymovies.models.MovieOutline
 import com.bumptech.glide.Glide
 
 class MoviesOutlineAdapter(
-    private var movieList: List<MovieOutline>,
+    private var movieList: MutableList<MovieOutline>,
     private var onItemClick: OnItemClick
-    ) : RecyclerView.Adapter<MoviesOutlineAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<MoviesOutlineAdapter.ViewHolder>() {
+
+    fun appendList(listToAppend: List<MovieOutline>) {
+        movieList.addAll(listToAppend)
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view: View = LayoutInflater.from(parent.context)
@@ -53,9 +57,11 @@ class MoviesOutlineAdapter(
             Glide.with(itemView.context)
                 .load(movieOutline.getPosterUrl(ImageSize.W342))
                 .into(ivPoster)
-            tvTitle.text = movieOutline.title ?: "null"
-            tvYear.text = movieOutline.releaseDate?.substring(0, 4) ?: "null"
-            tvVote.text = movieOutline.rating?.toString() ?: "0.0"
+            tvTitle.text = movieOutline.title ?: "-"
+            tvYear.text =
+                if (movieOutline.releaseDate == null || movieOutline.releaseDate == "") "-"
+                else movieOutline.releaseDate.substring(0, 4)
+            tvVote.text = movieOutline.rating?.toString() ?: "-"
         }
 
     }

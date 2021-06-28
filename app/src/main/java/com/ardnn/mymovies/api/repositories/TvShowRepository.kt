@@ -22,8 +22,8 @@ object TvShowRepository {
 
 
     // method to get airing today tv shows
-    fun getAiringTodayTvShows(callback: AiringTodayTvShowsCallback) {
-        TV_SHOW_SERVICE.getAiringTodayTvShows(Consts.API_KEY).enqueue(object : Callback<TvShowOutline> {
+    fun getAiringTodayTvShows(page: Int, callback: AiringTodayTvShowsCallback) {
+        TV_SHOW_SERVICE.getAiringTodayTvShows(Consts.API_KEY, page).enqueue(object : Callback<TvShowOutline> {
             override fun onResponse(call: Call<TvShowOutline>, response: Response<TvShowOutline>) {
                 if (response.isSuccessful) {
                     if (response.body() != null) {
@@ -48,8 +48,8 @@ object TvShowRepository {
     }
 
     // method to get on the air tv shows
-    fun getOnTheAirTvShows(callback: OnTheAirTvShowsCallback) {
-        TV_SHOW_SERVICE.getOnTheAirTvShows(Consts.API_KEY).enqueue(object : Callback<TvShowOutline> {
+    fun getOnTheAirTvShows(page: Int, callback: OnTheAirTvShowsCallback) {
+        TV_SHOW_SERVICE.getOnTheAirTvShows(Consts.API_KEY, page).enqueue(object : Callback<TvShowOutline> {
             override fun onResponse(call: Call<TvShowOutline>, response: Response<TvShowOutline>) {
                 if (response.isSuccessful) {
                     if (response.body() != null) {
@@ -73,8 +73,8 @@ object TvShowRepository {
     }
 
     // method to get popular tv shows
-    fun getPopularTvShows(callback: PopularTvShowsCallback) {
-        TV_SHOW_SERVICE.getPopularTvShows(Consts.API_KEY).enqueue(object : Callback<TvShowOutline> {
+    fun getPopularTvShows(page: Int, callback: PopularTvShowsCallback) {
+        TV_SHOW_SERVICE.getPopularTvShows(Consts.API_KEY, page).enqueue(object : Callback<TvShowOutline> {
             override fun onResponse(call: Call<TvShowOutline>, response: Response<TvShowOutline>) {
                 if (response.isSuccessful) {
                     if (response.body() != null) {
@@ -99,8 +99,8 @@ object TvShowRepository {
     }
 
     // method to get top rated tv shows
-    fun getTopRatedTvShows(callback: TopRatedTvShowsCallback) {
-        TV_SHOW_SERVICE.getTopRatedTvShows(Consts.API_KEY).enqueue(object : Callback<TvShowOutline> {
+    fun getTopRatedTvShows(page: Int, callback: TopRatedTvShowsCallback) {
+        TV_SHOW_SERVICE.getTopRatedTvShows(Consts.API_KEY, page).enqueue(object : Callback<TvShowOutline> {
             override fun onResponse(call: Call<TvShowOutline>, response: Response<TvShowOutline>) {
                 if (response.isSuccessful) {
                     if (response.body() != null) {
