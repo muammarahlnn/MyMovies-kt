@@ -41,17 +41,17 @@ class AiringTodayFragment : Fragment(), OnItemClick, SwipeRefreshLayout.OnRefres
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        val view: View =  inflater.inflate(R.layout.fragment_now_playing, container, false)
+        val view: View =  inflater.inflate(R.layout.fragment_airing_today, container, false)
 
         // initialize widgets
-        progressBar = view.findViewById(R.id.pb_now_playing)
+        progressBar = view.findViewById(R.id.pb_airing_today)
 
         // set swipe refresh layout
-        swipeRefresh = view.findViewById(R.id.srl_now_playing)
+        swipeRefresh = view.findViewById(R.id.srl_airing_today)
         swipeRefresh.setOnRefreshListener(this)
 
         // set recyclerview layout
-        recyclerView = view.findViewById(R.id.rv_now_playing)
+        recyclerView = view.findViewById(R.id.rv_airing_today)
         setRecyclerView()
 
         // load MoviesNowPlaying's data from TMDB API
