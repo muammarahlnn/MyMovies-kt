@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/black_primary"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark"
+    app:titleTextColor="@color/yellow_primary"
+    app:menu="@menu/item_toolbar_main">
+
+    <ImageView
+        android:id="@+id/iv_icon_toolbar"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="8dp"
+        tools:src="@drawable/ic_movies_yellow" />
+
+    <TextView
+        android:id="@+id/tv_section_toolbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Movies"
+        android:textSize="20sp"
+        android:textColor="@color/yellow_primary"
+        android:fontFamily="@font/roboto_medium"
+        />
+
+
+</androidx.appcompat.widget.Toolbar>
