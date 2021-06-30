@@ -2,12 +2,11 @@ package com.ardnn.mymovies.fragments.tvshows
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -26,7 +25,8 @@ class OnTheAirFragment : Fragment(), OnItemClick, SwipeRefreshLayout.OnRefreshLi
 
     // recyclerview attr
     private lateinit var recyclerView: RecyclerView
-    private var adapter: TvShowsOutlineAdapter? = null
+    private lateinit var adapter: TvShowsOutlineAdapter
+    private val tvShowList = mutableListOf<TvShowOutline>()
 
     // widgets
     private lateinit var progressBar: ProgressBar
@@ -35,6 +35,12 @@ class OnTheAirFragment : Fragment(), OnItemClick, SwipeRefreshLayout.OnRefreshLi
     // variables
     private var currentPage: Int = 1
     private var isFetching: Boolean = false
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,7 +56,7 @@ class OnTheAirFragment : Fragment(), OnItemClick, SwipeRefreshLayout.OnRefreshLi
         swipeRefresh = view.findViewById(R.id.srl_on_the_air)
         swipeRefresh.setOnRefreshListener(this)
 
-        // set recyclerview layout
+        // set recyclerview
         recyclerView = view.findViewById(R.id.rv_on_the_air)
         setRecyclerView()
 
@@ -60,18 +66,36 @@ class OnTheAirFragment : Fragment(), OnItemClick, SwipeRefreshLayout.OnRefreshLi
         return view
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+
+        menu.clear() // prevent duplicated menu item
+        inflater.inflate(R.menu.item_toolbar_main, menu)
+
+        // if user is searching a movie
+        val searchItem: MenuItem = menu.findItem(R.id.toolbar_item_search)
+        val searchView: SearchView = searchItem.actionView as SearchView
+        searchView.queryHint = "Search..."
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                adapter.setIsSearching(true)
+                adapter.filter.filter(newText)
+                return true
+            }
+
+        })
+    }
+
     private fun loadData(page: Int) {
         TvShowRepository.getOnTheAirTvShows(page, object : OnTheAirTvShowsCallback {
             override fun onSuccess(onTheAirList: MutableList<TvShowOutline>) {
-                if (adapter == null) {
-                    // setup recyclerview
-                    adapter = TvShowsOutlineAdapter(onTheAirList, this@OnTheAirFragment)
-                    adapter?.notifyDataSetChanged()
-                    recyclerView.adapter = adapter
-                } else {
-                    // append adapter list with new list from next page
-                    adapter?.appendList(onTheAirList)
-                }
+                if (page == 1) tvShowList.clear()
+                tvShowList.addAll(onTheAirList)
+                adapter.updateList(tvShowList)
 
                 // done fetching
                 progressBar.visibility = View.GONE
@@ -87,9 +111,13 @@ class OnTheAirFragment : Fragment(), OnItemClick, SwipeRefreshLayout.OnRefreshLi
     }
 
     private fun setRecyclerView() {
-        // set recyclerview layout
+        // set layout manager
         val layoutManager = GridLayoutManager(activity, 2)
         recyclerView.layoutManager = layoutManager
+
+        // set adapter
+        adapter = TvShowsOutlineAdapter(tvShowList, this)
+        recyclerView.adapter = adapter
 
         // listener if recyclerview reached last item then fetch next page
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -99,7 +127,7 @@ class OnTheAirFragment : Fragment(), OnItemClick, SwipeRefreshLayout.OnRefreshLi
                 val firstVisibleItem: Int = layoutManager.findFirstVisibleItemPosition()
 
                 if (firstVisibleItem + visibleItem >= totalItem / 2) {
-                    if (!isFetching) {
+                    if (!isFetching && !adapter.getIsSearching()) {
                         isFetching = true
                         loadData(++currentPage)
                         isFetching = false
@@ -111,8 +139,7 @@ class OnTheAirFragment : Fragment(), OnItemClick, SwipeRefreshLayout.OnRefreshLi
     }
 
     override fun onRefresh() {
-        // reset adapter
-        adapter = null
+        // reset fetching
         currentPage = 1
         progressBar.visibility = View.VISIBLE
         loadData(currentPage)

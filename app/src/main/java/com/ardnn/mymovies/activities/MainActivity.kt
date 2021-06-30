@@ -31,6 +31,10 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         tvSection = findViewById(R.id.tv_section_toolbar)
         ivIcon = findViewById(R.id.iv_icon_toolbar)
 
+        // set action bar
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+
         // set bottom navigation view
         bnvNavigation = findViewById(R.id.bnv_navigation_main)
         bnvNavigation.setOnNavigationItemSelectedListener(this)

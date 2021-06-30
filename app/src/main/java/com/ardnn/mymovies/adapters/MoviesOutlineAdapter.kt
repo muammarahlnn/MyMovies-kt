@@ -3,6 +3,8 @@ package com.ardnn.mymovies.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -12,12 +14,20 @@ import com.ardnn.mymovies.models.MovieOutline
 import com.bumptech.glide.Glide
 
 class MoviesOutlineAdapter(
-    private var movieList: MutableList<MovieOutline>,
-    private var onItemClick: OnItemClick
-) : RecyclerView.Adapter<MoviesOutlineAdapter.ViewHolder>() {
+    private val movieList: MutableList<MovieOutline>,
+    private val onItemClick: OnItemClick
+) : RecyclerView.Adapter<MoviesOutlineAdapter.ViewHolder>(), Filterable {
 
-    fun appendList(listToAppend: List<MovieOutline>) {
-        movieList.addAll(listToAppend)
+    // list to save all fetched movies
+    private val listFull: MutableList<MovieOutline> = mutableListOf()
+
+    init {
+        listFull.addAll(movieList)
+    }
+
+    fun updateList(updatedList: MutableList<MovieOutline>) {
+        listFull.clear()
+        listFull.addAll(updatedList)
         notifyDataSetChanged()
     }
 
@@ -63,7 +73,49 @@ class MoviesOutlineAdapter(
                 else movieOutline.releaseDate.substring(0, 4)
             tvVote.text = movieOutline.rating?.toString() ?: "-"
         }
-
     }
 
+    // search movies
+    private var isSearching: Boolean = false
+    fun getIsSearching() : Boolean = isSearching
+    fun setIsSearching(isSearching: Boolean) {
+        this.isSearching = isSearching
+    }
+
+    override fun getFilter(): Filter {
+        return searchFilter
+    }
+
+    private val searchFilter: Filter = object : Filter() {
+        override fun performFiltering(constraint: CharSequence?): FilterResults {
+            val filteredList: MutableList<MovieOutline> = mutableListOf()
+            if (constraint == null || constraint.isEmpty()) {
+                filteredList.addAll(listFull)
+                isSearching = false
+            } else {
+                val filterPattern: String = constraint.toString().trim()
+                for (movie in listFull) {
+                    val title: String = movie.title ?: "-"
+                    val year: String =
+                        if (movie.releaseDate == null || movie.releaseDate == "") "-"
+                        else movie.releaseDate.substring(0, 4)
+
+                    if (title.startsWith(filterPattern, true) || year.startsWith(filterPattern, true)) {
+                        filteredList.add(movie)
+                    }
+                }
+            }
+
+            val filterResults = FilterResults()
+            filterResults.values = filteredList
+            return filterResults
+        }
+
+        override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
+            movieList.clear()
+            movieList.addAll(results?.values as MutableList<MovieOutline>)
+            notifyDataSetChanged()
+        }
+
+    }
 }

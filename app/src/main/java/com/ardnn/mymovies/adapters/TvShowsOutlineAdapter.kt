@@ -3,6 +3,8 @@ package com.ardnn.mymovies.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -12,12 +14,20 @@ import com.ardnn.mymovies.models.TvShowOutline
 import com.bumptech.glide.Glide
 
 class TvShowsOutlineAdapter(
-    private var tvShowList: MutableList<TvShowOutline>,
-    private var onItemClick: OnItemClick
-) : RecyclerView.Adapter<TvShowsOutlineAdapter.ViewHolder>() {
+    private val tvShowList: MutableList<TvShowOutline>,
+    private val onItemClick: OnItemClick
+) : RecyclerView.Adapter<TvShowsOutlineAdapter.ViewHolder>(), Filterable {
 
-    fun appendList(listToAppend: List<TvShowOutline>) {
-        tvShowList.addAll(listToAppend)
+    // list to save all fetched tv shows
+    private val listFull: MutableList<TvShowOutline> = mutableListOf()
+
+    init {
+        listFull.addAll(tvShowList)
+    }
+
+    fun updateList(updatedList: MutableList<TvShowOutline>) {
+        listFull.clear()
+        listFull.addAll(updatedList)
         notifyDataSetChanged()
     }
 
@@ -63,5 +73,49 @@ class TvShowsOutlineAdapter(
                 else tvShowOutline.releaseDate.substring(0, 4)
             tvVote.text = tvShowOutline.rating?.toString() ?: "-"
         }
+    }
+
+    // search tv shows
+    private var isSearching: Boolean = false
+    fun getIsSearching(): Boolean = isSearching
+    fun setIsSearching(isSearching: Boolean) {
+        this.isSearching = isSearching
+    }
+
+    override fun getFilter(): Filter {
+        return searchFilter
+    }
+
+    private val searchFilter: Filter = object : Filter() {
+        override fun performFiltering(constraint: CharSequence?): FilterResults {
+            val filteredList: MutableList<TvShowOutline> = mutableListOf()
+            if (constraint == null || constraint.isEmpty()) {
+                filteredList.addAll(listFull)
+                isSearching = false
+            } else {
+                val filterPattern: String = constraint.toString().trim()
+                for (tvShow in listFull) {
+                    val title: String = tvShow.title ?: "-"
+                    val year: String =
+                        if (tvShow.releaseDate == null || tvShow.releaseDate == "") "-"
+                        else tvShow.releaseDate.substring(0, 4)
+
+                    if (title.startsWith(filterPattern, true) || year.startsWith(filterPattern, true)) {
+                        filteredList.add(tvShow)
+                    }
+                }
+            }
+
+            val filterResults = FilterResults()
+            filterResults.values = filteredList
+            return filterResults
+        }
+
+        override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
+            tvShowList.clear()
+            tvShowList.addAll(results?.values as MutableList<TvShowOutline>)
+            notifyDataSetChanged()
+        }
+
     }
 }
