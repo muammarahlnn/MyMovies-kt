@@ -1,8 +1,10 @@
 package com.ardnn.mymovies.activities
 
+import android.graphics.Rect
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
@@ -20,7 +22,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
     private lateinit var toolbar: Toolbar
     private lateinit var tvSection: TextView
     private lateinit var ivIcon: ImageView
-    private lateinit var bnvNavigation: BottomNavigationView
+    private lateinit var bnvMain: BottomNavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,10 +38,23 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
         // set bottom navigation view
-        bnvNavigation = findViewById(R.id.bnv_navigation_main)
-        bnvNavigation.setOnNavigationItemSelectedListener(this)
-        bnvNavigation.itemIconTintList = null
-        bnvNavigation.selectedItemId = R.id.item_movies_main
+        bnvMain = findViewById(R.id.bnv_navigation_main)
+        bnvMain.setOnNavigationItemSelectedListener(this)
+        bnvMain.itemIconTintList = null
+        bnvMain.selectedItemId = R.id.item_movies_main
+
+        // check if keyboard shows up
+        val viewRoot: View = findViewById(R.id.activity_root)
+        viewRoot.viewTreeObserver.addOnGlobalLayoutListener {
+            val rect = Rect()
+            viewRoot.getWindowVisibleDisplayFrame(rect)
+
+            // if keyboard shows up then hide bnv and vice versa
+            val heightDiff: Int = viewRoot.rootView.height - rect.height()
+            bnvMain.visibility =
+                if (heightDiff > 0.25 * viewRoot.rootView.height) View.GONE
+                else View.VISIBLE
+        }
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
