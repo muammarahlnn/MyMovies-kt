@@ -14,7 +14,7 @@ object Utils {
             "May", "June", "July", "August",
             "September", "October", "November", "December"
         )
-        val splittedDate = date!!.split("-") // [year, month, day]
+        val splittedDate = date.split("-") // [year, month, day]
         val year = splittedDate[0]
         val month = months[splittedDate[1].toInt()]
         var day = splittedDate[2]
