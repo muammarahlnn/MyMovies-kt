@@ -15,7 +15,7 @@ class GenresAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view: View = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_rv_genre, parent, false)
+            .inflate(R.layout.item_rv_rect, parent, false)
 
         return ViewHolder(view, onItemClick)
     }
@@ -35,7 +35,7 @@ class GenresAdapter(
             itemView.setOnClickListener {
                 onItemClick.itemClicked(genreList[absoluteAdapterPosition])
             }
-            tvGenre = itemView.findViewById(R.id.tv_genre)
+            tvGenre = itemView.findViewById(R.id.tv_name)
         }
 
         fun onBind(genre: Genre) {
