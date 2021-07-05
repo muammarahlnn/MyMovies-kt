@@ -105,7 +105,7 @@
                 android:lineSpacingExtra="2dp"
                 android:maxLines="3"
                 android:textColor="@color/yellow_primary"
-                android:textSize="21sp"
+                android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/cardView2"
                 app:layout_constraintTop_toBottomOf="@+id/iv_wallpaper_movie_detail"
@@ -118,7 +118,7 @@
                 android:layout_marginTop="2dp"
                 android:fontFamily="@font/roboto_light"
                 android:textColor="@color/white"
-                android:textSize="15sp"
+                android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="@+id/tv_title_movie_detail"
                 app:layout_constraintTop_toBottomOf="@+id/tv_title_movie_detail"
                 tools:text="1 January 2021" />
@@ -142,7 +142,7 @@
                 android:layout_marginStart="6dp"
                 android:fontFamily="@font/roboto_light"
                 android:textColor="@color/white"
-                android:textSize="15sp"
+                android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="@+id/bullet"
                 app:layout_constraintStart_toEndOf="@+id/bullet"
                 tools:text="121 mins" />
@@ -162,7 +162,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
                 android:textColor="@color/white"
-                android:textSize="18sp"
+                android:textSize="15sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@+id/iv_icon_star"
                 app:layout_constraintStart_toEndOf="@+id/iv_icon_star"
@@ -174,7 +174,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/per_10"
                 android:textColor="@color/gray_primary"
-                android:textSize="15sp"
+                android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_rating_movie_detail"
                 app:layout_constraintStart_toEndOf="@+id/tv_rating_movie_detail" />
 
@@ -189,7 +189,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cardView2"
                 tools:itemCount="1"
-                tools:listitem="@layout/item_rv_genre" />
+                tools:listitem="@layout/item_rv_rect" />
 
             <androidx.legacy.widget.Space
                 android:id="@+id/space2"
@@ -229,7 +229,7 @@
                     android:fontFamily="@font/roboto_regular"
                     android:text="@string/synopsis"
                     android:textColor="@color/white"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toEndOf="@+id/view"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -244,7 +244,7 @@
                     android:lineSpacingExtra="5dp"
                     android:maxLines="2"
                     android:textColor="@color/white"
-                    android:textSize="15sp"
+                    android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/temp"
@@ -254,9 +254,11 @@
                     android:id="@+id/tv_more_movie_detail"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="more"
+                    android:text="@string/more"
                     android:textAlignment="textEnd"
                     android:textColor="@color/gray_primary"
+                    android:textSize="14sp"
+                    android:fontFamily="@font/roboto_light"
                     app:layout_constraintEnd_toEndOf="@+id/tv_synopsis_movie_detail"
                     app:layout_constraintStart_toStartOf="@+id/tv_synopsis_movie_detail"
                     app:layout_constraintTop_toBottomOf="@+id/tv_synopsis_movie_detail" />
@@ -293,7 +295,7 @@
                     android:fontFamily="@font/roboto_regular"
                     android:text="@string/casts"
                     android:textColor="@color/white"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toEndOf="@+id/view2"
                     app:layout_constraintTop_toTopOf="parent" />

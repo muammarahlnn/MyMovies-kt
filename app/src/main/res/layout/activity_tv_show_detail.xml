@@ -105,7 +105,7 @@
                 android:lineSpacingExtra="2dp"
                 android:maxLines="2"
                 android:textColor="@color/yellow_primary"
-                android:textSize="21sp"
+                android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/cardView2"
                 app:layout_constraintTop_toBottomOf="@+id/iv_wallpaper_tv_show_detail"
@@ -127,7 +127,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto_medium"
                     android:textColor="@color/white"
-                    android:textSize="15sp"
+                    android:textSize="14sp"
                     android:textStyle="bold"
                     tools:text="21" />
 
@@ -171,7 +171,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto_medium"
                     android:textColor="@color/white"
-                    android:textSize="15sp"
+                    android:textSize="14sp"
                     android:textStyle="bold"
                     tools:text="2" />
 
@@ -205,7 +205,7 @@
                 android:layout_marginStart="6dp"
                 android:fontFamily="@font/roboto_light"
                 android:textColor="@color/white"
-                android:textSize="15sp"
+                android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="@id/bullet2"
                 app:layout_constraintStart_toEndOf="@id/bullet2"
                 app:layout_constraintTop_toTopOf="@+id/bullet2"
@@ -226,7 +226,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
                 android:textColor="@color/white"
-                android:textSize="18sp"
+                android:textSize="15sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@+id/iv_icon_star"
                 app:layout_constraintStart_toEndOf="@+id/iv_icon_star"
@@ -238,7 +238,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/per_10"
                 android:textColor="@color/gray_primary"
-                android:textSize="15sp"
+                android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_rating_tv_show_detail"
                 app:layout_constraintStart_toEndOf="@+id/tv_rating_tv_show_detail" />
 
@@ -253,7 +253,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cardView2"
                 tools:itemCount="1"
-                tools:listitem="@layout/item_rv_genre" />
+                tools:listitem="@layout/item_rv_rect" />
 
             <LinearLayout
                 android:id="@+id/ll_airing"
@@ -280,7 +280,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_medium"
                         android:textColor="@color/white"
-                        android:textSize="16sp"
+                        android:textSize="15sp"
                         tools:text="21 July, 2020" />
 
                     <TextView
@@ -305,7 +305,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_medium"
                         android:textColor="@color/white"
-                        android:textSize="16sp"
+                        android:textSize="15sp"
                         tools:text="12 April, 2021" />
 
                     <TextView
@@ -359,7 +359,7 @@
                     android:fontFamily="@font/roboto_regular"
                     android:text="@string/synopsis"
                     android:textColor="@color/white"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toEndOf="@+id/view"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -374,7 +374,7 @@
                     android:lineSpacingExtra="5dp"
                     android:maxLines="2"
                     android:textColor="@color/white"
-                    android:textSize="15sp"
+                    android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/temp"
@@ -384,9 +384,11 @@
                     android:id="@+id/tv_more_tv_show_detail"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="more"
+                    android:text="@string/more"
                     android:textAlignment="textEnd"
                     android:textColor="@color/gray_primary"
+                    android:textSize="14sp"
+                    android:fontFamily="@font/roboto_light"
                     app:layout_constraintEnd_toEndOf="@+id/tv_synopsis_tv_show_detail"
                     app:layout_constraintStart_toStartOf="@+id/tv_synopsis_tv_show_detail"
                     app:layout_constraintTop_toBottomOf="@+id/tv_synopsis_tv_show_detail" />
@@ -423,7 +425,7 @@
                     android:fontFamily="@font/roboto_regular"
                     android:text="@string/casts"
                     android:textColor="@color/white"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toEndOf="@+id/view2"
                     app:layout_constraintTop_toTopOf="parent" />
