@@ -1,0 +1,422 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black_taskbar"
+    tools:context=".activities.MovieDetailActivity">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:scrollbars="none"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="50dp">
+
+            <ImageView
+                android:id="@+id/iv_wallpaper_person_detail"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:scaleType="centerCrop"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:background="@color/gray_primary" />
+
+            <ImageView
+                android:id="@+id/btn_back_person_detail"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="24dp"
+                android:padding="11dp"
+                android:src="@drawable/ic_back_yellow"
+                android:background="@drawable/bg_circle_black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.legacy.widget.Space
+                android:id="@+id/space"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginBottom="25dp"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_wallpaper_person_detail"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <View
+                android:id="@+id/view4"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginStart="2dp"
+                android:background="@color/black_primary"
+                android:paddingBottom="24dp"
+                app:layout_constraintBottom_toBottomOf="@id/space2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/iv_wallpaper_person_detail" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView2"
+                android:layout_width="120dp"
+                android:layout_height="175dp"
+                android:layout_marginStart="16dp"
+                android:foreground="@drawable/bg_card_poster"
+                app:cardCornerRadius="7dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/space">
+
+                <ImageView
+                    android:id="@+id/iv_profile_person_detail"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop" />
+
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/tv_name_person_detail"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="16dp"
+                android:ellipsize="end"
+                android:fontFamily="@font/roboto_medium"
+                android:lineSpacingExtra="2dp"
+                android:maxLines="2"
+                android:textColor="@color/yellow_primary"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/cardView2"
+                app:layout_constraintTop_toBottomOf="@+id/iv_wallpaper_person_detail"
+                tools:text="Full\nName" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/known_as"
+                android:textSize="14sp"
+                android:textColor="@color/white"
+                android:fontFamily="@font/roboto_regular"
+                app:layout_constraintStart_toStartOf="@+id/tv_name_person_detail"
+                app:layout_constraintTop_toBottomOf="@+id/tv_name_person_detail" />
+
+            <TextView
+                android:id="@+id/tv_known_as_person_detail"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:layout_marginEnd="16sp"
+                android:fontFamily="@font/roboto_regular"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/textView"
+                app:layout_constraintTop_toTopOf="@+id/textView"
+                tools:text="Character" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_regular"
+                android:text="@string/in"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="@+id/textView"
+                app:layout_constraintTop_toBottomOf="@+id/tv_known_as_person_detail" />
+
+            <TextView
+                android:id="@+id/tv_film_person_detail"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:layout_marginEnd="16sp"
+                android:fontFamily="@font/roboto_regular"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/textView2"
+                app:layout_constraintTop_toTopOf="@+id/textView2"
+                tools:text="Film" />
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/roboto_regular"
+                android:text="Known for"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="@+id/textView2"
+                app:layout_constraintTop_toBottomOf="@+id/tv_film_person_detail" />
+
+            <TextView
+                android:id="@+id/tv_department_person_detail"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:layout_marginEnd="16sp"
+                android:fontFamily="@font/roboto_regular"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/textView5"
+                app:layout_constraintTop_toTopOf="@+id/textView5"
+                tools:text="Acting" />
+
+            <androidx.legacy.widget.Space
+                android:id="@+id/space2"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="12dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cardView2" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_aka"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/black_primary"
+                android:paddingTop="12dp"
+                android:paddingBottom="24dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/space2">
+
+                <View
+                    android:id="@+id/view3"
+                    android:layout_width="6dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="16dp"
+                    android:background="@color/yellow_primary"
+                    app:layout_constraintBottom_toBottomOf="@+id/temp3"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/temp3" />
+
+                <TextView
+                    android:id="@+id/temp3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="Also known as"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toEndOf="@+id/view3"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_aka_person_detail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:paddingStart="16dp"
+                    android:clipToPadding="false"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/temp3"
+                    tools:itemCount="1"
+                    tools:listitem="@layout/item_rv_rect" />
+
+                <!-- if person doesn't has also known as-->
+                <TextView
+                    android:id="@+id/tv_aka_gone_person_detail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_medium"
+                    android:text="-"
+                    android:textColor="@color/white"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="@+id/view3"
+                    app:layout_constraintTop_toTopOf="@+id/rv_aka_person_detail" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_born"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/black_primary"
+                    android:layout_marginTop="10dp"
+                    android:paddingHorizontal="16sp"
+                    android:paddingVertical="12dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/cl_aka">
+
+                    <View
+                        android:id="@+id/view1"
+                        android:layout_width="6dp"
+                        android:layout_height="0dp"
+                        android:background="@color/yellow_primary"
+                        app:layout_constraintBottom_toBottomOf="@+id/temp1"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/temp1" />
+
+                    <TextView
+                        android:id="@+id/temp1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:fontFamily="@font/roboto_regular"
+                        android:text="@string/born"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toEndOf="@+id/view1"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/textView3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="@font/roboto_medium"
+                        android:text="Born in"
+                        android:textColor="@color/gray_primary"
+                        android:textSize="14sp"
+                        app:layout_constraintStart_toStartOf="@+id/view1"
+                        app:layout_constraintTop_toBottomOf="@+id/temp1" />
+
+                    <TextView
+                        android:id="@+id/tv_born_in_person_detail"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:fontFamily="@font/roboto_medium"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/textView3"
+                        app:layout_constraintTop_toTopOf="@+id/textView3"
+                        tools:text="Makassar, Indonesia" />
+
+
+                    <TextView
+                        android:id="@+id/tv_born_on_person_detail"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_medium"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/tv_born_in_person_detail"
+                        app:layout_constraintTop_toTopOf="@+id/textView4"
+                        tools:text="12 April 2021" />
+
+                    <TextView
+                        android:id="@+id/textView4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:fontFamily="@font/roboto_medium"
+                        android:text="Born on"
+                        android:textColor="@color/gray_primary"
+                        android:textSize="14sp"
+                        app:layout_constraintStart_toStartOf="@+id/textView3"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_born_in_person_detail" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_wrapper_biography_person_detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/black_primary"
+                android:paddingHorizontal="16sp"
+                android:paddingVertical="12dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cl_born">
+
+                <View
+                    android:id="@+id/view"
+                    android:layout_width="6dp"
+                    android:layout_height="0dp"
+                    android:background="@color/yellow_primary"
+                    app:layout_constraintBottom_toBottomOf="@+id/temp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/temp" />
+
+                <TextView
+                    android:id="@+id/temp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="Biography"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toEndOf="@+id/view"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_biography_person_detail"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/roboto_regular"
+                    android:lineSpacingExtra="5dp"
+                    android:maxLines="2"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/temp"
+                    tools:text="haha wkwk lol\nini synopsis\nlorem lorem lorem" />
+
+                <TextView
+                    android:id="@+id/tv_more_person_detail"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="more"
+                    android:textAlignment="textEnd"
+                    android:textColor="@color/gray_primary"
+                    app:layout_constraintEnd_toEndOf="@+id/tv_biography_person_detail"
+                    app:layout_constraintStart_toStartOf="@+id/tv_biography_person_detail"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_biography_person_detail" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <ProgressBar
+                    android:id="@+id/pb_person_detail"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:indeterminate="true"
+                    android:indeterminateTint="@color/yellow_primary"
+                    app:layout_constraintBottom_toBottomOf="@+id/iv_wallpaper_person_detail"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

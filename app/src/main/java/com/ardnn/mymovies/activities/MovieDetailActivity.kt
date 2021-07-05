@@ -1,5 +1,6 @@
 package com.ardnn.mymovies.activities
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -208,7 +209,13 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, OnItemCli
     }
 
     override fun itemClicked(cast: Cast) {
-        Toast.makeText(this@MovieDetailActivity, cast.name, Toast.LENGTH_SHORT).show()
+        // go to person detail
+        val goToPersonDetail = Intent(this, PersonDetailActivity::class.java)
+        goToPersonDetail.putExtra(PersonDetailActivity.EXTRA_ID, cast.id)
+        goToPersonDetail.putExtra(PersonDetailActivity.EXTRA_KNOWN_AS, cast.character)
+        goToPersonDetail.putExtra(PersonDetailActivity.EXTRA_FILM, movie.title)
+        goToPersonDetail.putExtra(PersonDetailActivity.EXTRA_WALLPAPER_URL, movie.getWallpaperUrl(ImageSize.W780))
+        startActivity(goToPersonDetail)
     }
 
     // do nothing
