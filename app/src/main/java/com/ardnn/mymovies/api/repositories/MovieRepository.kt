@@ -7,6 +7,7 @@ import com.ardnn.mymovies.models.MovieOutline
 import com.ardnn.mymovies.api.services.MovieApiServices
 import com.ardnn.mymovies.models.Cast
 import com.ardnn.mymovies.models.Movie
+import com.ardnn.mymovies.models.Video
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -172,4 +173,30 @@ object MovieRepository {
             })
     }
 
+    // method to get movie videos
+    fun getMovieVideos(movieId: Int, callback: MovieVideosCallback) {
+        MOVIE_SERVICE.getMovieVideos(movieId, Consts.API_KEY)
+            .enqueue(object : Callback<Video> {
+                override fun onResponse(call: Call<Video>, response: Response<Video>) {
+                    if (response.isSuccessful) {
+                        if (response.body() != null) {
+                            if (response.body()?.videoList != null) {
+                                callback.onSuccess(response.body()?.videoList ?: mutableListOf())
+                            } else {
+                                callback.onFailure("response.body().videoList is null")
+                            }
+                        } else {
+                            callback.onFailure("response.body() is null")
+                        }
+                    } else {
+                        callback.onFailure(response.message())
+                    }
+                }
+
+                override fun onFailure(call: Call<Video>, t: Throwable) {
+                    callback.onFailure(t.localizedMessage ?: "Response failure.")
+                }
+
+            })
+    }
 }
