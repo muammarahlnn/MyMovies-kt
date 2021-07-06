@@ -2,6 +2,7 @@ package com.ardnn.mymovies.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
@@ -13,9 +14,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ardnn.mymovies.R
 import com.ardnn.mymovies.adapters.AlsoKnownAsAdapter
 import com.ardnn.mymovies.api.callbacks.person.PersonDetailsCallback
+import com.ardnn.mymovies.api.callbacks.person.PersonMoviesCallback
 import com.ardnn.mymovies.api.repositories.PersonRepository
 import com.ardnn.mymovies.helpers.Utils
 import com.ardnn.mymovies.models.ImageSize
+import com.ardnn.mymovies.models.MovieOutline
 import com.ardnn.mymovies.models.Person
 import com.bumptech.glide.Glide
 
@@ -68,6 +71,7 @@ class PersonDetailActivity : AppCompatActivity(), View.OnClickListener {
 
         // load person detail data
         loadData()
+        loadMoviesData()
     }
 
 
@@ -131,6 +135,21 @@ class PersonDetailActivity : AppCompatActivity(), View.OnClickListener {
             }
         })
 
+    }
+
+    private fun loadMoviesData() {
+        PersonRepository.getPersonMovies(personId, object : PersonMoviesCallback {
+            override fun onSuccess(personMovieList: MutableList<MovieOutline>) {
+                for (movie in personMovieList) {
+                    Log.d("PERSON MOVIE", movie.title ?: "-")
+                }
+            }
+
+            override fun onFailure(message: String) {
+                Toast.makeText(this@PersonDetailActivity, message, Toast.LENGTH_SHORT).show()
+            }
+
+        })
     }
 
     private fun setDataToWidgets() {

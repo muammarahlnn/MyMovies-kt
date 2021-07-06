@@ -20,7 +20,10 @@ data class MovieOutline(
     val rating: Double?,
 
     @SerializedName("results")
-    val movieOutlineList: MutableList<MovieOutline>
+    val movieOutlineList: MutableList<MovieOutline>,
+
+    @SerializedName("cast")
+    val personMovieList: MutableList<MovieOutline>
 ) {
     fun getPosterUrl(size: ImageSize) : String {
         return "${Consts.IMG_URL}${size.getValue()}${posterUrl}"

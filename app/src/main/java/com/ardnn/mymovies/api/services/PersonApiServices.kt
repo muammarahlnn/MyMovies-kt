@@ -1,5 +1,6 @@
 package com.ardnn.mymovies.api.services
 
+import com.ardnn.mymovies.models.MovieOutline
 import com.ardnn.mymovies.models.Person
 import retrofit2.Call
 import retrofit2.http.GET
@@ -12,4 +13,10 @@ interface PersonApiServices {
         @Path("person_id") personId: Int,
         @Query("api_key") apiKey: String
     ): Call<Person>
+
+    @GET("{person_id}/movie_credits")
+    fun getPersonMovies(
+        @Path("person_id") personId: Int,
+        @Query("api_key") apiKey: String
+    ): Call<MovieOutline>
 }

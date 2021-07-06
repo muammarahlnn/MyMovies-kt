@@ -1,7 +1,9 @@
 package com.ardnn.mymovies.api.repositories
 
 import com.ardnn.mymovies.api.callbacks.person.PersonDetailsCallback
+import com.ardnn.mymovies.api.callbacks.person.PersonMoviesCallback
 import com.ardnn.mymovies.api.services.PersonApiServices
+import com.ardnn.mymovies.models.MovieOutline
 import com.ardnn.mymovies.models.Person
 import retrofit2.Call
 import retrofit2.Callback
@@ -38,6 +40,35 @@ object PersonRepository {
                     callback.onFailure(t.localizedMessage!!)
                 }
 
+            })
+    }
+
+    // method to get person movies
+    fun getPersonMovies(personId: Int, callback: PersonMoviesCallback) {
+        PERSON_SERVICE.getPersonMovies(personId, Consts.API_KEY)
+            .enqueue(object : Callback<MovieOutline> {
+                override fun onResponse(
+                    call: Call<MovieOutline>,
+                    response: Response<MovieOutline>
+                ) {
+                    if (response.isSuccessful) {
+                        if (response.body() != null) {
+                            if (response.body()?.personMovieList != null) {
+                                callback.onSuccess(response.body()!!.personMovieList)
+                            } else {
+                                callback.onFailure("response.body().personMovieList is null")
+                            }
+                        } else {
+                            callback.onFailure("response.body() is null")
+                        }
+                    } else {
+                        callback.onFailure(response.message())
+                    }
+                }
+
+                override fun onFailure(call: Call<MovieOutline>, t: Throwable) {
+                    callback.onFailure(t.localizedMessage!!)
+                }
             })
     }
 }
