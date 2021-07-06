@@ -19,6 +19,7 @@ import com.ardnn.mymovies.adapters.OnItemClick
 import com.ardnn.mymovies.api.callbacks.movies.MovieCastsCallback
 import com.ardnn.mymovies.api.callbacks.movies.MovieDetailsCallback
 import com.ardnn.mymovies.api.callbacks.movies.MovieVideosCallback
+import com.ardnn.mymovies.api.callbacks.movies.SimilarMoviesCallback
 import com.ardnn.mymovies.api.repositories.MovieRepository
 import com.ardnn.mymovies.helpers.Utils
 import com.ardnn.mymovies.models.*
@@ -74,6 +75,7 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, OnItemCli
         loadMovieDetails()
         loadMovieCasts()
         loadMovieVideos()
+        loadSimilarMovie()
 
         // if button clicked
         btnBack.setOnClickListener(this)
@@ -180,6 +182,21 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, OnItemCli
             override fun onSuccess(videoList: MutableList<Video>) {
                 for (video in videoList) {
                     Log.d("MOVIE VIDEO", video.name ?: "null")
+                }
+            }
+
+            override fun onFailure(message: String) {
+                TODO("Not yet implemented")
+            }
+
+        })
+    }
+
+    private fun loadSimilarMovie() {
+        MovieRepository.getSimilarMovies(movieId, object : SimilarMoviesCallback {
+            override fun onSuccess(similarList: MutableList<MovieOutline>) {
+                for (movie in similarList) {
+                    Log.d("SIMILAR", movie.title ?: "null")
                 }
             }
 

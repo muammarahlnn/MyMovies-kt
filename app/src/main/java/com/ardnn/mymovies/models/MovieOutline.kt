@@ -1,6 +1,7 @@
 package com.ardnn.mymovies.models
 
 import com.ardnn.mymovies.api.repositories.Consts
+import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
 data class MovieOutline(

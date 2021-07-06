@@ -199,4 +199,34 @@ object MovieRepository {
 
             })
     }
+
+    // method to get similar movies
+    fun getSimilarMovies(movieId: Int, callback: SimilarMoviesCallback) {
+        MOVIE_SERVICE.getSimilarMovies(movieId, Consts.API_KEY)
+            .enqueue(object : Callback<MovieOutline> {
+                override fun onResponse(
+                    call: Call<MovieOutline>,
+                    response: Response<MovieOutline>
+                ) {
+                    if (response.isSuccessful) {
+                        if (response.body() != null) {
+                            if (response.body()?.movieOutlineList != null) {
+                                callback.onSuccess(response.body()!!.movieOutlineList)
+                            } else {
+                                callback.onFailure("response.body().movieOutlineList is null")
+                            }
+                        } else {
+                            callback.onFailure("response.body() is null")
+                        }
+                    } else {
+                        callback.onFailure(response.message())
+                    }
+                }
+
+                override fun onFailure(call: Call<MovieOutline>, t: Throwable) {
+                    callback.onFailure(t.localizedMessage!!)
+                }
+
+            })
+    }
 }
