@@ -1,11 +1,11 @@
 package com.ardnn.mymovies.api.repositories
 
 import com.ardnn.mymovies.api.callbacks.tvshows.*
-import com.ardnn.mymovies.helpers.Utils
 import com.ardnn.mymovies.models.TvShowOutline
 import com.ardnn.mymovies.api.services.TvShowApiServices
 import com.ardnn.mymovies.models.Cast
 import com.ardnn.mymovies.models.TvShow
+import com.ardnn.mymovies.models.Video
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -168,6 +168,33 @@ object TvShowRepository {
 
                 override fun onFailure(call: Call<Cast>, t: Throwable) {
                     callback.onFailure(t.localizedMessage!!)
+                }
+
+            })
+    }
+
+    // method to get tv show videos
+    fun getTvShowVideos(tvShowId: Int, callback: TvShowVideosCallback) {
+        TV_SHOW_SERVICE.getTvShowVideos(tvShowId, Consts.API_KEY)
+            .enqueue(object : Callback<Video> {
+                override fun onResponse(call: Call<Video>, response: Response<Video>) {
+                    if (response.isSuccessful) {
+                        if (response.body() != null) {
+                            if (response.body()?.videoList != null) {
+                                callback.onSuccess(response.body()?.videoList ?: mutableListOf())
+                            } else {
+                                callback.onFailure("response.body().videoList is null")
+                            }
+                        } else {
+                            callback.onFailure("response.body() is null")
+                        }
+                    } else {
+                        callback.onFailure(response.message())
+                    }
+                }
+
+                override fun onFailure(call: Call<Video>, t: Throwable) {
+                    callback.onFailure(t.localizedMessage ?: "Response failure.")
                 }
 
             })

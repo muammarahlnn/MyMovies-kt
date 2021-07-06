@@ -3,6 +3,7 @@ package com.ardnn.mymovies.api.services
 import com.ardnn.mymovies.models.Cast
 import com.ardnn.mymovies.models.TvShow
 import com.ardnn.mymovies.models.TvShowOutline
+import com.ardnn.mymovies.models.Video
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -20,6 +21,12 @@ interface TvShowApiServices {
         @Path("tv_id") tvShowId: Int,
         @Query("api_key") apiKey: String
     ): Call<Cast>
+
+    @GET("{tv_id}/videos")
+    fun getTvShowVideos(
+        @Path("tv_id") tvShowId: Int,
+        @Query("api_key") apiKey: String
+    ): Call<Video>
 
     @GET("airing_today")
     fun getAiringTodayTvShows(

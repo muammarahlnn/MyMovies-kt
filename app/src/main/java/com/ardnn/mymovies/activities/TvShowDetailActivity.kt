@@ -18,6 +18,7 @@ import com.ardnn.mymovies.adapters.GenresAdapter
 import com.ardnn.mymovies.adapters.OnItemClick
 import com.ardnn.mymovies.api.callbacks.tvshows.TvShowCastsCallback
 import com.ardnn.mymovies.api.callbacks.tvshows.TvShowDetailsCallback
+import com.ardnn.mymovies.api.callbacks.tvshows.TvShowVideosCallback
 import com.ardnn.mymovies.api.repositories.TvShowRepository
 import com.ardnn.mymovies.helpers.Utils
 import com.ardnn.mymovies.models.*
@@ -73,6 +74,7 @@ class TvShowDetailActivity : AppCompatActivity(), OnItemClick, View.OnClickListe
         // load tv show data
         loadTvShowDetails()
         loadTvShowCasts()
+        loadTvShowVideos()
 
         // if button clicked
         btnBack.setOnClickListener(this)
@@ -171,6 +173,21 @@ class TvShowDetailActivity : AppCompatActivity(), OnItemClick, View.OnClickListe
 
             override fun onFailure(message: String) {
                 Toast.makeText(this@TvShowDetailActivity, message, Toast.LENGTH_SHORT).show()
+            }
+
+        })
+    }
+
+    private fun loadTvShowVideos() {
+        TvShowRepository.getTvShowVideos(tvShowId, object : TvShowVideosCallback {
+            override fun onSuccess(videoList: MutableList<Video>) {
+                for (video in videoList) {
+                    Log.d("TV SHOW VIDEO", video.name ?: "null")
+                }
+            }
+
+            override fun onFailure(message: String) {
+                TODO("Not yet implemented")
             }
 
         })
