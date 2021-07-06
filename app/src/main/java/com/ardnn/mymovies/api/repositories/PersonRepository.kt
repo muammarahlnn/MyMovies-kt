@@ -2,9 +2,11 @@ package com.ardnn.mymovies.api.repositories
 
 import com.ardnn.mymovies.api.callbacks.person.PersonDetailsCallback
 import com.ardnn.mymovies.api.callbacks.person.PersonMoviesCallback
+import com.ardnn.mymovies.api.callbacks.person.PersonTvShowsCallback
 import com.ardnn.mymovies.api.services.PersonApiServices
 import com.ardnn.mymovies.models.MovieOutline
 import com.ardnn.mymovies.models.Person
+import com.ardnn.mymovies.models.TvShowOutline
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -69,6 +71,36 @@ object PersonRepository {
                 override fun onFailure(call: Call<MovieOutline>, t: Throwable) {
                     callback.onFailure(t.localizedMessage!!)
                 }
+            })
+    }
+
+    // method to get person tv shows
+    fun getPersonTvShows(personId: Int, callback: PersonTvShowsCallback) {
+        PERSON_SERVICE.getPersonTvShows(personId, Consts.API_KEY)
+            .enqueue(object : Callback<TvShowOutline> {
+                override fun onResponse(
+                    call: Call<TvShowOutline>,
+                    response: Response<TvShowOutline>
+                ) {
+                    if (response.isSuccessful) {
+                        if (response.body() != null) {
+                            if (response.body()?.personTvShowList != null) {
+                                callback.onSuccess(response.body()!!.personTvShowList)
+                            } else {
+                                callback.onFailure("response.body().personTvShowList is null")
+                            }
+                        } else {
+                            callback.onFailure("response.body() is null")
+                        }
+                    } else {
+                        callback.onFailure(response.message())
+                    }
+                }
+
+                override fun onFailure(call: Call<TvShowOutline>, t: Throwable) {
+                    callback.onFailure(t.localizedMessage!!)
+                }
+
             })
     }
 }

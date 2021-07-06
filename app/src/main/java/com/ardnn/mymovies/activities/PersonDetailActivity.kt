@@ -15,11 +15,13 @@ import com.ardnn.mymovies.R
 import com.ardnn.mymovies.adapters.AlsoKnownAsAdapter
 import com.ardnn.mymovies.api.callbacks.person.PersonDetailsCallback
 import com.ardnn.mymovies.api.callbacks.person.PersonMoviesCallback
+import com.ardnn.mymovies.api.callbacks.person.PersonTvShowsCallback
 import com.ardnn.mymovies.api.repositories.PersonRepository
 import com.ardnn.mymovies.helpers.Utils
 import com.ardnn.mymovies.models.ImageSize
 import com.ardnn.mymovies.models.MovieOutline
 import com.ardnn.mymovies.models.Person
+import com.ardnn.mymovies.models.TvShowOutline
 import com.bumptech.glide.Glide
 
 class PersonDetailActivity : AppCompatActivity(), View.OnClickListener {
@@ -72,6 +74,7 @@ class PersonDetailActivity : AppCompatActivity(), View.OnClickListener {
         // load person detail data
         loadData()
         loadMoviesData()
+        loadTvShowData()
     }
 
 
@@ -149,6 +152,20 @@ class PersonDetailActivity : AppCompatActivity(), View.OnClickListener {
                 Toast.makeText(this@PersonDetailActivity, message, Toast.LENGTH_SHORT).show()
             }
 
+        })
+    }
+
+    private fun loadTvShowData() {
+        PersonRepository.getPersonTvShows(personId, object : PersonTvShowsCallback {
+            override fun onSuccess(personTvShowList: MutableList<TvShowOutline>) {
+                for (tvShow in personTvShowList) {
+                    Log.d("PERSON TV", tvShow.title ?: "-")
+                }
+            }
+
+            override fun onFailure(message: String) {
+                Toast.makeText(this@PersonDetailActivity, message, Toast.LENGTH_SHORT).show()
+            }
         })
     }
 
