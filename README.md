@@ -1,2 +1,2 @@
 # MyMovies
-android app to show movie catalogue using TMDB API
+android app to show movie catalogue using data from TMDB API
