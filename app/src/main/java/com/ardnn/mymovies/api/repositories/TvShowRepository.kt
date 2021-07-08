@@ -199,4 +199,34 @@ object TvShowRepository {
 
             })
     }
+
+    // method to get similar tv shows
+    fun getSimilarTvShows(tvShowId: Int, callback: SimilarTvShowsCallback) {
+        TV_SHOW_SERVICE.getSimilarTvShows(tvShowId, Consts.API_KEY)
+            .enqueue(object : Callback<TvShowOutline> {
+                override fun onResponse(
+                    call: Call<TvShowOutline>,
+                    response: Response<TvShowOutline>
+                ) {
+                    if (response.isSuccessful) {
+                        if (response.body() != null) {
+                            if (response.body()?.tvShowOutlineList != null) {
+                                callback.onSuccess(response.body()!!.tvShowOutlineList)
+                            } else {
+                                callback.onFailure("response.body().tvShowOutlineList is null")
+                            }
+                        } else {
+                            callback.onFailure("response.body() is null")
+                        }
+                    } else {
+                        callback.onFailure(response.message())
+                    }
+                }
+
+                override fun onFailure(call: Call<TvShowOutline>, t: Throwable) {
+                    callback.onFailure(t.localizedMessage!!)
+                }
+
+            })
+    }
 }

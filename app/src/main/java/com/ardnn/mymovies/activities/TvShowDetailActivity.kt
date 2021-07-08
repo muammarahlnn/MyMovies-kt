@@ -16,6 +16,7 @@ import com.ardnn.mymovies.R
 import com.ardnn.mymovies.adapters.CastsAdapter
 import com.ardnn.mymovies.adapters.GenresAdapter
 import com.ardnn.mymovies.adapters.OnItemClick
+import com.ardnn.mymovies.api.callbacks.tvshows.SimilarTvShowsCallback
 import com.ardnn.mymovies.api.callbacks.tvshows.TvShowCastsCallback
 import com.ardnn.mymovies.api.callbacks.tvshows.TvShowDetailsCallback
 import com.ardnn.mymovies.api.callbacks.tvshows.TvShowVideosCallback
@@ -75,6 +76,7 @@ class TvShowDetailActivity : AppCompatActivity(), OnItemClick, View.OnClickListe
         loadTvShowDetails()
         loadTvShowCasts()
         loadTvShowVideos()
+        loadSimilarTvShows()
 
         // if button clicked
         btnBack.setOnClickListener(this)
@@ -183,6 +185,21 @@ class TvShowDetailActivity : AppCompatActivity(), OnItemClick, View.OnClickListe
             override fun onSuccess(videoList: MutableList<Video>) {
                 for (video in videoList) {
                     Log.d("TV SHOW VIDEO", video.name ?: "null")
+                }
+            }
+
+            override fun onFailure(message: String) {
+                TODO("Not yet implemented")
+            }
+
+        })
+    }
+
+    private fun loadSimilarTvShows() {
+        TvShowRepository.getSimilarTvShows(tvShowId, object : SimilarTvShowsCallback {
+            override fun onSuccess(similarList: MutableList<TvShowOutline>) {
+                for (tvShow in similarList) {
+                    Log.d("SIMILAR", tvShow.title ?: "null")
                 }
             }
 
