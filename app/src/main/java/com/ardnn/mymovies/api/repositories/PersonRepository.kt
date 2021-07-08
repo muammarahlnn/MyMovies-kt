@@ -29,7 +29,7 @@ object PersonRepository {
                 override fun onResponse(call: Call<Person>, response: Response<Person>) {
                     if (response.isSuccessful) {
                         if (response.body() != null) {
-                            callback.onSuccess(response.body()!!)
+                            callback.onSuccess(response.body() ?: Person())
                         } else {
                             callback.onFailure("response.body() is null")
                         }
@@ -39,7 +39,7 @@ object PersonRepository {
                 }
 
                 override fun onFailure(call: Call<Person>, t: Throwable) {
-                    callback.onFailure(t.localizedMessage!!)
+                    callback.onFailure(t.localizedMessage ?: "getPersonDetails failure")
                 }
 
             })
@@ -56,7 +56,7 @@ object PersonRepository {
                     if (response.isSuccessful) {
                         if (response.body() != null) {
                             if (response.body()?.personMovieList != null) {
-                                callback.onSuccess(response.body()!!.personMovieList)
+                                callback.onSuccess(response.body()?.personMovieList ?: mutableListOf())
                             } else {
                                 callback.onFailure("response.body().personMovieList is null")
                             }
@@ -69,7 +69,7 @@ object PersonRepository {
                 }
 
                 override fun onFailure(call: Call<MovieOutline>, t: Throwable) {
-                    callback.onFailure(t.localizedMessage!!)
+                    callback.onFailure(t.localizedMessage ?: "getPersonMovies failure")
                 }
             })
     }
@@ -85,7 +85,7 @@ object PersonRepository {
                     if (response.isSuccessful) {
                         if (response.body() != null) {
                             if (response.body()?.personTvShowList != null) {
-                                callback.onSuccess(response.body()!!.personTvShowList)
+                                callback.onSuccess(response.body()?.personTvShowList ?: mutableListOf())
                             } else {
                                 callback.onFailure("response.body().personTvShowList is null")
                             }
@@ -98,7 +98,7 @@ object PersonRepository {
                 }
 
                 override fun onFailure(call: Call<TvShowOutline>, t: Throwable) {
-                    callback.onFailure(t.localizedMessage!!)
+                    callback.onFailure(t.localizedMessage ?: "getPersonTvShows failure")
                 }
 
             })

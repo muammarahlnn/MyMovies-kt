@@ -28,7 +28,7 @@ object TvShowRepository {
                 if (response.isSuccessful) {
                     if (response.body() != null) {
                         if (response.body()?.tvShowOutlineList != null) {
-                            callback.onSuccess(response.body()!!.tvShowOutlineList)
+                            callback.onSuccess(response.body()?.tvShowOutlineList ?: mutableListOf())
                         } else {
                             callback.onFailure("response.body().tvShowOutlineList is null")
                         }
@@ -41,7 +41,7 @@ object TvShowRepository {
             }
 
             override fun onFailure(call: Call<TvShowOutline>, t: Throwable) {
-                callback.onFailure(t.localizedMessage!!)
+                callback.onFailure(t.localizedMessage ?: "getAiringTodayTvShows failure")
             }
 
         })
@@ -54,7 +54,7 @@ object TvShowRepository {
                 if (response.isSuccessful) {
                     if (response.body() != null) {
                         if (response.body()?.tvShowOutlineList != null) {
-                            callback.onSuccess(response.body()!!.tvShowOutlineList)
+                            callback.onSuccess(response.body()?.tvShowOutlineList ?: mutableListOf())
                         } else {
                             callback.onFailure("response.body().tvShowOutlineList is null")
                         }
@@ -67,7 +67,7 @@ object TvShowRepository {
             }
 
             override fun onFailure(call: Call<TvShowOutline>, t: Throwable) {
-                callback.onFailure(t.localizedMessage!!)
+                callback.onFailure(t.localizedMessage ?: "getOnTheAirTvShows failure")
             }
         })
     }
@@ -79,7 +79,7 @@ object TvShowRepository {
                 if (response.isSuccessful) {
                     if (response.body() != null) {
                         if (response.body()?.tvShowOutlineList != null) {
-                            callback.onSuccess(response.body()!!.tvShowOutlineList)
+                            callback.onSuccess(response.body()?.tvShowOutlineList ?: mutableListOf())
                         } else {
                             callback.onFailure("response.body().tvShowOutlineList is null")
                         }
@@ -92,7 +92,7 @@ object TvShowRepository {
             }
 
             override fun onFailure(call: Call<TvShowOutline>, t: Throwable) {
-                callback.onFailure(t.localizedMessage!!)
+                callback.onFailure(t.localizedMessage ?: "getPopularTvShows failure")
             }
 
         })
@@ -105,7 +105,7 @@ object TvShowRepository {
                 if (response.isSuccessful) {
                     if (response.body() != null) {
                         if (response.body()?.tvShowOutlineList != null) {
-                            callback.onSuccess(response.body()!!.tvShowOutlineList)
+                            callback.onSuccess(response.body()?.tvShowOutlineList ?: mutableListOf())
                         } else {
                             callback.onFailure("response.body().tvShowOutlineList is null")
                         }
@@ -118,7 +118,7 @@ object TvShowRepository {
             }
 
             override fun onFailure(call: Call<TvShowOutline>, t: Throwable) {
-                callback.onFailure(t.localizedMessage!!)
+                callback.onFailure(t.localizedMessage ?: "getTopRatedTvShows failure")
             }
 
         })
@@ -131,7 +131,7 @@ object TvShowRepository {
                 override fun onResponse(call: Call<TvShow>, response: Response<TvShow>) {
                     if (response.isSuccessful) {
                         if (response.body() != null) {
-                            callback.onSuccess(response.body()!!)
+                            callback.onSuccess(response.body() ?: TvShow())
                         } else {
                             callback.onFailure("response.body() is null")
                         }
@@ -141,7 +141,7 @@ object TvShowRepository {
                 }
 
                 override fun onFailure(call: Call<TvShow>, t: Throwable) {
-                    callback.onFailure(t.localizedMessage!!)
+                    callback.onFailure(t.localizedMessage ?: "getTvShowDetails failure")
                 }
         })
     }
@@ -154,7 +154,7 @@ object TvShowRepository {
                     if (response.isSuccessful) {
                         if (response.body() != null) {
                             if (response.body()?.castList != null) {
-                                callback.onSuccess(response.body()!!.castList)
+                                callback.onSuccess(response.body()?.castList ?: mutableListOf())
                             } else {
                                 callback.onFailure("response.body().castList is null")
                             }
@@ -167,7 +167,7 @@ object TvShowRepository {
                 }
 
                 override fun onFailure(call: Call<Cast>, t: Throwable) {
-                    callback.onFailure(t.localizedMessage!!)
+                    callback.onFailure(t.localizedMessage ?: "getTvShowCasts failure")
                 }
 
             })
@@ -204,14 +204,11 @@ object TvShowRepository {
     fun getSimilarTvShows(tvShowId: Int, callback: TvShowOutlineCallback) {
         TV_SHOW_SERVICE.getSimilarTvShows(tvShowId, Consts.API_KEY)
             .enqueue(object : Callback<TvShowOutline> {
-                override fun onResponse(
-                    call: Call<TvShowOutline>,
-                    response: Response<TvShowOutline>
-                ) {
+                override fun onResponse(call: Call<TvShowOutline>, response: Response<TvShowOutline>) {
                     if (response.isSuccessful) {
                         if (response.body() != null) {
                             if (response.body()?.tvShowOutlineList != null) {
-                                callback.onSuccess(response.body()!!.tvShowOutlineList)
+                                callback.onSuccess(response.body()?.tvShowOutlineList ?: mutableListOf())
                             } else {
                                 callback.onFailure("response.body().tvShowOutlineList is null")
                             }
@@ -224,7 +221,7 @@ object TvShowRepository {
                 }
 
                 override fun onFailure(call: Call<TvShowOutline>, t: Throwable) {
-                    callback.onFailure(t.localizedMessage!!)
+                    callback.onFailure(t.localizedMessage ?: "getSimilarTvShows failure")
                 }
 
             })

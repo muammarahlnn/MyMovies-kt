@@ -28,7 +28,7 @@ object MovieRepository {
                 if (response.isSuccessful) {
                     if (response.body() != null) {
                         if (response.body()?.movieOutlineList != null) {
-                            callback.onSuccess(response.body()!!.movieOutlineList)
+                            callback.onSuccess(response.body()?.movieOutlineList ?: mutableListOf())
                         } else {
                             callback.onFailure("response.body().movieOutlineList is null")
                         }
@@ -41,7 +41,7 @@ object MovieRepository {
             }
 
             override fun onFailure(call: Call<MovieOutline>, t: Throwable) {
-                callback.onFailure(t.localizedMessage!!)
+                callback.onFailure(t.localizedMessage ?: "getNowPlayingMovies failure")
             }
 
         })
@@ -54,7 +54,7 @@ object MovieRepository {
                 if (response.isSuccessful) {
                     if (response.body() != null) {
                         if (response.body()?.movieOutlineList != null) {
-                            callback.onSuccess(response.body()!!.movieOutlineList)
+                            callback.onSuccess(response.body()?.movieOutlineList ?: mutableListOf())
                         } else {
                             callback.onFailure("response.body().movieOutlineList is null")
                         }
@@ -67,7 +67,7 @@ object MovieRepository {
             }
 
             override fun onFailure(call: Call<MovieOutline>, t: Throwable) {
-                callback.onFailure(t.localizedMessage!!)
+                callback.onFailure(t.localizedMessage ?: "getUpcomingMovies failure")
             }
         })
     }
@@ -79,7 +79,7 @@ object MovieRepository {
                 if (response.isSuccessful) {
                     if (response.body() != null) {
                         if (response.body()?.movieOutlineList != null) {
-                            callback.onSuccess(response.body()!!.movieOutlineList)
+                            callback.onSuccess(response.body()?.movieOutlineList ?: mutableListOf())
                         } else {
                             callback.onFailure("response.body().movieOutlineList is null")
                         }
@@ -92,7 +92,7 @@ object MovieRepository {
             }
 
             override fun onFailure(call: Call<MovieOutline>, t: Throwable) {
-                callback.onFailure(t.localizedMessage!!)
+                callback.onFailure(t.localizedMessage ?: "getPopularMovies failure")
             }
         })
     }
@@ -104,7 +104,7 @@ object MovieRepository {
                 if (response.isSuccessful) {
                     if (response.body() != null) {
                         if (response.body()?.movieOutlineList != null) {
-                            callback.onSuccess(response.body()!!.movieOutlineList)
+                            callback.onSuccess(response.body()?.movieOutlineList ?: mutableListOf())
                         } else {
                             callback.onFailure("response.body().movieOutlineList is null")
                         }
@@ -117,7 +117,7 @@ object MovieRepository {
             }
 
             override fun onFailure(call: Call<MovieOutline>, t: Throwable) {
-                callback.onFailure(t.localizedMessage!!)
+                callback.onFailure(t.localizedMessage ?: "getTopRatedMovies failure")
             }
         })
     }
@@ -129,7 +129,7 @@ object MovieRepository {
                 override fun onResponse(call: Call<Movie>, response: Response<Movie>) {
                     if (response.isSuccessful) {
                         if (response.body() != null) {
-                            callback.onSuccess(response.body()!!)
+                            callback.onSuccess(response.body() ?: Movie())
                         } else {
                             callback.onFailure("response.body() is null")
                         }
@@ -139,7 +139,7 @@ object MovieRepository {
                 }
 
                 override fun onFailure(call: Call<Movie>, t: Throwable) {
-                    callback.onFailure(t.localizedMessage!!)
+                    callback.onFailure(t.localizedMessage ?: "getMovieDetails failure")
                 }
             })
     }
@@ -152,7 +152,7 @@ object MovieRepository {
                     if (response.isSuccessful) {
                         if (response.body() != null) {
                             if (response.body()?.castList != null) {
-                                callback.onSuccess(response.body()!!.castList)
+                                callback.onSuccess(response.body()?.castList ?: mutableListOf())
                             } else {
                                 callback.onFailure("response.body().castList is null")
                             }
@@ -165,7 +165,7 @@ object MovieRepository {
                 }
 
                 override fun onFailure(call: Call<Cast>, t: Throwable) {
-                    callback.onFailure(t.localizedMessage!!)
+                    callback.onFailure(t.localizedMessage ?: "getMovieCasts failure")
                 }
 
             })
@@ -209,7 +209,7 @@ object MovieRepository {
                     if (response.isSuccessful) {
                         if (response.body() != null) {
                             if (response.body()?.movieOutlineList != null) {
-                                callback.onSuccess(response.body()!!.movieOutlineList)
+                                callback.onSuccess(response.body()?.movieOutlineList ?: mutableListOf())
                             } else {
                                 callback.onFailure("response.body().movieOutlineList is null")
                             }
@@ -222,7 +222,7 @@ object MovieRepository {
                 }
 
                 override fun onFailure(call: Call<MovieOutline>, t: Throwable) {
-                    callback.onFailure(t.localizedMessage!!)
+                    callback.onFailure(t.localizedMessage ?: "getSimilarMovies failure")
                 }
 
             })

@@ -5,31 +5,31 @@ import com.google.gson.annotations.SerializedName
 
 data class Person(
     @SerializedName("id")
-    val id: Int?,
+    val id: Int? = -1,
 
     @SerializedName("name")
-    val name: String?,
+    val name: String? = "",
 
     @SerializedName("birthday")
-    val birthday: String?,
+    val birthday: String? = "",
 
     @SerializedName("place_of_birth")
-    val birthPlace: String?,
+    val birthPlace: String? = "",
 
     @SerializedName("gender")
-    val genderCode: Int?,
+    val genderCode: Int? = -1,
 
     @SerializedName("known_for_department")
-    val department: String?,
+    val department: String? = "",
 
     @SerializedName("profile_path")
-    val profileUrl: String,
+    val profileUrl: String = "",
 
     @SerializedName("also_known_as")
-    val akaList: List<String>,
+    val akaList: List<String> = listOf(),
 
     @SerializedName("biography")
-    val biography: String?,
+    val biography: String? = "",
 ) {
     fun getProfileUrl(size: ImageSize): String {
         return "${Consts.IMG_URL}${size.getValue()}${profileUrl}"
