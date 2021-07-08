@@ -18,16 +18,12 @@ import com.ardnn.mymovies.adapters.GenresAdapter
 import com.ardnn.mymovies.adapters.OnItemClick
 import com.ardnn.mymovies.api.callbacks.movies.MovieCastsCallback
 import com.ardnn.mymovies.api.callbacks.movies.MovieDetailsCallback
+import com.ardnn.mymovies.api.callbacks.movies.MovieOutlineCallback
 import com.ardnn.mymovies.api.callbacks.movies.MovieVideosCallback
-import com.ardnn.mymovies.api.callbacks.movies.SimilarMoviesCallback
 import com.ardnn.mymovies.api.repositories.MovieRepository
 import com.ardnn.mymovies.helpers.Utils
 import com.ardnn.mymovies.models.*
-import com.ardnn.mymovies.api.services.MovieApiServices
 import com.bumptech.glide.Glide
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, OnItemClick{
     companion object {
@@ -193,9 +189,9 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, OnItemCli
     }
 
     private fun loadSimilarMovie() {
-        MovieRepository.getSimilarMovies(movieId, object : SimilarMoviesCallback {
-            override fun onSuccess(similarList: MutableList<MovieOutline>) {
-                for (movie in similarList) {
+        MovieRepository.getSimilarMovies(movieId, object : MovieOutlineCallback {
+            override fun onSuccess(movieOutlineList: MutableList<MovieOutline>) {
+                for (movie in movieOutlineList) {
                     Log.d("SIMILAR", movie.title ?: "null")
                 }
             }

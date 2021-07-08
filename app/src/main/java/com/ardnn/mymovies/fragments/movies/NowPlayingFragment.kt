@@ -3,13 +3,10 @@ package com.ardnn.mymovies.fragments.movies
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
-import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import android.widget.ProgressBar
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
-import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -17,12 +14,12 @@ import com.ardnn.mymovies.R
 import com.ardnn.mymovies.activities.MovieDetailActivity
 import com.ardnn.mymovies.adapters.MoviesOutlineAdapter
 import com.ardnn.mymovies.adapters.OnItemClick
+import com.ardnn.mymovies.api.callbacks.movies.MovieOutlineCallback
 import com.ardnn.mymovies.models.Cast
 import com.ardnn.mymovies.models.Genre
 import com.ardnn.mymovies.models.MovieOutline
 import com.ardnn.mymovies.models.TvShowOutline
 import com.ardnn.mymovies.api.repositories.MovieRepository
-import com.ardnn.mymovies.api.callbacks.movies.NowPlayingMoviesCallback
 
 class NowPlayingFragment : Fragment(), OnItemClick, SwipeRefreshLayout.OnRefreshListener {
 
@@ -93,10 +90,10 @@ class NowPlayingFragment : Fragment(), OnItemClick, SwipeRefreshLayout.OnRefresh
     }
 
     private fun loadData(page: Int) {
-        MovieRepository.getNowPlayingMovies(page, object : NowPlayingMoviesCallback {
-            override fun onSuccess(nowPlayingList: MutableList<MovieOutline>) {
+        MovieRepository.getNowPlayingMovies(page, object : MovieOutlineCallback {
+            override fun onSuccess(movieOutlineList: MutableList<MovieOutline>) {
                 if (page == 1) movieList.clear()
-                movieList.addAll(nowPlayingList)
+                movieList.addAll(movieOutlineList)
                 adapter.updateList(movieList)
 
                 // done fetching

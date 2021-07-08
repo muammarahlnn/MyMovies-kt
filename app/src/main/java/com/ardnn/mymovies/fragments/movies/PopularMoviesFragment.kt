@@ -14,12 +14,12 @@ import com.ardnn.mymovies.R
 import com.ardnn.mymovies.activities.MovieDetailActivity
 import com.ardnn.mymovies.adapters.MoviesOutlineAdapter
 import com.ardnn.mymovies.adapters.OnItemClick
+import com.ardnn.mymovies.api.callbacks.movies.MovieOutlineCallback
 import com.ardnn.mymovies.models.Cast
 import com.ardnn.mymovies.models.Genre
 import com.ardnn.mymovies.models.MovieOutline
 import com.ardnn.mymovies.models.TvShowOutline
 import com.ardnn.mymovies.api.repositories.MovieRepository
-import com.ardnn.mymovies.api.callbacks.movies.PopularMoviesCallback
 
 class PopularMoviesFragment : Fragment(), OnItemClick, SwipeRefreshLayout.OnRefreshListener {
 
@@ -90,10 +90,10 @@ class PopularMoviesFragment : Fragment(), OnItemClick, SwipeRefreshLayout.OnRefr
     }
 
     private fun loadData(page: Int) {
-        MovieRepository.getPopularMovies(page, object : PopularMoviesCallback {
-            override fun onSuccess(popularMoviesList: MutableList<MovieOutline>) {
+        MovieRepository.getPopularMovies(page, object : MovieOutlineCallback {
+            override fun onSuccess(movieOutlineList: MutableList<MovieOutline>) {
                 if (page == 1) movieList.clear()
-                movieList.addAll(popularMoviesList)
+                movieList.addAll(movieOutlineList)
                 adapter.updateList(movieList)
 
                 // done fetching

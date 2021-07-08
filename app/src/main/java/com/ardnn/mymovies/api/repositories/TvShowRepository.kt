@@ -22,7 +22,7 @@ object TvShowRepository {
 
 
     // method to get airing today tv shows
-    fun getAiringTodayTvShows(page: Int, callback: AiringTodayTvShowsCallback) {
+    fun getAiringTodayTvShows(page: Int, callback: TvShowOutlineCallback) {
         TV_SHOW_SERVICE.getAiringTodayTvShows(Consts.API_KEY, page).enqueue(object : Callback<TvShowOutline> {
             override fun onResponse(call: Call<TvShowOutline>, response: Response<TvShowOutline>) {
                 if (response.isSuccessful) {
@@ -48,7 +48,7 @@ object TvShowRepository {
     }
 
     // method to get on the air tv shows
-    fun getOnTheAirTvShows(page: Int, callback: OnTheAirTvShowsCallback) {
+    fun getOnTheAirTvShows(page: Int, callback: TvShowOutlineCallback) {
         TV_SHOW_SERVICE.getOnTheAirTvShows(Consts.API_KEY, page).enqueue(object : Callback<TvShowOutline> {
             override fun onResponse(call: Call<TvShowOutline>, response: Response<TvShowOutline>) {
                 if (response.isSuccessful) {
@@ -73,7 +73,7 @@ object TvShowRepository {
     }
 
     // method to get popular tv shows
-    fun getPopularTvShows(page: Int, callback: PopularTvShowsCallback) {
+    fun getPopularTvShows(page: Int, callback: TvShowOutlineCallback) {
         TV_SHOW_SERVICE.getPopularTvShows(Consts.API_KEY, page).enqueue(object : Callback<TvShowOutline> {
             override fun onResponse(call: Call<TvShowOutline>, response: Response<TvShowOutline>) {
                 if (response.isSuccessful) {
@@ -99,7 +99,7 @@ object TvShowRepository {
     }
 
     // method to get top rated tv shows
-    fun getTopRatedTvShows(page: Int, callback: TopRatedTvShowsCallback) {
+    fun getTopRatedTvShows(page: Int, callback: TvShowOutlineCallback) {
         TV_SHOW_SERVICE.getTopRatedTvShows(Consts.API_KEY, page).enqueue(object : Callback<TvShowOutline> {
             override fun onResponse(call: Call<TvShowOutline>, response: Response<TvShowOutline>) {
                 if (response.isSuccessful) {
@@ -201,7 +201,7 @@ object TvShowRepository {
     }
 
     // method to get similar tv shows
-    fun getSimilarTvShows(tvShowId: Int, callback: SimilarTvShowsCallback) {
+    fun getSimilarTvShows(tvShowId: Int, callback: TvShowOutlineCallback) {
         TV_SHOW_SERVICE.getSimilarTvShows(tvShowId, Consts.API_KEY)
             .enqueue(object : Callback<TvShowOutline> {
                 override fun onResponse(

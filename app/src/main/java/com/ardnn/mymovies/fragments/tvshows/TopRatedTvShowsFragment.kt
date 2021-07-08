@@ -14,12 +14,12 @@ import com.ardnn.mymovies.R
 import com.ardnn.mymovies.activities.TvShowDetailActivity
 import com.ardnn.mymovies.adapters.OnItemClick
 import com.ardnn.mymovies.adapters.TvShowsOutlineAdapter
+import com.ardnn.mymovies.api.callbacks.tvshows.TvShowOutlineCallback
 import com.ardnn.mymovies.models.Cast
 import com.ardnn.mymovies.models.Genre
 import com.ardnn.mymovies.models.MovieOutline
 import com.ardnn.mymovies.models.TvShowOutline
 import com.ardnn.mymovies.api.repositories.TvShowRepository
-import com.ardnn.mymovies.api.callbacks.tvshows.TopRatedTvShowsCallback
 
 class TopRatedTvShowsFragment : Fragment(), OnItemClick, SwipeRefreshLayout.OnRefreshListener {
 
@@ -90,10 +90,10 @@ class TopRatedTvShowsFragment : Fragment(), OnItemClick, SwipeRefreshLayout.OnRe
     }
 
     private fun loadData(page: Int) {
-        TvShowRepository.getTopRatedTvShows(page, object : TopRatedTvShowsCallback {
-            override fun onSuccess(topRatedTvShowsList: MutableList<TvShowOutline>) {
+        TvShowRepository.getTopRatedTvShows(page, object : TvShowOutlineCallback {
+            override fun onSuccess(tvShowOutlineList: MutableList<TvShowOutline>) {
                 if (page == 1) tvShowList.clear()
-                tvShowList.addAll(topRatedTvShowsList)
+                tvShowList.addAll(tvShowOutlineList)
                 adapter.updateList(tvShowList)
 
                 // done fetching

@@ -1,8 +1,6 @@
 package com.ardnn.mymovies.api.repositories
 
-import android.widget.TextView
 import com.ardnn.mymovies.api.callbacks.movies.*
-import com.ardnn.mymovies.helpers.Utils
 import com.ardnn.mymovies.models.MovieOutline
 import com.ardnn.mymovies.api.services.MovieApiServices
 import com.ardnn.mymovies.models.Cast
@@ -24,7 +22,7 @@ object MovieRepository {
 
 
     // method to get now playing movies
-    fun getNowPlayingMovies(page: Int, callback: NowPlayingMoviesCallback) {
+    fun getNowPlayingMovies(page: Int, callback: MovieOutlineCallback) {
         MOVIE_SERVICE.getNowPlayingMovies(Consts.API_KEY, page).enqueue(object : Callback<MovieOutline> {
             override fun onResponse(call: Call<MovieOutline>, response: Response<MovieOutline>) {
                 if (response.isSuccessful) {
@@ -50,7 +48,7 @@ object MovieRepository {
     }
 
     // method to get upcoming movies
-    fun getUpcomingMovies(page: Int, callback: UpcomingMoviesCallback) {
+    fun getUpcomingMovies(page: Int, callback: MovieOutlineCallback) {
         MOVIE_SERVICE.getUpcomingMovies(Consts.API_KEY, page).enqueue(object : Callback<MovieOutline> {
             override fun onResponse(call: Call<MovieOutline>, response: Response<MovieOutline>) {
                 if (response.isSuccessful) {
@@ -75,7 +73,7 @@ object MovieRepository {
     }
 
     // method to get popular movies
-    fun getPopularMovies(page: Int, callback: PopularMoviesCallback) {
+    fun getPopularMovies(page: Int, callback: MovieOutlineCallback) {
         MOVIE_SERVICE.getPopularMovies(Consts.API_KEY, page).enqueue(object : Callback<MovieOutline> {
             override fun onResponse(call: Call<MovieOutline>, response: Response<MovieOutline>) {
                 if (response.isSuccessful) {
@@ -100,7 +98,7 @@ object MovieRepository {
     }
 
     // method to get top rated movies
-    fun getTopRatedMovies(page: Int, callback: TopRatedMoviesCallback) {
+    fun getTopRatedMovies(page: Int, callback: MovieOutlineCallback) {
         MOVIE_SERVICE.getTopRatedMovies(Consts.API_KEY, page).enqueue(object : Callback<MovieOutline> {
             override fun onResponse(call: Call<MovieOutline>, response: Response<MovieOutline>) {
                 if (response.isSuccessful) {
@@ -201,7 +199,7 @@ object MovieRepository {
     }
 
     // method to get similar movies
-    fun getSimilarMovies(movieId: Int, callback: SimilarMoviesCallback) {
+    fun getSimilarMovies(movieId: Int, callback: MovieOutlineCallback) {
         MOVIE_SERVICE.getSimilarMovies(movieId, Consts.API_KEY)
             .enqueue(object : Callback<MovieOutline> {
                 override fun onResponse(
