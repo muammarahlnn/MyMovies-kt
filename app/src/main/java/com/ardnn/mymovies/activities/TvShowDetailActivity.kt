@@ -72,6 +72,7 @@ class TvShowDetailActivity : AppCompatActivity(), OnItemClick, View.OnClickListe
         // load tv show data
         loadTvShowDetails()
         loadTvShowCasts()
+        loadTvShowImages()
         loadTvShowVideos()
         loadSimilarTvShows()
 
@@ -172,6 +173,27 @@ class TvShowDetailActivity : AppCompatActivity(), OnItemClick, View.OnClickListe
 
             override fun onFailure(message: String) {
                 Toast.makeText(this@TvShowDetailActivity, message, Toast.LENGTH_SHORT).show()
+            }
+
+        })
+    }
+
+    private fun loadTvShowImages() {
+        TvShowRepository.getTvShowImages(tvShowId, object : TvShowImagesCallback {
+            override fun onPostersSuccess(posterList: List<Image>) {
+                for (poster in posterList) {
+                    println("POSTER -> ${poster.imageUrl ?: ""}")
+                }
+            }
+
+            override fun onBackdropsSuccess(backdropList: List<Image>) {
+                for (backdrop in backdropList) {
+                    println("BACKDROP -> ${backdrop.imageUrl ?: ""}")
+                }
+            }
+
+            override fun onFailure(message: String) {
+                TODO("Not yet implemented")
             }
 
         })

@@ -1,9 +1,6 @@
 package com.ardnn.mymovies.api.services
 
-import com.ardnn.mymovies.models.Cast
-import com.ardnn.mymovies.models.TvShow
-import com.ardnn.mymovies.models.TvShowOutline
-import com.ardnn.mymovies.models.Video
+import com.ardnn.mymovies.models.*
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -21,6 +18,13 @@ interface TvShowApiServices {
         @Path("tv_id") tvShowId: Int,
         @Query("api_key") apiKey: String
     ): Call<Cast>
+
+    @GET("{tv_id}/images")
+    fun getTvShowImages(
+        @Path("tv_id") tvShowId: Int,
+        @Query("api_key") apiKey: String,
+        @Query("language") language: String = "en",
+    ): Call<Image>
 
     @GET("{tv_id}/videos")
     fun getTvShowVideos(
