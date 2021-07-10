@@ -1,9 +1,6 @@
 package com.ardnn.mymovies.api.services
 
-import com.ardnn.mymovies.models.Cast
-import com.ardnn.mymovies.models.Movie
-import com.ardnn.mymovies.models.MovieOutline
-import com.ardnn.mymovies.models.Video
+import com.ardnn.mymovies.models.*
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -21,6 +18,13 @@ interface MovieApiServices {
         @Path("movie_id") movieId: Int,
         @Query("api_key") apiKey: String
     ): Call<Cast>
+
+    @GET("{movie_id}/images")
+    fun getMovieImages(
+        @Path("movie_id") movieId: Int,
+        @Query("api_key") apiKey: String,
+        @Query("include_image_language") imageLanguage: String = "en"
+    ): Call<Image>
 
     @GET("{movie_id}/videos")
     fun getMovieVideos(

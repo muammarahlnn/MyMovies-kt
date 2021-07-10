@@ -16,10 +16,7 @@ import com.ardnn.mymovies.R
 import com.ardnn.mymovies.adapters.CastsAdapter
 import com.ardnn.mymovies.adapters.GenresAdapter
 import com.ardnn.mymovies.adapters.OnItemClick
-import com.ardnn.mymovies.api.callbacks.movies.MovieCastsCallback
-import com.ardnn.mymovies.api.callbacks.movies.MovieDetailsCallback
-import com.ardnn.mymovies.api.callbacks.movies.MovieOutlineCallback
-import com.ardnn.mymovies.api.callbacks.movies.MovieVideosCallback
+import com.ardnn.mymovies.api.callbacks.movies.*
 import com.ardnn.mymovies.api.repositories.MovieRepository
 import com.ardnn.mymovies.helpers.Utils
 import com.ardnn.mymovies.models.*
@@ -70,6 +67,7 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, OnItemCli
         // load movies data
         loadMovieDetails()
         loadMovieCasts()
+        loadMovieImages()
         loadMovieVideos()
         loadSimilarMovie()
 
@@ -171,6 +169,27 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, OnItemCli
 
         })
 
+    }
+
+    private fun loadMovieImages() {
+        MovieRepository.getMovieImages(movieId, object : MovieImagesCallback {
+            override fun onPostersSuccess(posterList: List<Image>) {
+                for (poster in posterList) {
+                    println("POSTER -> ${poster.imageUrl ?: "null"}")
+                }
+            }
+
+            override fun onBackdropsSuccess(backdropList: List<Image>) {
+                for (backdrop in backdropList) {
+                    println("BACKDROP -> ${backdrop.imageUrl ?: "null"}")
+                }
+            }
+
+            override fun onFailure(message: String) {
+                TODO("Not yet implemented")
+            }
+
+        })
     }
 
     private fun loadMovieVideos() {

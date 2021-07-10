@@ -1,11 +1,8 @@
 package com.ardnn.mymovies.api.repositories
 
 import com.ardnn.mymovies.api.callbacks.movies.*
-import com.ardnn.mymovies.models.MovieOutline
 import com.ardnn.mymovies.api.services.MovieApiServices
-import com.ardnn.mymovies.models.Cast
-import com.ardnn.mymovies.models.Movie
-import com.ardnn.mymovies.models.Video
+import com.ardnn.mymovies.models.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -166,6 +163,38 @@ object MovieRepository {
 
                 override fun onFailure(call: Call<Cast>, t: Throwable) {
                     callback.onFailure(t.localizedMessage ?: "getMovieCasts failure")
+                }
+
+            })
+    }
+
+    // method to get movie images
+    fun getMovieImages(movieId: Int, callback: MovieImagesCallback) {
+        MOVIE_SERVICE.getMovieImages(movieId, Consts.API_KEY)
+            .enqueue(object : Callback<Image> {
+                override fun onResponse(call: Call<Image>, response: Response<Image>) {
+                    if (response.isSuccessful) {
+                        if (response.body() != null) {
+                            if (response.body()?.posterList != null) {
+                                callback.onPostersSuccess(response.body()?.posterList ?: listOf())
+                            } else {
+                                callback.onFailure("response.body().posterList is null")
+                            }
+                            if (response.body()?.backdropList != null) {
+                                callback.onBackdropsSuccess(response.body()?.backdropList ?: listOf())
+                            } else {
+                                callback.onFailure("response.body().backdropList is null")
+                            }
+                        } else {
+                            callback.onFailure("response.body() is null")
+                        }
+                    } else {
+                        callback.onFailure(response.message())
+                    }
+                }
+
+                override fun onFailure(call: Call<Image>, t: Throwable) {
+                    callback.onFailure(t.localizedMessage ?: "getMovieImages failure")
                 }
 
             })
