@@ -16,6 +16,9 @@ import com.ardnn.mymovies.R
 import com.ardnn.mymovies.adapters.CastsAdapter
 import com.ardnn.mymovies.adapters.GenresAdapter
 import com.ardnn.mymovies.adapters.OnItemClick
+import com.ardnn.mymovies.api.callbacks.CastsCallback
+import com.ardnn.mymovies.api.callbacks.ImagesCallback
+import com.ardnn.mymovies.api.callbacks.VideosCallback
 import com.ardnn.mymovies.api.callbacks.movies.*
 import com.ardnn.mymovies.api.repositories.MovieRepository
 import com.ardnn.mymovies.helpers.Utils
@@ -156,7 +159,7 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, OnItemCli
     }
 
     private fun loadMovieCasts() {
-        MovieRepository.getMovieCasts(movieId, object : MovieCastsCallback {
+        MovieRepository.getMovieCasts(movieId, object : CastsCallback {
             override fun onSuccess(castList: List<Cast>) {
                 // setup recyclerview casts
                 castsAdapter = CastsAdapter(castList, this@MovieDetailActivity)
@@ -172,7 +175,7 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, OnItemCli
     }
 
     private fun loadMovieImages() {
-        MovieRepository.getMovieImages(movieId, object : MovieImagesCallback {
+        MovieRepository.getMovieImages(movieId, object : ImagesCallback {
             override fun onPostersSuccess(posterList: List<Image>) {
                 for (poster in posterList) {
                     println("POSTER -> ${poster.imageUrl ?: "null"}")
@@ -193,8 +196,8 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, OnItemCli
     }
 
     private fun loadMovieVideos() {
-        MovieRepository.getMovieVideos(movieId, object : MovieVideosCallback {
-            override fun onSuccess(videoList: MutableList<Video>) {
+        MovieRepository.getMovieVideos(movieId, object : VideosCallback {
+            override fun onSuccess(videoList: List<Video>) {
                 for (video in videoList) {
                     Log.d("MOVIE VIDEO", video.name ?: "null")
                 }

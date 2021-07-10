@@ -13,5 +13,5 @@ data class Video(
     val site: String?,
 
     @SerializedName("results")
-    val videoList: MutableList<Video>
+    val videoList: List<Video>
 )

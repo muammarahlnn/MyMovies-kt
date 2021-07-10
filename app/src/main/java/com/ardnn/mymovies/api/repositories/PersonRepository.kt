@@ -1,8 +1,8 @@
 package com.ardnn.mymovies.api.repositories
 
+import com.ardnn.mymovies.api.callbacks.movies.MovieOutlineCallback
 import com.ardnn.mymovies.api.callbacks.person.PersonDetailsCallback
-import com.ardnn.mymovies.api.callbacks.person.PersonMoviesCallback
-import com.ardnn.mymovies.api.callbacks.person.PersonTvShowsCallback
+import com.ardnn.mymovies.api.callbacks.tvshows.TvShowOutlineCallback
 import com.ardnn.mymovies.api.services.PersonApiServices
 import com.ardnn.mymovies.models.MovieOutline
 import com.ardnn.mymovies.models.Person
@@ -46,7 +46,7 @@ object PersonRepository {
     }
 
     // method to get person movies
-    fun getPersonMovies(personId: Int, callback: PersonMoviesCallback) {
+    fun getPersonMovies(personId: Int, callback: MovieOutlineCallback) {
         PERSON_SERVICE.getPersonMovies(personId, Consts.API_KEY)
             .enqueue(object : Callback<MovieOutline> {
                 override fun onResponse(
@@ -75,7 +75,7 @@ object PersonRepository {
     }
 
     // method to get person tv shows
-    fun getPersonTvShows(personId: Int, callback: PersonTvShowsCallback) {
+    fun getPersonTvShows(personId: Int, callback: TvShowOutlineCallback) {
         PERSON_SERVICE.getPersonTvShows(personId, Consts.API_KEY)
             .enqueue(object : Callback<TvShowOutline> {
                 override fun onResponse(

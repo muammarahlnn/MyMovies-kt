@@ -13,9 +13,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ardnn.mymovies.R
 import com.ardnn.mymovies.adapters.AlsoKnownAsAdapter
+import com.ardnn.mymovies.api.callbacks.movies.MovieOutlineCallback
 import com.ardnn.mymovies.api.callbacks.person.PersonDetailsCallback
-import com.ardnn.mymovies.api.callbacks.person.PersonMoviesCallback
-import com.ardnn.mymovies.api.callbacks.person.PersonTvShowsCallback
+import com.ardnn.mymovies.api.callbacks.tvshows.TvShowOutlineCallback
 import com.ardnn.mymovies.api.repositories.PersonRepository
 import com.ardnn.mymovies.helpers.Utils
 import com.ardnn.mymovies.models.ImageSize
@@ -141,9 +141,9 @@ class PersonDetailActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun loadMoviesData() {
-        PersonRepository.getPersonMovies(personId, object : PersonMoviesCallback {
-            override fun onSuccess(personMovieList: MutableList<MovieOutline>) {
-                for (movie in personMovieList) {
+        PersonRepository.getPersonMovies(personId, object : MovieOutlineCallback {
+            override fun onSuccess(movieOutlineList: MutableList<MovieOutline>) {
+                for (movie in movieOutlineList) {
                     Log.d("PERSON MOVIE", movie.title ?: "-")
                 }
             }
@@ -156,9 +156,9 @@ class PersonDetailActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun loadTvShowData() {
-        PersonRepository.getPersonTvShows(personId, object : PersonTvShowsCallback {
-            override fun onSuccess(personTvShowList: MutableList<TvShowOutline>) {
-                for (tvShow in personTvShowList) {
+        PersonRepository.getPersonTvShows(personId, object : TvShowOutlineCallback {
+            override fun onSuccess(tvShowOutlineList: MutableList<TvShowOutline>) {
+                for (tvShow in tvShowOutlineList) {
                     Log.d("PERSON TV", tvShow.title ?: "-")
                 }
             }

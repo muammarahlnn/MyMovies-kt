@@ -1,5 +1,8 @@
 package com.ardnn.mymovies.api.repositories
 
+import com.ardnn.mymovies.api.callbacks.CastsCallback
+import com.ardnn.mymovies.api.callbacks.ImagesCallback
+import com.ardnn.mymovies.api.callbacks.VideosCallback
 import com.ardnn.mymovies.api.callbacks.tvshows.*
 import com.ardnn.mymovies.api.services.TvShowApiServices
 import com.ardnn.mymovies.models.*
@@ -144,14 +147,14 @@ object TvShowRepository {
     }
 
     // method to get tv show casts
-    fun getTvShowCasts(tvShowId: Int, callback: TvShowCastsCallback) {
+    fun getTvShowCasts(tvShowId: Int, callback: CastsCallback) {
         TV_SHOW_SERVICE.getTvShowCasts(tvShowId, Consts.API_KEY)
             .enqueue(object : Callback<Cast> {
                 override fun onResponse(call: Call<Cast>, response: Response<Cast>) {
                     if (response.isSuccessful) {
                         if (response.body() != null) {
                             if (response.body()?.castList != null) {
-                                callback.onSuccess(response.body()?.castList ?: mutableListOf())
+                                callback.onSuccess(response.body()?.castList ?: listOf())
                             } else {
                                 callback.onFailure("response.body().castList is null")
                             }
@@ -171,7 +174,7 @@ object TvShowRepository {
     }
 
     // method to get tv show images
-    fun getTvShowImages(tvShowId: Int, callback: TvShowImagesCallback) {
+    fun getTvShowImages(tvShowId: Int, callback: ImagesCallback) {
         TV_SHOW_SERVICE.getTvShowImages(tvShowId, Consts.API_KEY)
             .enqueue(object : Callback<Image> {
                 override fun onResponse(call: Call<Image>, response: Response<Image>) {
@@ -203,14 +206,14 @@ object TvShowRepository {
     }
 
     // method to get tv show videos
-    fun getTvShowVideos(tvShowId: Int, callback: TvShowVideosCallback) {
+    fun getTvShowVideos(tvShowId: Int, callback: VideosCallback) {
         TV_SHOW_SERVICE.getTvShowVideos(tvShowId, Consts.API_KEY)
             .enqueue(object : Callback<Video> {
                 override fun onResponse(call: Call<Video>, response: Response<Video>) {
                     if (response.isSuccessful) {
                         if (response.body() != null) {
                             if (response.body()?.videoList != null) {
-                                callback.onSuccess(response.body()?.videoList ?: mutableListOf())
+                                callback.onSuccess(response.body()?.videoList ?: listOf())
                             } else {
                                 callback.onFailure("response.body().videoList is null")
                             }

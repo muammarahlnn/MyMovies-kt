@@ -1,5 +1,8 @@
 package com.ardnn.mymovies.api.repositories
 
+import com.ardnn.mymovies.api.callbacks.CastsCallback
+import com.ardnn.mymovies.api.callbacks.ImagesCallback
+import com.ardnn.mymovies.api.callbacks.VideosCallback
 import com.ardnn.mymovies.api.callbacks.movies.*
 import com.ardnn.mymovies.api.services.MovieApiServices
 import com.ardnn.mymovies.models.*
@@ -142,14 +145,14 @@ object MovieRepository {
     }
 
     // method to get movie casts
-    fun getMovieCasts(movieId: Int, callback: MovieCastsCallback) {
+    fun getMovieCasts(movieId: Int, callback: CastsCallback) {
         MOVIE_SERVICE.getMovieCasts(movieId, Consts.API_KEY)
             .enqueue(object : Callback<Cast> {
                 override fun onResponse(call: Call<Cast>, response: Response<Cast>) {
                     if (response.isSuccessful) {
                         if (response.body() != null) {
                             if (response.body()?.castList != null) {
-                                callback.onSuccess(response.body()?.castList ?: mutableListOf())
+                                callback.onSuccess(response.body()?.castList ?: listOf())
                             } else {
                                 callback.onFailure("response.body().castList is null")
                             }
@@ -169,7 +172,7 @@ object MovieRepository {
     }
 
     // method to get movie images
-    fun getMovieImages(movieId: Int, callback: MovieImagesCallback) {
+    fun getMovieImages(movieId: Int, callback: ImagesCallback) {
         MOVIE_SERVICE.getMovieImages(movieId, Consts.API_KEY)
             .enqueue(object : Callback<Image> {
                 override fun onResponse(call: Call<Image>, response: Response<Image>) {
@@ -201,14 +204,14 @@ object MovieRepository {
     }
 
     // method to get movie videos
-    fun getMovieVideos(movieId: Int, callback: MovieVideosCallback) {
+    fun getMovieVideos(movieId: Int, callback: VideosCallback) {
         MOVIE_SERVICE.getMovieVideos(movieId, Consts.API_KEY)
             .enqueue(object : Callback<Video> {
                 override fun onResponse(call: Call<Video>, response: Response<Video>) {
                     if (response.isSuccessful) {
                         if (response.body() != null) {
                             if (response.body()?.videoList != null) {
-                                callback.onSuccess(response.body()?.videoList ?: mutableListOf())
+                                callback.onSuccess(response.body()?.videoList ?: listOf())
                             } else {
                                 callback.onFailure("response.body().videoList is null")
                             }

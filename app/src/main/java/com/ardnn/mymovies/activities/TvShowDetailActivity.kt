@@ -16,11 +16,13 @@ import com.ardnn.mymovies.R
 import com.ardnn.mymovies.adapters.CastsAdapter
 import com.ardnn.mymovies.adapters.GenresAdapter
 import com.ardnn.mymovies.adapters.OnItemClick
+import com.ardnn.mymovies.api.callbacks.CastsCallback
+import com.ardnn.mymovies.api.callbacks.ImagesCallback
+import com.ardnn.mymovies.api.callbacks.VideosCallback
 import com.ardnn.mymovies.api.callbacks.tvshows.*
 import com.ardnn.mymovies.api.repositories.TvShowRepository
 import com.ardnn.mymovies.helpers.Utils
 import com.ardnn.mymovies.models.*
-import com.ardnn.mymovies.api.services.TvShowApiServices
 import com.bumptech.glide.Glide
 
 class TvShowDetailActivity : AppCompatActivity(), OnItemClick, View.OnClickListener {
@@ -164,7 +166,7 @@ class TvShowDetailActivity : AppCompatActivity(), OnItemClick, View.OnClickListe
     }
 
     private fun loadTvShowCasts() {
-        TvShowRepository.getTvShowCasts(tvShowId, object : TvShowCastsCallback {
+        TvShowRepository.getTvShowCasts(tvShowId, object : CastsCallback {
             override fun onSuccess(castList: List<Cast>) {
                 // set recyclerview casts
                 castsAdapter = CastsAdapter(castList, this@TvShowDetailActivity)
@@ -179,7 +181,7 @@ class TvShowDetailActivity : AppCompatActivity(), OnItemClick, View.OnClickListe
     }
 
     private fun loadTvShowImages() {
-        TvShowRepository.getTvShowImages(tvShowId, object : TvShowImagesCallback {
+        TvShowRepository.getTvShowImages(tvShowId, object : ImagesCallback {
             override fun onPostersSuccess(posterList: List<Image>) {
                 for (poster in posterList) {
                     println("POSTER -> ${poster.imageUrl ?: ""}")
@@ -200,8 +202,8 @@ class TvShowDetailActivity : AppCompatActivity(), OnItemClick, View.OnClickListe
     }
 
     private fun loadTvShowVideos() {
-        TvShowRepository.getTvShowVideos(tvShowId, object : TvShowVideosCallback {
-            override fun onSuccess(videoList: MutableList<Video>) {
+        TvShowRepository.getTvShowVideos(tvShowId, object : VideosCallback {
+            override fun onSuccess(videoList: List<Video>) {
                 for (video in videoList) {
                     Log.d("TV SHOW VIDEO", video.name ?: "null")
                 }
