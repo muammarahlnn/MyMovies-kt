@@ -51,6 +51,8 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, OnItemCli
     private lateinit var tvMore: TextView
     private lateinit var ivWallpaper: ImageView
     private lateinit var ivPoster: ImageView
+    private lateinit var ivImgsPosters: ImageView
+    private lateinit var ivImgsBackdrops: ImageView
     private lateinit var btnBack: ImageView
     private lateinit var btnFavorite: ImageView
     private lateinit var pbDetail: ProgressBar
@@ -67,17 +69,15 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, OnItemCli
         // initialization
         initialization()
 
-        // load movies data
-        loadMovieDetails()
-        loadMovieCasts()
-        loadMovieImages()
-        loadMovieVideos()
-        loadSimilarMovie()
+        // load movie data
+        loadMovieData()
 
         // if button clicked
         btnBack.setOnClickListener(this)
         btnFavorite.setOnClickListener(this)
         clWrapperSynopsis.setOnClickListener(this)
+        ivImgsPosters.setOnClickListener(this)
+        ivImgsBackdrops.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
@@ -104,6 +104,18 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, OnItemCli
                     tvSynopsis.maxLines = 2
                     tvMore.text = "more"
                 }
+            }
+            R.id.iv_imgs_posters_movie_detail -> {
+                val goToImagesDetail = Intent(this@MovieDetailActivity, ImagesDetailActivity::class.java)
+                goToImagesDetail.putExtra(ImagesDetailActivity.EXTRA_ID, movieId)
+                goToImagesDetail.putExtra(ImagesDetailActivity.EXTRA_KEY, ImagesDetailActivity.POSTERS)
+                startActivity(goToImagesDetail)
+            }
+            R.id.iv_imgs_backdrops_movie_detail -> {
+                val goToImagesDetail = Intent(this@MovieDetailActivity, ImagesDetailActivity::class.java)
+                goToImagesDetail.putExtra(ImagesDetailActivity.EXTRA_ID, movieId)
+                goToImagesDetail.putExtra(ImagesDetailActivity.EXTRA_KEY, ImagesDetailActivity.BACKDROPS)
+                startActivity(goToImagesDetail)
             }
         }
     }
@@ -137,10 +149,19 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, OnItemCli
         tvMore = findViewById(R.id.tv_more_movie_detail)
         ivWallpaper = findViewById(R.id.iv_wallpaper_movie_detail)
         ivPoster = findViewById(R.id.iv_poster_movie_detail)
+        ivImgsPosters = findViewById(R.id.iv_imgs_posters_movie_detail)
+        ivImgsBackdrops = findViewById(R.id.iv_imgs_backdrops_movie_detail)
         btnBack = findViewById(R.id.btn_back_movie_detail)
         btnFavorite = findViewById(R.id.btn_favorite_movie_detail)
         clWrapperSynopsis = findViewById(R.id.cl_wrapper_synopsis_movie_detail)
         pbDetail = findViewById(R.id.pb_movie_detail)
+    }
+
+    private fun loadMovieData() {
+        loadMovieDetails()
+        loadMovieCasts()
+        loadMovieVideos()
+        loadSimilarMovie()
     }
 
     private fun loadMovieDetails() {
@@ -172,27 +193,6 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, OnItemCli
 
         })
 
-    }
-
-    private fun loadMovieImages() {
-        MovieRepository.getMovieImages(movieId, object : ImagesCallback {
-            override fun onPostersSuccess(posterList: List<Image>) {
-                for (poster in posterList) {
-                    println("POSTER -> ${poster.imageUrl ?: "null"}")
-                }
-            }
-
-            override fun onBackdropsSuccess(backdropList: List<Image>) {
-                for (backdrop in backdropList) {
-                    println("BACKDROP -> ${backdrop.imageUrl ?: "null"}")
-                }
-            }
-
-            override fun onFailure(message: String) {
-                TODO("Not yet implemented")
-            }
-
-        })
     }
 
     private fun loadMovieVideos() {
@@ -246,6 +246,12 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, OnItemCli
         Glide.with(this)
             .load(movie.getPosterUrl(ImageSize.W342))
             .into(ivPoster)
+        Glide.with(this)
+            .load(movie.getPosterUrl(ImageSize.W200))
+            .into(ivImgsPosters)
+        Glide.with(this)
+            .load(movie.getWallpaperUrl(ImageSize.W500))
+            .into(ivImgsBackdrops)
 
 
         // set rv genres

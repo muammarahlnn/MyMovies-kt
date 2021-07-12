@@ -23,4 +23,8 @@
     <string name="in">in</string>
     <string name="born">Born</string>
     <string name="more">more</string>
+    <string name="backdrops">Backdrops</string>
+    <string name="posters">Posters</string>
+    <string name="images">Images</string>
+    <string name="per">/</string>
 </resources>
