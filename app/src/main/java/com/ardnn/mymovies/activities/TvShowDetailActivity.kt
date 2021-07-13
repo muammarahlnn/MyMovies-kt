@@ -55,6 +55,8 @@ class TvShowDetailActivity : AppCompatActivity(), OnItemClick, View.OnClickListe
     private lateinit var tvMore: TextView
     private lateinit var ivWallpaper: ImageView
     private lateinit var ivPoster: ImageView
+    private lateinit var ivImgsPosters: ImageView
+    private lateinit var ivImgsBackdrops: ImageView
     private lateinit var btnBack: ImageView
     private lateinit var btnFavorite: ImageView
     private lateinit var clWrapperSynopsis: ConstraintLayout
@@ -82,9 +84,16 @@ class TvShowDetailActivity : AppCompatActivity(), OnItemClick, View.OnClickListe
         btnBack.setOnClickListener(this)
         btnFavorite.setOnClickListener(this)
         clWrapperSynopsis.setOnClickListener(this)
+        ivImgsPosters.setOnClickListener(this)
+        ivImgsBackdrops.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
+        // images detail intent
+        val goToImagesDetail = Intent(this, ImagesDetailActivity::class.java)
+        goToImagesDetail.putExtra(ImagesDetailActivity.EXTRA_ID, tvShowId)
+        goToImagesDetail.putExtra(ImagesDetailActivity.EXTRA_ACTIVITY_KEY, ImagesDetailActivity.TV_SHOW)
+
         when (v?.id) {
             R.id.btn_back_tv_show_detail -> {
                 finish()
@@ -108,6 +117,14 @@ class TvShowDetailActivity : AppCompatActivity(), OnItemClick, View.OnClickListe
                     tvSynopsis.maxLines = 2
                     tvMore.text = "more"
                 }
+            }
+            R.id.iv_imgs_posters_tv_show_detail -> {
+                goToImagesDetail.putExtra(ImagesDetailActivity.EXTRA_IMAGES_KEY, ImagesDetailActivity.POSTERS)
+                startActivity(goToImagesDetail)
+            }
+            R.id.iv_imgs_backdrops_tv_show_detail -> {
+                goToImagesDetail.putExtra(ImagesDetailActivity.EXTRA_IMAGES_KEY, ImagesDetailActivity.BACKDROPS)
+                startActivity(goToImagesDetail)
             }
         }
     }
@@ -144,6 +161,8 @@ class TvShowDetailActivity : AppCompatActivity(), OnItemClick, View.OnClickListe
         tvMore = findViewById(R.id.tv_more_tv_show_detail)
         ivWallpaper = findViewById(R.id.iv_wallpaper_tv_show_detail)
         ivPoster = findViewById(R.id.iv_poster_tv_show_detail)
+        ivImgsPosters = findViewById(R.id.iv_imgs_posters_tv_show_detail)
+        ivImgsBackdrops = findViewById(R.id.iv_imgs_backdrops_tv_show_detail)
         btnBack = findViewById(R.id.btn_back_tv_show_detail)
         btnFavorite = findViewById(R.id.btn_favorite_tv_show_detail)
         clWrapperSynopsis = findViewById(R.id.cl_wrapper_synopsis_tv_show_detail)
@@ -261,6 +280,14 @@ class TvShowDetailActivity : AppCompatActivity(), OnItemClick, View.OnClickListe
             this,
             tvShow.getPosterUrl(ImageSize.W342),
             ivPoster, true)
+        Utils.setImageGlide(
+            this,
+            tvShow.getPosterUrl(ImageSize.W342),
+            ivImgsPosters, true)
+        Utils.setImageGlide(
+            this,
+            tvShow.getWallpaperUrl(ImageSize.W780),
+            ivImgsBackdrops, true)
 
         // set rv genres
         genresAdapter = GenresAdapter(tvShow.genreList, this)

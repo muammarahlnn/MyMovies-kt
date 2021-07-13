@@ -14,12 +14,16 @@ import com.ardnn.mymovies.R
 import com.ardnn.mymovies.adapters.ImagesPagerAdapter
 import com.ardnn.mymovies.api.callbacks.ImagesCallback
 import com.ardnn.mymovies.api.repositories.MovieRepository
+import com.ardnn.mymovies.api.repositories.TvShowRepository
 import com.ardnn.mymovies.models.Image
 
 class ImagesDetailActivity : AppCompatActivity() {
     companion object {
         const val EXTRA_ID = "extra_id"
-        const val EXTRA_KEY = "extra_key"
+        const val EXTRA_ACTIVITY_KEY = "extra_activity_key"
+        const val EXTRA_IMAGES_KEY = "extra_images_key"
+        const val MOVIE = "movie"
+        const val TV_SHOW = "tv_show"
         const val POSTERS = "posters"
         const val BACKDROPS = "backdrops"
     }
@@ -35,8 +39,9 @@ class ImagesDetailActivity : AppCompatActivity() {
     private lateinit var tvTotalImage: TextView
 
     // variables
-    private var movieId: Int = 0
+    private var filmId: Int = 0
     private var imagesKey: String = ""
+    private var activityKey: String = ""
     private var isToolbarActive: Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,8 +50,9 @@ class ImagesDetailActivity : AppCompatActivity() {
 
         // initialization
         imagesPagerAdapter = ImagesPagerAdapter()
-        movieId = intent.getIntExtra(EXTRA_ID, 0)
-        imagesKey = intent.getStringExtra(EXTRA_KEY) ?: ""
+        filmId = intent.getIntExtra(EXTRA_ID, 0)
+        activityKey = intent.getStringExtra(EXTRA_ACTIVITY_KEY) ?: ""
+        imagesKey = intent.getStringExtra(EXTRA_IMAGES_KEY) ?: ""
         imagesPager = findViewById(R.id.vp2_images_detail)
         clToolbar = findViewById(R.id.cl_toolbar_images_detail)
         btnBack = findViewById(R.id.btn_back_images_detail)
@@ -80,35 +86,21 @@ class ImagesDetailActivity : AppCompatActivity() {
     }
 
     private fun loadImagesData() {
-        MovieRepository.getMovieImages(movieId, object : ImagesCallback {
+        if (activityKey == MOVIE) {
+            loadMovieImages()
+        } else if (activityKey == TV_SHOW) {
+            loadTvShowImages()
+        }
+    }
+
+    private fun loadMovieImages() {
+        MovieRepository.getMovieImages(filmId, object : ImagesCallback {
             override fun onPostersSuccess(posterList: List<Image>) {
-                if (imagesKey == POSTERS) {
-                    // debug
-                    for (poster in posterList) {
-                        println("POSTER -> ${poster.imageUrl ?: "null"}")
-                    }
-
-                    // set data to widgets
-                    setDataToWidgets(posterList)
-
-                    // set screen orientation
-                    requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-                }
+                postersSuccessfullyLoaded(posterList)
             }
 
             override fun onBackdropsSuccess(backdropList: List<Image>) {
-                if (imagesKey == BACKDROPS) {
-                    // debug
-                    for (backdrop in backdropList) {
-                        println("BACKDROP -> ${backdrop.imageUrl ?: "null"}")
-                    }
-
-                    // set data to widgets
-                    setDataToWidgets(backdropList)
-
-                    // set screen orientation
-                    requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-                }
+                backdropsSuccessfullyLoaded(backdropList)
             }
 
             override fun onFailure(message: String) {
@@ -116,6 +108,53 @@ class ImagesDetailActivity : AppCompatActivity() {
             }
 
         })
+    }
+
+    private fun loadTvShowImages() {
+        TvShowRepository.getTvShowImages(filmId, object : ImagesCallback {
+            override fun onPostersSuccess(posterList: List<Image>) {
+                postersSuccessfullyLoaded(posterList)
+            }
+
+            override fun onBackdropsSuccess(backdropList: List<Image>) {
+                backdropsSuccessfullyLoaded(backdropList)
+            }
+
+            override fun onFailure(message: String) {
+                Toast.makeText(this@ImagesDetailActivity, message, Toast.LENGTH_SHORT).show()
+            }
+
+        })
+    }
+
+    private fun postersSuccessfullyLoaded(posterList: List<Image>) {
+        if (imagesKey == POSTERS) {
+            // debug
+            for (poster in posterList) {
+                println("POSTER -> ${poster.imageUrl ?: "null"}")
+            }
+
+            // set data to widgets
+            setDataToWidgets(posterList)
+
+            // set screen orientation
+            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        }
+    }
+
+    private fun backdropsSuccessfullyLoaded(backdropList: List<Image>) {
+        if (imagesKey == BACKDROPS) {
+            // debug
+            for (backdrop in backdropList) {
+                println("BACKDROP -> ${backdrop.imageUrl ?: "null"}")
+            }
+
+            // set data to widgets
+            setDataToWidgets(backdropList)
+
+            // set screen orientation
+            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+        }
     }
 
     private fun setDataToWidgets(imageList: List<Image>) {

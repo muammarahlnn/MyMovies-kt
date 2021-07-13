@@ -83,6 +83,11 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, OnItemCli
     }
 
     override fun onClick(v: View?) {
+        // images detail intent
+        val goToImagesDetail = Intent(this, ImagesDetailActivity::class.java)
+        goToImagesDetail.putExtra(ImagesDetailActivity.EXTRA_ID, movieId)
+        goToImagesDetail.putExtra(ImagesDetailActivity.EXTRA_ACTIVITY_KEY, ImagesDetailActivity.MOVIE)
+
         when (v?.id) {
             R.id.btn_back_movie_detail -> {
                 finish()
@@ -108,15 +113,11 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, OnItemCli
                 }
             }
             R.id.iv_imgs_posters_movie_detail -> {
-                val goToImagesDetail = Intent(this@MovieDetailActivity, ImagesDetailActivity::class.java)
-                goToImagesDetail.putExtra(ImagesDetailActivity.EXTRA_ID, movieId)
-                goToImagesDetail.putExtra(ImagesDetailActivity.EXTRA_KEY, ImagesDetailActivity.POSTERS)
+                goToImagesDetail.putExtra(ImagesDetailActivity.EXTRA_IMAGES_KEY, ImagesDetailActivity.POSTERS)
                 startActivity(goToImagesDetail)
             }
             R.id.iv_imgs_backdrops_movie_detail -> {
-                val goToImagesDetail = Intent(this@MovieDetailActivity, ImagesDetailActivity::class.java)
-                goToImagesDetail.putExtra(ImagesDetailActivity.EXTRA_ID, movieId)
-                goToImagesDetail.putExtra(ImagesDetailActivity.EXTRA_KEY, ImagesDetailActivity.BACKDROPS)
+                goToImagesDetail.putExtra(ImagesDetailActivity.EXTRA_IMAGES_KEY, ImagesDetailActivity.BACKDROPS)
                 startActivity(goToImagesDetail)
             }
         }
