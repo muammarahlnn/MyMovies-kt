@@ -7,6 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.ardnn.mymovies.R
+import com.ardnn.mymovies.helpers.Utils
 import com.ardnn.mymovies.models.Cast
 import com.ardnn.mymovies.models.ImageSize
 import com.bumptech.glide.Glide
@@ -49,9 +50,10 @@ class CastsAdapter(
 
         fun onBind(cast: Cast) {
             if (cast.imageUrl != null || cast.imageUrl == "") {
-                Glide.with(itemView.context)
-                    .load(cast.getImageUrl(ImageSize.W342))
-                    .into(ivImage)
+                Utils.setImageGlide(
+                    itemView.context,
+                    cast.getImageUrl(ImageSize.W342),
+                    ivImage)
             } else {
                 ivImage.setImageResource(R.drawable.img_placeholder)
             }

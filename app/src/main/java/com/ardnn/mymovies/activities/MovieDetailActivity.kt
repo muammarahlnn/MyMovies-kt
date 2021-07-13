@@ -24,6 +24,8 @@ import com.ardnn.mymovies.api.repositories.MovieRepository
 import com.ardnn.mymovies.helpers.Utils
 import com.ardnn.mymovies.models.*
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.bumptech.glide.request.RequestOptions
 
 class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, OnItemClick{
     companion object {
@@ -240,19 +242,22 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, OnItemCli
                 "-"
         tvRating.text = (movie.rating ?: "-").toString()
         tvSynopsis.text = movie.overview ?: "-"
-        Glide.with(this)
-            .load(movie.getWallpaperUrl(ImageSize.W780))
-            .into(ivWallpaper)
-        Glide.with(this)
-            .load(movie.getPosterUrl(ImageSize.W342))
-            .into(ivPoster)
-        Glide.with(this)
-            .load(movie.getPosterUrl(ImageSize.W200))
-            .into(ivImgsPosters)
-        Glide.with(this)
-            .load(movie.getWallpaperUrl(ImageSize.W500))
-            .into(ivImgsBackdrops)
-
+        Utils.setImageGlide(
+            this,
+            movie.getWallpaperUrl(ImageSize.W780),
+            ivWallpaper, true)
+        Utils.setImageGlide(
+            this,
+            movie.getPosterUrl(ImageSize.W342),
+            ivPoster, true)
+        Utils.setImageGlide(
+            this,
+            movie.getPosterUrl(ImageSize.W200),
+            ivImgsPosters, true)
+        Utils.setImageGlide(
+            this,
+            movie.getWallpaperUrl(ImageSize.W500),
+            ivImgsBackdrops, true)
 
         // set rv genres
         genresAdapter = GenresAdapter(movie.genreList, this@MovieDetailActivity)

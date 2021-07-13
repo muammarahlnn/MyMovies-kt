@@ -253,12 +253,14 @@ class TvShowDetailActivity : AppCompatActivity(), OnItemClick, View.OnClickListe
             else
                 "-"
         tvSynopsis.text = tvShow.overview ?: "-"
-        Glide.with(this)
-            .load(tvShow.getWallpaperUrl(ImageSize.W780))
-            .into(ivWallpaper)
-        Glide.with(this)
-            .load(tvShow.getPosterUrl(ImageSize.W342))
-            .into(ivPoster)
+        Utils.setImageGlide(
+            this,
+            tvShow.getWallpaperUrl(ImageSize.W780),
+            ivWallpaper, true)
+        Utils.setImageGlide(
+            this,
+            tvShow.getPosterUrl(ImageSize.W342),
+            ivPoster, true)
 
         // set rv genres
         genresAdapter = GenresAdapter(tvShow.genreList, this)

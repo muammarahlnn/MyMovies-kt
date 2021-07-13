@@ -181,12 +181,14 @@ class PersonDetailActivity : AppCompatActivity(), View.OnClickListener {
             else
                 "-"
         tvBiography.text = person.biography ?: "-"
-        Glide.with(this)
-            .load(person.getProfileUrl(ImageSize.W342))
-            .into(ivProfile)
-        Glide.with(this)
-            .load(intent.getStringExtra(EXTRA_WALLPAPER_URL))
-            .into(ivWallpaper)
+        Utils.setImageGlide(
+            this,
+            person.getProfileUrl(ImageSize.W342),
+            ivProfile, true)
+        Utils.setImageGlide(
+            this,
+            intent.getStringExtra(EXTRA_WALLPAPER_URL),
+            ivWallpaper, true)
 
         // set rv also known as
         akaAdapter = AlsoKnownAsAdapter(person.akaList)

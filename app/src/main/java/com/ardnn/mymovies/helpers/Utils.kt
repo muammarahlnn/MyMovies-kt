@@ -1,8 +1,15 @@
 package com.ardnn.mymovies.helpers
 
+import android.content.Context
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.LinearLayout
+import com.ardnn.mymovies.R
+import com.ardnn.mymovies.models.ImageSize
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.tabs.TabLayout
 
 object Utils {
@@ -34,6 +41,20 @@ object Utils {
             val layoutParams: LinearLayout.LayoutParams = tab.layoutParams as LinearLayout.LayoutParams
             layoutParams.weight = 1F
             tab.layoutParams = layoutParams
+        }
+    }
+
+    fun setImageGlide(context: Context, url: String?, imageView: ImageView, withPlaceholder: Boolean = false) {
+        val reqOption = RequestOptions()
+            .placeholder(R.drawable.img_placeholder).centerCrop()
+
+        if (withPlaceholder) {
+            Glide.with(context).load(url)
+                .apply(reqOption)
+                .into(imageView)
+        } else {
+            Glide.with(context).load(url)
+                .into(imageView)
         }
     }
 }

@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.ardnn.mymovies.R
+import com.ardnn.mymovies.helpers.Utils
 import com.ardnn.mymovies.models.ImageSize
 import com.ardnn.mymovies.models.MovieOutline
 import com.bumptech.glide.Glide
@@ -65,9 +66,10 @@ class MoviesOutlineAdapter(
         fun onBind(movieOutline: MovieOutline) {
             // set data to widgets
             if (movieOutline.posterUrl != null || movieOutline.posterUrl == "") {
-                Glide.with(itemView.context)
-                    .load(movieOutline.getPosterUrl(ImageSize.W342))
-                    .into(ivPoster)
+                Utils.setImageGlide(
+                    itemView.context,
+                    movieOutline.getPosterUrl(ImageSize.W342),
+                    ivPoster)
             } else {
                 ivPoster.setImageResource(R.drawable.img_placeholder)
             }
