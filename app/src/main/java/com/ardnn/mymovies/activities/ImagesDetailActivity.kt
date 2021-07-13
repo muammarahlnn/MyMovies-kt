@@ -59,6 +59,13 @@ class ImagesDetailActivity : AppCompatActivity() {
         tvCurrentImage = findViewById(R.id.tv_current_image)
         tvTotalImage = findViewById(R.id.tv_total_image)
 
+        // set screen orientation
+        if (imagesKey == POSTERS) {
+            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        } else if (imagesKey == BACKDROPS) {
+            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+        }
+
         // load data
         loadImagesData()
 
@@ -136,9 +143,6 @@ class ImagesDetailActivity : AppCompatActivity() {
 
             // set data to widgets
             setDataToWidgets(posterList)
-
-            // set screen orientation
-            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
     }
 
@@ -151,9 +155,6 @@ class ImagesDetailActivity : AppCompatActivity() {
 
             // set data to widgets
             setDataToWidgets(backdropList)
-
-            // set screen orientation
-            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         }
     }
 
