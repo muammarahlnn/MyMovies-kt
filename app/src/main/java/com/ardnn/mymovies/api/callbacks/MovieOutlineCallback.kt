@@ -1,4 +1,4 @@
-package com.ardnn.mymovies.api.callbacks.movies
+package com.ardnn.mymovies.api.callbacks
 
 import com.ardnn.mymovies.models.MovieOutline
 

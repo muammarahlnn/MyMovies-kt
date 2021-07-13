@@ -14,7 +14,7 @@ import com.ardnn.mymovies.R
 import com.ardnn.mymovies.activities.MovieDetailActivity
 import com.ardnn.mymovies.adapters.MoviesOutlineAdapter
 import com.ardnn.mymovies.adapters.OnItemClick
-import com.ardnn.mymovies.api.callbacks.movies.MovieOutlineCallback
+import com.ardnn.mymovies.api.callbacks.MovieOutlineCallback
 import com.ardnn.mymovies.models.Cast
 import com.ardnn.mymovies.models.Genre
 import com.ardnn.mymovies.models.MovieOutline

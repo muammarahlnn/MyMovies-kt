@@ -16,14 +16,10 @@ import com.ardnn.mymovies.R
 import com.ardnn.mymovies.adapters.CastsAdapter
 import com.ardnn.mymovies.adapters.GenresAdapter
 import com.ardnn.mymovies.adapters.OnItemClick
-import com.ardnn.mymovies.api.callbacks.CastsCallback
-import com.ardnn.mymovies.api.callbacks.ImagesCallback
-import com.ardnn.mymovies.api.callbacks.VideosCallback
-import com.ardnn.mymovies.api.callbacks.tvshows.*
+import com.ardnn.mymovies.api.callbacks.*
 import com.ardnn.mymovies.api.repositories.TvShowRepository
 import com.ardnn.mymovies.helpers.Utils
 import com.ardnn.mymovies.models.*
-import com.bumptech.glide.Glide
 
 class TvShowDetailActivity : AppCompatActivity(), OnItemClick, View.OnClickListener {
     companion object {

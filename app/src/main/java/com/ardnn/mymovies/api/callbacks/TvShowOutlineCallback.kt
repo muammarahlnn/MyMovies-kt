@@ -1,4 +1,4 @@
-package com.ardnn.mymovies.api.callbacks.tvshows
+package com.ardnn.mymovies.api.callbacks
 
 import com.ardnn.mymovies.models.TvShowOutline
 

@@ -1,9 +1,6 @@
 package com.ardnn.mymovies.api.repositories
 
-import com.ardnn.mymovies.api.callbacks.CastsCallback
-import com.ardnn.mymovies.api.callbacks.ImagesCallback
-import com.ardnn.mymovies.api.callbacks.VideosCallback
-import com.ardnn.mymovies.api.callbacks.movies.*
+import com.ardnn.mymovies.api.callbacks.*
 import com.ardnn.mymovies.api.services.MovieApiServices
 import com.ardnn.mymovies.models.*
 import retrofit2.Call

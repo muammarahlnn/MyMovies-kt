@@ -16,16 +16,10 @@ import com.ardnn.mymovies.R
 import com.ardnn.mymovies.adapters.CastsAdapter
 import com.ardnn.mymovies.adapters.GenresAdapter
 import com.ardnn.mymovies.adapters.OnItemClick
-import com.ardnn.mymovies.api.callbacks.CastsCallback
-import com.ardnn.mymovies.api.callbacks.ImagesCallback
-import com.ardnn.mymovies.api.callbacks.VideosCallback
-import com.ardnn.mymovies.api.callbacks.movies.*
+import com.ardnn.mymovies.api.callbacks.*
 import com.ardnn.mymovies.api.repositories.MovieRepository
 import com.ardnn.mymovies.helpers.Utils
 import com.ardnn.mymovies.models.*
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.bumptech.glide.request.RequestOptions
 
 class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, OnItemClick{
     companion object {

@@ -13,16 +13,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ardnn.mymovies.R
 import com.ardnn.mymovies.adapters.AlsoKnownAsAdapter
-import com.ardnn.mymovies.api.callbacks.movies.MovieOutlineCallback
-import com.ardnn.mymovies.api.callbacks.person.PersonDetailsCallback
-import com.ardnn.mymovies.api.callbacks.tvshows.TvShowOutlineCallback
+import com.ardnn.mymovies.api.callbacks.MovieOutlineCallback
+import com.ardnn.mymovies.api.callbacks.PersonDetailsCallback
+import com.ardnn.mymovies.api.callbacks.TvShowOutlineCallback
 import com.ardnn.mymovies.api.repositories.PersonRepository
 import com.ardnn.mymovies.helpers.Utils
 import com.ardnn.mymovies.models.ImageSize
 import com.ardnn.mymovies.models.MovieOutline
 import com.ardnn.mymovies.models.Person
 import com.ardnn.mymovies.models.TvShowOutline
-import com.bumptech.glide.Glide
 
 class PersonDetailActivity : AppCompatActivity(), View.OnClickListener {
     companion object {

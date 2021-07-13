@@ -1,8 +1,8 @@
 package com.ardnn.mymovies.api.repositories
 
-import com.ardnn.mymovies.api.callbacks.movies.MovieOutlineCallback
-import com.ardnn.mymovies.api.callbacks.person.PersonDetailsCallback
-import com.ardnn.mymovies.api.callbacks.tvshows.TvShowOutlineCallback
+import com.ardnn.mymovies.api.callbacks.MovieOutlineCallback
+import com.ardnn.mymovies.api.callbacks.PersonDetailsCallback
+import com.ardnn.mymovies.api.callbacks.TvShowOutlineCallback
 import com.ardnn.mymovies.api.services.PersonApiServices
 import com.ardnn.mymovies.models.MovieOutline
 import com.ardnn.mymovies.models.Person
