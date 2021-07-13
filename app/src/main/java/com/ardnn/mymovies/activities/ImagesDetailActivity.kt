@@ -1,5 +1,6 @@
 package com.ardnn.mymovies.activities
 
+import android.content.pm.ActivityInfo
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -87,8 +88,11 @@ class ImagesDetailActivity : AppCompatActivity() {
                         println("POSTER -> ${poster.imageUrl ?: "null"}")
                     }
 
-                    // setup pager
+                    // set data to widgets
                     setDataToWidgets(posterList)
+
+                    // set screen orientation
+                    requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
                 }
             }
 
@@ -101,6 +105,9 @@ class ImagesDetailActivity : AppCompatActivity() {
 
                     // set data to widgets
                     setDataToWidgets(backdropList)
+
+                    // set screen orientation
+                    requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
                 }
             }
 
