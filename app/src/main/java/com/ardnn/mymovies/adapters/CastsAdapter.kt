@@ -10,6 +10,8 @@ import com.ardnn.mymovies.R
 import com.ardnn.mymovies.models.Cast
 import com.ardnn.mymovies.models.ImageSize
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.bumptech.glide.request.RequestOptions
 
 class CastsAdapter(
     private val castList: List<Cast>,
@@ -46,9 +48,15 @@ class CastsAdapter(
         }
 
         fun onBind(cast: Cast) {
-            Glide.with(itemView.context).load(cast.getImageUrl(ImageSize.W342)).into(ivImage)
-            tvName.text = cast.name
-            tvCharacter.text = cast.character
+            if (cast.imageUrl != null || cast.imageUrl == "") {
+                Glide.with(itemView.context)
+                    .load(cast.getImageUrl(ImageSize.W342))
+                    .into(ivImage)
+            } else {
+                ivImage.setImageResource(R.drawable.img_placeholder)
+            }
+            tvName.text = cast.name ?: "-"
+            tvCharacter.text = cast.character ?: "-"
         }
     }
 }

@@ -64,9 +64,13 @@ class MoviesOutlineAdapter(
 
         fun onBind(movieOutline: MovieOutline) {
             // set data to widgets
-            Glide.with(itemView.context)
-                .load(movieOutline.getPosterUrl(ImageSize.W342))
-                .into(ivPoster)
+            if (movieOutline.posterUrl != null || movieOutline.posterUrl == "") {
+                Glide.with(itemView.context)
+                    .load(movieOutline.getPosterUrl(ImageSize.W342))
+                    .into(ivPoster)
+            } else {
+                ivPoster.setImageResource(R.drawable.img_placeholder)
+            }
             tvTitle.text = movieOutline.title ?: "-"
             tvYear.text =
                 if (movieOutline.releaseDate == null || movieOutline.releaseDate == "") "-"

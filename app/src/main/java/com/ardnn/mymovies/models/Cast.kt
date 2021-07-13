@@ -5,16 +5,16 @@ import com.google.gson.annotations.SerializedName
 
 data class Cast(
     @SerializedName("id")
-    val id: Int,
+    val id: Int?,
 
     @SerializedName("name")
-    val name: String,
+    val name: String?,
 
     @SerializedName("character")
-    val character: String,
+    val character: String?,
 
     @SerializedName("profile_path")
-    val imageUrl: String,
+    val imageUrl: String?,
 
     @SerializedName("cast")
     val castList: List<Cast>

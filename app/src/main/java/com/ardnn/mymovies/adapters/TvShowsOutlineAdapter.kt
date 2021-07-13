@@ -64,9 +64,13 @@ class TvShowsOutlineAdapter(
 
         fun onBind(tvShowOutline: TvShowOutline) {
             // set data to widgets
-            Glide.with(itemView.context)
-                .load(tvShowOutline.getPosterUrl(ImageSize.W342))
-                .into(ivPoster)
+            if (tvShowOutline.posterUrl != null || tvShowOutline.posterUrl == "") {
+                Glide.with(itemView.context)
+                    .load(tvShowOutline.getPosterUrl(ImageSize.W342))
+                    .into(ivPoster)
+            } else {
+                ivPoster.setImageResource(R.drawable.img_placeholder)
+            }
             tvTitle.text = tvShowOutline.title ?: "-"
             tvYear.text =
                 if (tvShowOutline.releaseDate == null || tvShowOutline.releaseDate == "") "-"
