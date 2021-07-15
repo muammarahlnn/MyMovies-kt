@@ -15,13 +15,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ardnn.mymovies.R
 import com.ardnn.mymovies.adapters.CastsAdapter
 import com.ardnn.mymovies.adapters.GenresAdapter
-import com.ardnn.mymovies.adapters.OnItemClick
 import com.ardnn.mymovies.api.callbacks.*
 import com.ardnn.mymovies.api.repositories.TvShowRepository
 import com.ardnn.mymovies.helpers.Utils
+import com.ardnn.mymovies.listeners.FilmDetailClickListener
 import com.ardnn.mymovies.models.*
 
-class TvShowDetailActivity : AppCompatActivity(), OnItemClick, View.OnClickListener {
+class TvShowDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetailClickListener {
     companion object {
         const val EXTRA_ID = "extra_id"
     }
@@ -293,12 +293,11 @@ class TvShowDetailActivity : AppCompatActivity(), OnItemClick, View.OnClickListe
         pbDetail.visibility = View.GONE
 
     }
-
-    override fun itemClicked(genre: Genre) {
+    override fun onGenreClicked(genre: Genre) {
         Toast.makeText(this, genre.name, Toast.LENGTH_SHORT).show()
     }
 
-    override fun itemClicked(cast: Cast) {
+    override fun onCastClicked(cast: Cast) {
         // go to person detail
         val goToPersonDetail = Intent(this, PersonDetailActivity::class.java)
         goToPersonDetail.putExtra(PersonDetailActivity.EXTRA_ID, cast.id)
@@ -308,9 +307,8 @@ class TvShowDetailActivity : AppCompatActivity(), OnItemClick, View.OnClickListe
         startActivity(goToPersonDetail)
     }
 
-
-    // do nothing
-    override fun itemClicked(movieOutline: MovieOutline) {}
-    override fun itemClicked(tvShowOutline: TvShowOutline) {}
+    override fun onVideoClicked(video: Video) {
+        TODO("Not yet implemented")
+    }
 
 }

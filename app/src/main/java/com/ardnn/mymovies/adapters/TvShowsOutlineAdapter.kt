@@ -10,13 +10,14 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.ardnn.mymovies.R
 import com.ardnn.mymovies.helpers.Utils
+import com.ardnn.mymovies.listeners.SingleClickListener
 import com.ardnn.mymovies.models.ImageSize
 import com.ardnn.mymovies.models.TvShowOutline
 import com.bumptech.glide.Glide
 
 class TvShowsOutlineAdapter(
     private val tvShowList: MutableList<TvShowOutline>,
-    private val onItemClick: OnItemClick
+    private val clickListener: SingleClickListener<TvShowOutline>
 ) : RecyclerView.Adapter<TvShowsOutlineAdapter.ViewHolder>(), Filterable {
 
     // list to save all fetched tv shows
@@ -36,7 +37,7 @@ class TvShowsOutlineAdapter(
         val view: View = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_rv_films, parent, false)
 
-        return ViewHolder(view, onItemClick)
+        return ViewHolder(view, clickListener)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -47,7 +48,7 @@ class TvShowsOutlineAdapter(
         return tvShowList.size
     }
 
-    inner class ViewHolder(itemView: View, onItemClick: OnItemClick) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View, clickListener: SingleClickListener<TvShowOutline>) : RecyclerView.ViewHolder(itemView) {
         private val ivPoster: ImageView
         private val tvTitle: TextView
         private val tvYear: TextView
@@ -55,7 +56,7 @@ class TvShowsOutlineAdapter(
 
         init {
             itemView.setOnClickListener {
-                onItemClick.itemClicked(tvShowList[absoluteAdapterPosition])
+                clickListener.onItemClicked(tvShowList[absoluteAdapterPosition])
             }
             ivPoster = itemView.findViewById(R.id.iv_poster_item_films)
             tvTitle = itemView.findViewById(R.id.tv_title_item_films)

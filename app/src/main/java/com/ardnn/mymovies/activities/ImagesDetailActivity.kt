@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
-import android.widget.Space
 import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -15,9 +14,10 @@ import com.ardnn.mymovies.adapters.ImagesPagerAdapter
 import com.ardnn.mymovies.api.callbacks.ImagesCallback
 import com.ardnn.mymovies.api.repositories.MovieRepository
 import com.ardnn.mymovies.api.repositories.TvShowRepository
+import com.ardnn.mymovies.listeners.SingleClickListener
 import com.ardnn.mymovies.models.Image
 
-class ImagesDetailActivity : AppCompatActivity() {
+class ImagesDetailActivity : AppCompatActivity(), SingleClickListener<Image> {
     companion object {
         const val EXTRA_ID = "extra_id"
         const val EXTRA_ACTIVITY_KEY = "extra_activity_key"
@@ -49,7 +49,6 @@ class ImagesDetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_images_detail)
 
         // initialization
-        imagesPagerAdapter = ImagesPagerAdapter()
         filmId = intent.getIntExtra(EXTRA_ID, 0)
         activityKey = intent.getStringExtra(EXTRA_ACTIVITY_KEY) ?: ""
         imagesKey = intent.getStringExtra(EXTRA_IMAGES_KEY) ?: ""
@@ -74,14 +73,6 @@ class ImagesDetailActivity : AppCompatActivity() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 tvCurrentImage.text = (position + 1).toString()
-            }
-        })
-
-        // if image clicked
-        imagesPagerAdapter.setOnImageClick(object : ImagesPagerAdapter.OnImageClick {
-            override fun imageClicked() {
-                isToolbarActive = !isToolbarActive
-                clToolbar.visibility = if (isToolbarActive) View.VISIBLE else View.GONE
             }
         })
 
@@ -160,13 +151,18 @@ class ImagesDetailActivity : AppCompatActivity() {
 
     private fun setDataToWidgets(imageList: List<Image>) {
         // viewpager
-        imagesPagerAdapter.setImageList(imageList)
+        imagesPagerAdapter = ImagesPagerAdapter(imageList, this)
         imagesPager.adapter = imagesPagerAdapter
         imagesPager.currentItem = 0
 
         // widgets
         tvCurrentImage.text = "1"
         tvTotalImage.text = imageList.size.toString()
+    }
+
+    override fun onItemClicked(item: Image) {
+        isToolbarActive = !isToolbarActive
+        clToolbar.visibility = if (isToolbarActive) View.VISIBLE else View.GONE
     }
 
 }

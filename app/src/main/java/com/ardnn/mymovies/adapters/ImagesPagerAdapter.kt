@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import androidx.recyclerview.widget.RecyclerView
 import com.ardnn.mymovies.R
+import com.ardnn.mymovies.listeners.SingleClickListener
 import com.ardnn.mymovies.models.Image
 import com.ardnn.mymovies.models.ImageSize
 import com.bumptech.glide.Glide
@@ -17,23 +18,16 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.request.transition.DrawableCrossFadeTransition
 
-class ImagesPagerAdapter: RecyclerView.Adapter<ImagesPagerAdapter.ViewHolder>() {
-    private lateinit var imageList: List<Image>
-    private lateinit var onImageClick: OnImageClick
-
-    fun setImageList(imageList: List<Image>) {
-        this.imageList = imageList
-    }
-
-    fun setOnImageClick(onImageClick: OnImageClick) {
-        this.onImageClick = onImageClick
-    }
+class ImagesPagerAdapter(
+    private val imageList: List<Image>,
+    private val clickListener: SingleClickListener<Image>
+): RecyclerView.Adapter<ImagesPagerAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view: View = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_rv_images, parent, false)
 
-        return ViewHolder(view, onImageClick)
+        return ViewHolder(view, clickListener)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -44,14 +38,14 @@ class ImagesPagerAdapter: RecyclerView.Adapter<ImagesPagerAdapter.ViewHolder>() 
         return imageList.size
     }
 
-    inner class ViewHolder(itemView: View, onImageClick: OnImageClick)
+    inner class ViewHolder(itemView: View, clickListener: SingleClickListener<Image>)
         : RecyclerView.ViewHolder(itemView), RequestListener<Drawable> {
         private val ivImage: ImageView = itemView.findViewById(R.id.iv_item_images)
         private val progressBar: ProgressBar = itemView.findViewById(R.id.pb_item_images)
 
         init {
             itemView.setOnClickListener {
-                onImageClick.imageClicked()
+                clickListener.onItemClicked(imageList[absoluteAdapterPosition])
             }
         }
 
@@ -87,10 +81,6 @@ class ImagesPagerAdapter: RecyclerView.Adapter<ImagesPagerAdapter.ViewHolder>() 
             progressBar.visibility = View.GONE
             return true
         }
-    }
-
-    interface OnImageClick {
-        fun imageClicked()
     }
 
 }

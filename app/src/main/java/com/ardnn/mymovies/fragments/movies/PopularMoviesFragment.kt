@@ -13,15 +13,13 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.ardnn.mymovies.R
 import com.ardnn.mymovies.activities.MovieDetailActivity
 import com.ardnn.mymovies.adapters.MoviesOutlineAdapter
-import com.ardnn.mymovies.adapters.OnItemClick
 import com.ardnn.mymovies.api.callbacks.MovieOutlineCallback
-import com.ardnn.mymovies.models.Cast
-import com.ardnn.mymovies.models.Genre
 import com.ardnn.mymovies.models.MovieOutline
-import com.ardnn.mymovies.models.TvShowOutline
 import com.ardnn.mymovies.api.repositories.MovieRepository
+import com.ardnn.mymovies.listeners.SingleClickListener
 
-class PopularMoviesFragment : Fragment(), OnItemClick, SwipeRefreshLayout.OnRefreshListener {
+class PopularMoviesFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener,
+    SingleClickListener<MovieOutline> {
 
     // recyclerview attr
     private lateinit var recyclerView: RecyclerView
@@ -144,15 +142,11 @@ class PopularMoviesFragment : Fragment(), OnItemClick, SwipeRefreshLayout.OnRefr
         loadData(currentPage)
     }
 
-    override fun itemClicked(movieOutline: MovieOutline) {
-        // go to movies detail
+    override fun onItemClicked(item: MovieOutline) {
+        // go to movie detail
         val goToMovieDetail = Intent(activity, MovieDetailActivity::class.java)
-        goToMovieDetail.putExtra(MovieDetailActivity.EXTRA_ID, movieOutline.id)
+        goToMovieDetail.putExtra(MovieDetailActivity.EXTRA_ID, item.id)
         startActivity(goToMovieDetail)
     }
-
-    override fun itemClicked(tvShowOutline: TvShowOutline) {}
-    override fun itemClicked(genre: Genre) {}
-    override fun itemClicked(cast: Cast) {}
 
 }
