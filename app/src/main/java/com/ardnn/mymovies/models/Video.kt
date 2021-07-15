@@ -14,4 +14,8 @@ data class Video(
 
     @SerializedName("results")
     val videoList: List<Video>
-)
+) {
+    fun getImageUrl(): String {
+        return "http://img.youtube.com/vi/${key}/mqdefault.jpg"
+    }
+}

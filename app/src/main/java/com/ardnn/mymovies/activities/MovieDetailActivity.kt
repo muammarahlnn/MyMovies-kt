@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ardnn.mymovies.R
 import com.ardnn.mymovies.adapters.CastsAdapter
 import com.ardnn.mymovies.adapters.GenresAdapter
+import com.ardnn.mymovies.adapters.VideosAdapter
 import com.ardnn.mymovies.api.callbacks.*
 import com.ardnn.mymovies.api.repositories.MovieRepository
 import com.ardnn.mymovies.helpers.Utils
@@ -37,6 +38,10 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetai
     // casts
     private lateinit var rvCasts: RecyclerView
     private lateinit var castsAdapter: CastsAdapter
+
+    // videos
+    private lateinit var rvVideos: RecyclerView
+    private lateinit var videosAdapter: VideosAdapter
 
     // widgets
     private lateinit var tvTitle: TextView
@@ -126,16 +131,21 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetai
         rvGenres.layoutManager = LinearLayoutManager(
             this,
             LinearLayoutManager.HORIZONTAL,
-            false
-        )
+            false)
 
         // casts
         rvCasts = findViewById(R.id.rv_casts_movie_detail)
         rvCasts.layoutManager = LinearLayoutManager(
             this,
             LinearLayoutManager.HORIZONTAL,
-            false
-        )
+            false)
+
+        // videos
+        rvVideos = findViewById(R.id.rv_videos_movie_detail)
+        rvVideos.layoutManager = LinearLayoutManager(
+            this,
+            LinearLayoutManager.HORIZONTAL,
+            false)
 
         // widgets
         tvTitle = findViewById(R.id.tv_title_movie_detail)
@@ -195,13 +205,18 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetai
     private fun loadMovieVideos() {
         MovieRepository.getMovieVideos(movieId, object : VideosCallback {
             override fun onSuccess(videoList: List<Video>) {
+                // debug
                 for (video in videoList) {
                     Log.d("MOVIE VIDEO", video.name ?: "null")
                 }
+
+                // setup recyclerview videos
+                videosAdapter = VideosAdapter(videoList, this@MovieDetailActivity)
+                rvVideos.adapter = videosAdapter
             }
 
             override fun onFailure(message: String) {
-                TODO("Not yet implemented")
+                Toast.makeText(this@MovieDetailActivity, message, Toast.LENGTH_SHORT).show()
             }
 
         })

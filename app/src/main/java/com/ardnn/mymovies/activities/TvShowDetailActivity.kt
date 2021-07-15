@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ardnn.mymovies.R
 import com.ardnn.mymovies.adapters.CastsAdapter
 import com.ardnn.mymovies.adapters.GenresAdapter
+import com.ardnn.mymovies.adapters.VideosAdapter
 import com.ardnn.mymovies.api.callbacks.*
 import com.ardnn.mymovies.api.repositories.TvShowRepository
 import com.ardnn.mymovies.helpers.Utils
@@ -38,6 +39,10 @@ class TvShowDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDeta
     // casts
     private lateinit var rvCasts: RecyclerView
     private lateinit var castsAdapter: CastsAdapter
+
+    // videos
+    private lateinit var rvVideos: RecyclerView
+    private lateinit var videosAdapter: VideosAdapter
 
     // widgets
     private lateinit var tvTitle: TextView
@@ -70,11 +75,7 @@ class TvShowDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDeta
         initialization()
 
         // load tv show data
-        loadTvShowDetails()
-        loadTvShowCasts()
-        loadTvShowImages()
-        loadTvShowVideos()
-        loadSimilarTvShows()
+        loadTvShowData()
 
         // if button clicked
         btnBack.setOnClickListener(this)
@@ -134,16 +135,21 @@ class TvShowDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDeta
         rvGenres.layoutManager = LinearLayoutManager(
             this,
             LinearLayoutManager.HORIZONTAL,
-            false
-        )
+            false)
 
         // casts
         rvCasts = findViewById(R.id.rv_casts_tv_show_detail)
         rvCasts.layoutManager = LinearLayoutManager(
             this,
             LinearLayoutManager.HORIZONTAL,
-            false
-        )
+            false)
+
+        // videos
+        rvVideos = findViewById(R.id.rv_videos_tv_show_detail)
+        rvVideos.layoutManager = LinearLayoutManager(
+            this,
+            LinearLayoutManager.HORIZONTAL,
+            false)
 
         // widgets
         tvTitle = findViewById(R.id.tv_title_tv_show_detail)
@@ -163,6 +169,14 @@ class TvShowDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDeta
         btnFavorite = findViewById(R.id.btn_favorite_tv_show_detail)
         clWrapperSynopsis = findViewById(R.id.cl_wrapper_synopsis_tv_show_detail)
         pbDetail = findViewById(R.id.pb_tv_show_detail)
+    }
+
+    private fun loadTvShowData() {
+        loadTvShowDetails()
+        loadTvShowCasts()
+        loadTvShowImages()
+        loadTvShowVideos()
+        loadSimilarTvShows()
     }
 
     private fun loadTvShowDetails() {
@@ -219,13 +233,18 @@ class TvShowDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDeta
     private fun loadTvShowVideos() {
         TvShowRepository.getTvShowVideos(tvShowId, object : VideosCallback {
             override fun onSuccess(videoList: List<Video>) {
+                // debug
                 for (video in videoList) {
                     Log.d("TV SHOW VIDEO", video.name ?: "null")
                 }
+
+                // setup recyclerview videos
+                videosAdapter = VideosAdapter(videoList, this@TvShowDetailActivity)
+                rvVideos.adapter = videosAdapter
             }
 
             override fun onFailure(message: String) {
-                TODO("Not yet implemented")
+                Toast.makeText(this@TvShowDetailActivity, message, Toast.LENGTH_SHORT).show()
             }
 
         })
