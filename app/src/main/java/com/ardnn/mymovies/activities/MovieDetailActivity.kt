@@ -293,6 +293,16 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetai
     }
 
     override fun onVideoClicked(video: Video) {
-        TODO("Not yet implemented")
+        if (video.site.equals("YouTube", ignoreCase = true)) { // go to video player
+            val goToVideoPlayer = Intent(this, VideoPlayerActivity::class.java)
+            goToVideoPlayer.putExtra(VideoPlayerActivity.EXTRA_VIDEO_KEY, video.key)
+            startActivity(goToVideoPlayer)
+        } else {
+            Toast.makeText(
+                this,
+                "This video can't be played due to an error occurred",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
     }
 }

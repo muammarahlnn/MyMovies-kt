@@ -11,18 +11,25 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyMovies">
-        <activity android:name=".activities.ImagesDetailActivity"
-            />
-        <activity android:name=".activities.PersonDetailActivity"
+        <activity
+            android:name=".activities.VideoPlayerActivity"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".activities.TvShowDetailActivity"
+            android:screenOrientation="landscape" />
+        <activity android:name=".activities.ImagesDetailActivity" />
+        <activity
+            android:name=".activities.PersonDetailActivity"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".activities.MovieDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.TvShowDetailActivity"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".activities.SplashActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.MovieDetailActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.SplashActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -31,9 +38,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.MainActivity"
+        <activity
+            android:name=".activities.MainActivity"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
