@@ -164,7 +164,7 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetai
             false)
 
         // recommendations
-        rvRecommendations = findViewById(R.id.rv_recommendations_movies_detail)
+        rvRecommendations = findViewById(R.id.rv_recommendations_movie_detail)
         rvRecommendations.layoutManager = LinearLayoutManager(
             this,
             LinearLayoutManager.HORIZONTAL,
