@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ardnn.mymovies.R
 import com.ardnn.mymovies.adapters.CastsAdapter
 import com.ardnn.mymovies.adapters.GenresAdapter
+import com.ardnn.mymovies.adapters.SimilarMoviesAdapter
 import com.ardnn.mymovies.adapters.VideosAdapter
 import com.ardnn.mymovies.api.callbacks.*
 import com.ardnn.mymovies.api.repositories.MovieRepository
@@ -42,6 +43,10 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetai
     // videos
     private lateinit var rvVideos: RecyclerView
     private lateinit var videosAdapter: VideosAdapter
+
+    // similar movies
+    private lateinit var rvSimilar: RecyclerView
+    private lateinit var similarAdapter: SimilarMoviesAdapter
 
     // widgets
     private lateinit var tvTitle: TextView
@@ -147,6 +152,13 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetai
             LinearLayoutManager.HORIZONTAL,
             false)
 
+        // similar movies
+        rvSimilar = findViewById(R.id.rv_similar_movies)
+        rvSimilar.layoutManager = LinearLayoutManager(
+            this,
+            LinearLayoutManager.HORIZONTAL,
+            false)
+
         // widgets
         tvTitle = findViewById(R.id.tv_title_movie_detail)
         tvReleaseDate = findViewById(R.id.tv_release_date_movie_detail)
@@ -168,7 +180,7 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetai
         loadMovieDetails()
         loadMovieCasts()
         loadMovieVideos()
-        loadSimilarMovie()
+        loadSimilarMovies()
     }
 
     private fun loadMovieDetails() {
@@ -205,11 +217,6 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetai
     private fun loadMovieVideos() {
         MovieRepository.getMovieVideos(movieId, object : VideosCallback {
             override fun onSuccess(videoList: List<Video>) {
-                // debug
-                for (video in videoList) {
-                    Log.d("MOVIE VIDEO", video.name ?: "null")
-                }
-
                 // setup recyclerview videos
                 videosAdapter = VideosAdapter(videoList, this@MovieDetailActivity)
                 rvVideos.adapter = videosAdapter
@@ -222,16 +229,16 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetai
         })
     }
 
-    private fun loadSimilarMovie() {
+    private fun loadSimilarMovies() {
         MovieRepository.getSimilarMovies(movieId, object : MovieOutlineCallback {
             override fun onSuccess(movieOutlineList: MutableList<MovieOutline>) {
-                for (movie in movieOutlineList) {
-                    Log.d("SIMILAR", movie.title ?: "null")
-                }
+                // setup recyclerview similar movies
+                similarAdapter = SimilarMoviesAdapter(movieOutlineList, this@MovieDetailActivity)
+                rvSimilar.adapter = similarAdapter
             }
 
             override fun onFailure(message: String) {
-                TODO("Not yet implemented")
+                Toast.makeText(this@MovieDetailActivity, message, Toast.LENGTH_SHORT).show()
             }
 
         })
@@ -304,5 +311,16 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetai
                 Toast.LENGTH_SHORT
             ).show()
         }
+    }
+
+    override fun onSimilarClicked(movieOutline: MovieOutline) {
+        // go to movie detail
+        val goToMovieDetail = Intent(this, MovieDetailActivity::class.java)
+        goToMovieDetail.putExtra(EXTRA_ID, movieOutline.id)
+        startActivity(goToMovieDetail)
+    }
+
+    override fun onSimilarClicked(tvShowOutline: TvShowOutline) {
+        // do nothing
     }
 }

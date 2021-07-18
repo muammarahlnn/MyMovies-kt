@@ -28,4 +28,6 @@
     <string name="images">Images</string>
     <string name="per">/</string>
     <string name="videos">Videos</string>
+    <string name="similar_movies">Similar Movies</string>
+    <string name="similar_tv_shows">Similar TV Shows</string>
 </resources>

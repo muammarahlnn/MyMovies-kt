@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ardnn.mymovies.R
 import com.ardnn.mymovies.adapters.CastsAdapter
 import com.ardnn.mymovies.adapters.GenresAdapter
+import com.ardnn.mymovies.adapters.SimilarTvShowsAdapter
 import com.ardnn.mymovies.adapters.VideosAdapter
 import com.ardnn.mymovies.api.callbacks.*
 import com.ardnn.mymovies.api.repositories.TvShowRepository
@@ -42,6 +43,10 @@ class TvShowDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDeta
     // videos
     private lateinit var rvVideos: RecyclerView
     private lateinit var videosAdapter: VideosAdapter
+
+    // similar tv shows
+    private lateinit var rvSimilar: RecyclerView
+    private lateinit var similarAdapter: SimilarTvShowsAdapter
 
     // widgets
     private lateinit var tvTitle: TextView
@@ -150,6 +155,13 @@ class TvShowDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDeta
             LinearLayoutManager.HORIZONTAL,
             false)
 
+        // similar tv shows
+        rvSimilar = findViewById(R.id.rv_similar_tv_shows)
+        rvSimilar.layoutManager = LinearLayoutManager(
+            this,
+            LinearLayoutManager.HORIZONTAL,
+            false)
+
         // widgets
         tvTitle = findViewById(R.id.tv_title_tv_show_detail)
         tvEpisodes = findViewById(R.id.tv_episodes_tv_show_detail)
@@ -173,7 +185,6 @@ class TvShowDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDeta
     private fun loadTvShowData() {
         loadTvShowDetails()
         loadTvShowCasts()
-        loadTvShowImages()
         loadTvShowVideos()
         loadSimilarTvShows()
     }
@@ -208,35 +219,9 @@ class TvShowDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDeta
         })
     }
 
-    private fun loadTvShowImages() {
-        TvShowRepository.getTvShowImages(tvShowId, object : ImagesCallback {
-            override fun onPostersSuccess(posterList: List<Image>) {
-                for (poster in posterList) {
-                    println("POSTER -> ${poster.imageUrl ?: ""}")
-                }
-            }
-
-            override fun onBackdropsSuccess(backdropList: List<Image>) {
-                for (backdrop in backdropList) {
-                    println("BACKDROP -> ${backdrop.imageUrl ?: ""}")
-                }
-            }
-
-            override fun onFailure(message: String) {
-                TODO("Not yet implemented")
-            }
-
-        })
-    }
-
     private fun loadTvShowVideos() {
         TvShowRepository.getTvShowVideos(tvShowId, object : VideosCallback {
             override fun onSuccess(videoList: List<Video>) {
-                // debug
-                for (video in videoList) {
-                    Log.d("TV SHOW VIDEO", video.name ?: "null")
-                }
-
                 // setup recyclerview videos
                 videosAdapter = VideosAdapter(videoList, this@TvShowDetailActivity)
                 rvVideos.adapter = videosAdapter
@@ -252,13 +237,13 @@ class TvShowDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDeta
     private fun loadSimilarTvShows() {
         TvShowRepository.getSimilarTvShows(tvShowId, object : TvShowOutlineCallback {
             override fun onSuccess(tvShowOutlineList: MutableList<TvShowOutline>) {
-                for (tvShow in tvShowOutlineList) {
-                    Log.d("SIMILAR", tvShow.title ?: "null")
-                }
+                // setup recyclerview similar tv shows
+                similarAdapter = SimilarTvShowsAdapter(tvShowOutlineList, this@TvShowDetailActivity)
+                rvSimilar.adapter = similarAdapter
             }
 
             override fun onFailure(message: String) {
-                TODO("Not yet implemented")
+                Toast.makeText(this@TvShowDetailActivity, message, Toast.LENGTH_SHORT).show()
             }
 
         })
@@ -339,4 +324,14 @@ class TvShowDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDeta
         }
     }
 
+    override fun onSimilarClicked(tvShowOutline: TvShowOutline) {
+        // go to tv show detail
+        val goToTvShowDetail = Intent(this, TvShowDetailActivity::class.java)
+        goToTvShowDetail.putExtra(EXTRA_ID, tvShowOutline.id)
+        startActivity(goToTvShowDetail)
+    }
+
+    override fun onSimilarClicked(movieOutline: MovieOutline) {
+        // do nothing
+    }
 }
