@@ -21,6 +21,7 @@ import com.ardnn.mymovies.api.repositories.MovieRepository
 import com.ardnn.mymovies.helpers.Utils
 import com.ardnn.mymovies.listeners.FilmDetailClickListener
 import com.ardnn.mymovies.models.*
+import com.google.android.material.button.MaterialButton
 
 class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetailClickListener {
     companion object {
@@ -64,6 +65,7 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetai
     private lateinit var ivImgsBackdrops: ImageView
     private lateinit var btnBack: ImageView
     private lateinit var btnFavorite: ImageView
+    private lateinit var btnHome: MaterialButton
     private lateinit var pbDetail: ProgressBar
     private lateinit var clWrapperSynopsis: ConstraintLayout
 
@@ -84,6 +86,7 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetai
         // if button clicked
         btnBack.setOnClickListener(this)
         btnFavorite.setOnClickListener(this)
+        btnHome.setOnClickListener(this)
         clWrapperSynopsis.setOnClickListener(this)
         ivImgsPosters.setOnClickListener(this)
         ivImgsBackdrops.setOnClickListener(this)
@@ -126,6 +129,13 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetai
             R.id.iv_imgs_backdrops_movie_detail -> {
                 goToImagesDetail.putExtra(ImagesDetailActivity.EXTRA_IMAGES_KEY, ImagesDetailActivity.BACKDROPS)
                 startActivity(goToImagesDetail)
+            }
+            R.id.btn_home_movie_detail -> {
+                // go to home and remove all activity
+                val goToHome = Intent(this, MainActivity::class.java)
+                goToHome.putExtra(MainActivity.EXTRA_NAV_KEY, 1)
+                goToHome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                startActivity(goToHome)
             }
         }
     }
@@ -182,6 +192,7 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetai
         ivImgsBackdrops = findViewById(R.id.iv_imgs_backdrops_movie_detail)
         btnBack = findViewById(R.id.btn_back_movie_detail)
         btnFavorite = findViewById(R.id.btn_favorite_movie_detail)
+        btnHome = findViewById(R.id.btn_home_movie_detail)
         clWrapperSynopsis = findViewById(R.id.cl_wrapper_synopsis_movie_detail)
         pbDetail = findViewById(R.id.pb_movie_detail)
     }

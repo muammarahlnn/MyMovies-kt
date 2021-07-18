@@ -21,6 +21,7 @@ import com.ardnn.mymovies.api.repositories.TvShowRepository
 import com.ardnn.mymovies.helpers.Utils
 import com.ardnn.mymovies.listeners.FilmDetailClickListener
 import com.ardnn.mymovies.models.*
+import com.google.android.material.button.MaterialButton
 
 class TvShowDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetailClickListener {
     companion object {
@@ -67,6 +68,7 @@ class TvShowDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDeta
     private lateinit var ivImgsBackdrops: ImageView
     private lateinit var btnBack: ImageView
     private lateinit var btnFavorite: ImageView
+    private lateinit var btnHome: MaterialButton
     private lateinit var clWrapperSynopsis: ConstraintLayout
     private lateinit var pbDetail: ProgressBar
 
@@ -87,6 +89,7 @@ class TvShowDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDeta
         // if button clicked
         btnBack.setOnClickListener(this)
         btnFavorite.setOnClickListener(this)
+        btnHome.setOnClickListener(this)
         clWrapperSynopsis.setOnClickListener(this)
         ivImgsPosters.setOnClickListener(this)
         ivImgsBackdrops.setOnClickListener(this)
@@ -129,6 +132,13 @@ class TvShowDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDeta
             R.id.iv_imgs_backdrops_tv_show_detail -> {
                 goToImagesDetail.putExtra(ImagesDetailActivity.EXTRA_IMAGES_KEY, ImagesDetailActivity.BACKDROPS)
                 startActivity(goToImagesDetail)
+            }
+            R.id.btn_home_tv_show_detail -> {
+                // go to home and remove all activity
+                val goToHome = Intent(this, MainActivity::class.java)
+                goToHome.putExtra(MainActivity.EXTRA_NAV_KEY, 2)
+                goToHome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                startActivity(goToHome)
             }
         }
     }
@@ -188,6 +198,7 @@ class TvShowDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDeta
         ivImgsBackdrops = findViewById(R.id.iv_imgs_backdrops_tv_show_detail)
         btnBack = findViewById(R.id.btn_back_tv_show_detail)
         btnFavorite = findViewById(R.id.btn_favorite_tv_show_detail)
+        btnHome = findViewById(R.id.btn_home_tv_show_detail)
         clWrapperSynopsis = findViewById(R.id.cl_wrapper_synopsis_tv_show_detail)
         pbDetail = findViewById(R.id.pb_tv_show_detail)
     }

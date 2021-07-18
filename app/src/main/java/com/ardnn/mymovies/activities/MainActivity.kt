@@ -17,6 +17,9 @@ import com.ardnn.mymovies.fragments.tvshows.TvShowsFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener {
+    companion object {
+        const val EXTRA_NAV_KEY = "extra_nav_key"
+    }
 
     // widgets
     private lateinit var toolbar: Toolbar
@@ -41,7 +44,13 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         bnvMain = findViewById(R.id.bnv_navigation_main)
         bnvMain.setOnNavigationItemSelectedListener(this)
         bnvMain.itemIconTintList = null
-        bnvMain.selectedItemId = R.id.item_movies_main
+
+        val navKey: Int = intent.getIntExtra(EXTRA_NAV_KEY, 0)
+        bnvMain.selectedItemId =  when (navKey) {
+            1 -> R.id.item_movies_main
+            2 -> R.id.item_tv_shows_main
+            else -> R.id.item_movies_main
+        }
 
         // check if keyboard shows up
         val viewRoot: View = findViewById(R.id.activity_root)

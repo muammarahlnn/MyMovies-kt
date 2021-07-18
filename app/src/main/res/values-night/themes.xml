@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.MyMovies" parent="Theme.AppCompat.DayNight.NoActionBar">
+    <style name="Theme.MyMovies" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/black_taskbar</item>
         <item name="colorPrimaryVariant">@color/black_primary</item>
