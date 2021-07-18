@@ -38,6 +38,12 @@ interface MovieApiServices {
         @Query("api_key") apiKey: String
     ): Call<MovieOutline>
 
+   @GET("{movie_id}/recommendations")
+    fun getMovieRecommendations(
+        @Path("movie_id") movieId: Int,
+        @Query("api_key") apiKey: String
+    ): Call<MovieOutline>
+
     @GET("now_playing")
     fun getNowPlayingMovies(
         @Query("api_key") apiKey: String,

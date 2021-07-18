@@ -181,6 +181,7 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetai
         loadMovieCasts()
         loadMovieVideos()
         loadSimilarMovies()
+        loadMovieRecommendations()
     }
 
     private fun loadMovieDetails() {
@@ -239,6 +240,22 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetai
 
             override fun onFailure(message: String) {
                 Toast.makeText(this@MovieDetailActivity, message, Toast.LENGTH_SHORT).show()
+            }
+
+        })
+    }
+
+    private fun loadMovieRecommendations() {
+        MovieRepository.getMovieRecommendations(movieId, object : MovieOutlineCallback {
+            override fun onSuccess(movieOutlineList: MutableList<MovieOutline>) {
+                // debug
+                for (movie in movieOutlineList) {
+                    println("recommendation -> ${movie.title}")
+                }
+            }
+
+            override fun onFailure(message: String) {
+                TODO("Not yet implemented")
             }
 
         })

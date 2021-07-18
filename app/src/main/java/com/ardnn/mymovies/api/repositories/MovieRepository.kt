@@ -256,4 +256,34 @@ object MovieRepository {
 
             })
     }
+
+    // method to get movie recommendations
+    fun getMovieRecommendations(movieId: Int, callback: MovieOutlineCallback) {
+        MOVIE_SERVICE.getMovieRecommendations(movieId, Consts.API_KEY)
+            .enqueue(object : Callback<MovieOutline> {
+                override fun onResponse(
+                    call: Call<MovieOutline>,
+                    response: Response<MovieOutline>
+                ) {
+                    if (response.isSuccessful) {
+                        if (response.body() != null) {
+                            if (response.body()?.movieOutlineList != null) {
+                                callback.onSuccess(response.body()?.movieOutlineList ?: mutableListOf())
+                            } else {
+                                callback.onFailure("response.body().movieOutlineList is null")
+                            }
+                        } else {
+                            callback.onFailure("response.body() is null")
+                        }
+                    } else {
+                        callback.onFailure(response.message())
+                    }
+                }
+
+                override fun onFailure(call: Call<MovieOutline>, t: Throwable) {
+                    callback.onFailure(t.localizedMessage ?: "getMovieRecommendations failure")
+                }
+
+            })
+    }
 }
