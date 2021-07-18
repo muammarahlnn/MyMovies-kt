@@ -48,6 +48,10 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetai
     private lateinit var rvSimilar: RecyclerView
     private lateinit var similarAdapter: SimilarMoviesAdapter
 
+    // recommendations
+    private lateinit var rvRecommendations: RecyclerView
+    private lateinit var recommendationsAdapter: SimilarMoviesAdapter
+
     // widgets
     private lateinit var tvTitle: TextView
     private lateinit var tvReleaseDate: TextView
@@ -159,6 +163,13 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetai
             LinearLayoutManager.HORIZONTAL,
             false)
 
+        // recommendations
+        rvRecommendations = findViewById(R.id.rv_recommendations_movies_detail)
+        rvRecommendations.layoutManager = LinearLayoutManager(
+            this,
+            LinearLayoutManager.HORIZONTAL,
+            false)
+
         // widgets
         tvTitle = findViewById(R.id.tv_title_movie_detail)
         tvReleaseDate = findViewById(R.id.tv_release_date_movie_detail)
@@ -248,14 +259,13 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetai
     private fun loadMovieRecommendations() {
         MovieRepository.getMovieRecommendations(movieId, object : MovieOutlineCallback {
             override fun onSuccess(movieOutlineList: MutableList<MovieOutline>) {
-                // debug
-                for (movie in movieOutlineList) {
-                    println("recommendation -> ${movie.title}")
-                }
+                // setup recyclerview recommendations
+                recommendationsAdapter = SimilarMoviesAdapter(movieOutlineList, this@MovieDetailActivity)
+                rvRecommendations.adapter = recommendationsAdapter
             }
 
             override fun onFailure(message: String) {
-                TODO("Not yet implemented")
+                Toast.makeText(this@MovieDetailActivity, message, Toast.LENGTH_SHORT).show()
             }
 
         })
