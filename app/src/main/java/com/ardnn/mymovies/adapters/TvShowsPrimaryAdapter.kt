@@ -13,12 +13,11 @@ import com.ardnn.mymovies.helpers.Utils
 import com.ardnn.mymovies.listeners.SingleClickListener
 import com.ardnn.mymovies.models.ImageSize
 import com.ardnn.mymovies.models.TvShowOutline
-import com.bumptech.glide.Glide
 
-class TvShowsOutlineAdapter(
+class TvShowsPrimaryAdapter(
     private val tvShowList: MutableList<TvShowOutline>,
     private val clickListener: SingleClickListener<TvShowOutline>
-) : RecyclerView.Adapter<TvShowsOutlineAdapter.ViewHolder>(), Filterable {
+) : RecyclerView.Adapter<TvShowsPrimaryAdapter.ViewHolder>(), Filterable {
 
     // list to save all fetched tv shows
     private val listFull: MutableList<TvShowOutline> = mutableListOf()
@@ -35,7 +34,7 @@ class TvShowsOutlineAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view: View = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_rv_films, parent, false)
+            .inflate(R.layout.item_rv_films_primary, parent, false)
 
         return ViewHolder(view, clickListener)
     }
@@ -58,10 +57,10 @@ class TvShowsOutlineAdapter(
             itemView.setOnClickListener {
                 clickListener.onItemClicked(tvShowList[absoluteAdapterPosition])
             }
-            ivPoster = itemView.findViewById(R.id.iv_poster_item_films)
-            tvTitle = itemView.findViewById(R.id.tv_title_item_films)
-            tvYear = itemView.findViewById(R.id.tv_year_item_films)
-            tvVote = itemView.findViewById(R.id.tv_vote_item_films)
+            ivPoster = itemView.findViewById(R.id.iv_poster_item_films_primary)
+            tvTitle = itemView.findViewById(R.id.tv_title_item_films_primary)
+            tvYear = itemView.findViewById(R.id.tv_year_item_films_primary)
+            tvVote = itemView.findViewById(R.id.tv_vote_item_films_primary)
         }
 
         fun onBind(tvShowOutline: TvShowOutline) {

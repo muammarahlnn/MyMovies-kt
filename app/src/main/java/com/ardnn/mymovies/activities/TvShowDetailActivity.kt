@@ -3,7 +3,6 @@ package com.ardnn.mymovies.activities
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
@@ -15,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ardnn.mymovies.R
 import com.ardnn.mymovies.adapters.CastsAdapter
 import com.ardnn.mymovies.adapters.GenresAdapter
-import com.ardnn.mymovies.adapters.SimilarTvShowsAdapter
+import com.ardnn.mymovies.adapters.TvShowsSecondaryAdapter
 import com.ardnn.mymovies.adapters.VideosAdapter
 import com.ardnn.mymovies.api.callbacks.*
 import com.ardnn.mymovies.api.repositories.TvShowRepository
@@ -46,11 +45,11 @@ class TvShowDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDeta
 
     // similar tv shows
     private lateinit var rvSimilar: RecyclerView
-    private lateinit var similarAdapter: SimilarTvShowsAdapter
+    private lateinit var similarAdapter: TvShowsSecondaryAdapter
 
     // recommendations
     private lateinit var rvRecommendations: RecyclerView
-    private lateinit var recommendationsAdapter: SimilarTvShowsAdapter
+    private lateinit var recommendationsAdapter: TvShowsSecondaryAdapter
 
     // widgets
     private lateinit var tvTitle: TextView
@@ -250,7 +249,7 @@ class TvShowDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDeta
         TvShowRepository.getSimilarTvShows(tvShowId, object : TvShowOutlineCallback {
             override fun onSuccess(tvShowOutlineList: MutableList<TvShowOutline>) {
                 // setup recyclerview similar tv shows
-                similarAdapter = SimilarTvShowsAdapter(tvShowOutlineList, this@TvShowDetailActivity)
+                similarAdapter = TvShowsSecondaryAdapter(tvShowOutlineList, this@TvShowDetailActivity)
                 rvSimilar.adapter = similarAdapter
             }
 
@@ -265,7 +264,7 @@ class TvShowDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDeta
         TvShowRepository.getTvShowRecommendations(tvShowId, object : TvShowOutlineCallback {
             override fun onSuccess(tvShowOutlineList: MutableList<TvShowOutline>) {
                 // setup recyclerview recommendations
-                recommendationsAdapter = SimilarTvShowsAdapter(tvShowOutlineList, this@TvShowDetailActivity)
+                recommendationsAdapter = TvShowsSecondaryAdapter(tvShowOutlineList, this@TvShowDetailActivity)
                 rvRecommendations.adapter = recommendationsAdapter
             }
 

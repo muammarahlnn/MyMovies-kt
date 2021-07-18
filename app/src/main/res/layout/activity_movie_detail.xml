@@ -515,7 +515,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/temp5"
                     tools:itemCount="1"
-                    tools:listitem="@layout/item_rv_similar" />
+                    tools:listitem="@layout/item_rv_films_secondary" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -564,7 +564,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/temp6"
                     tools:itemCount="1"
-                    tools:listitem="@layout/item_rv_similar" />
+                    tools:listitem="@layout/item_rv_films_secondary" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

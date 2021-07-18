@@ -3,7 +3,6 @@ package com.ardnn.mymovies.activities
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
@@ -15,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ardnn.mymovies.R
 import com.ardnn.mymovies.adapters.CastsAdapter
 import com.ardnn.mymovies.adapters.GenresAdapter
-import com.ardnn.mymovies.adapters.SimilarMoviesAdapter
+import com.ardnn.mymovies.adapters.MoviesSecondaryAdapter
 import com.ardnn.mymovies.adapters.VideosAdapter
 import com.ardnn.mymovies.api.callbacks.*
 import com.ardnn.mymovies.api.repositories.MovieRepository
@@ -46,11 +45,11 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetai
 
     // similar movies
     private lateinit var rvSimilar: RecyclerView
-    private lateinit var similarAdapter: SimilarMoviesAdapter
+    private lateinit var similarAdapter: MoviesSecondaryAdapter
 
     // recommendations
     private lateinit var rvRecommendations: RecyclerView
-    private lateinit var recommendationsAdapter: SimilarMoviesAdapter
+    private lateinit var recommendationsAdapter: MoviesSecondaryAdapter
 
     // widgets
     private lateinit var tvTitle: TextView
@@ -245,7 +244,7 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetai
         MovieRepository.getSimilarMovies(movieId, object : MovieOutlineCallback {
             override fun onSuccess(movieOutlineList: MutableList<MovieOutline>) {
                 // setup recyclerview similar movies
-                similarAdapter = SimilarMoviesAdapter(movieOutlineList, this@MovieDetailActivity)
+                similarAdapter = MoviesSecondaryAdapter(movieOutlineList, this@MovieDetailActivity)
                 rvSimilar.adapter = similarAdapter
             }
 
@@ -260,7 +259,7 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetai
         MovieRepository.getMovieRecommendations(movieId, object : MovieOutlineCallback {
             override fun onSuccess(movieOutlineList: MutableList<MovieOutline>) {
                 // setup recyclerview recommendations
-                recommendationsAdapter = SimilarMoviesAdapter(movieOutlineList, this@MovieDetailActivity)
+                recommendationsAdapter = MoviesSecondaryAdapter(movieOutlineList, this@MovieDetailActivity)
                 rvRecommendations.adapter = recommendationsAdapter
             }
 

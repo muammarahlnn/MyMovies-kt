@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.ardnn.mymovies.R
 import com.ardnn.mymovies.activities.MovieDetailActivity
-import com.ardnn.mymovies.adapters.MoviesOutlineAdapter
+import com.ardnn.mymovies.adapters.MoviesPrimaryAdapter
 import com.ardnn.mymovies.api.callbacks.MovieOutlineCallback
 import com.ardnn.mymovies.models.MovieOutline
 import com.ardnn.mymovies.api.repositories.MovieRepository
@@ -23,7 +23,7 @@ class NowPlayingFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener,
 
     // recyclerview attr
     private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: MoviesOutlineAdapter
+    private lateinit var adapter: MoviesPrimaryAdapter
     private val movieList = mutableListOf<MovieOutline>()
 
     // widgets
@@ -113,7 +113,7 @@ class NowPlayingFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener,
         recyclerView.layoutManager = layoutManager
 
         // set adapter
-        adapter = MoviesOutlineAdapter(movieList, this)
+        adapter = MoviesPrimaryAdapter(movieList, this)
         recyclerView.adapter = adapter
 
         // listener if recyclerview reached last item then fetch next page

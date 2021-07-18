@@ -12,36 +12,36 @@ import com.ardnn.mymovies.listeners.FilmDetailClickListener
 import com.ardnn.mymovies.models.ImageSize
 import com.ardnn.mymovies.models.TvShowOutline
 
-class SimilarTvShowsAdapter(
-    private val similarList: MutableList<TvShowOutline>,
+class TvShowsSecondaryAdapter(
+    private val tvShowList: MutableList<TvShowOutline>,
     private val clickListener: FilmDetailClickListener
-) : RecyclerView.Adapter<SimilarTvShowsAdapter.ViewHolder>(){
+) : RecyclerView.Adapter<TvShowsSecondaryAdapter.ViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view: View = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_rv_similar, parent, false)
+            .inflate(R.layout.item_rv_films_secondary, parent, false)
 
         return ViewHolder(view, clickListener)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.onBind(similarList[position])
+        holder.onBind(tvShowList[position])
     }
 
     override fun getItemCount(): Int {
-        return similarList.size
+        return tvShowList.size
     }
 
     inner class ViewHolder(itemView: View, clickListener: FilmDetailClickListener)
         : RecyclerView.ViewHolder(itemView) {
-        private val ivPoster: ImageView = itemView.findViewById(R.id.iv_poster_item_similar)
-        private val tvTitle: TextView = itemView.findViewById(R.id.tv_title_item_similar)
-        private val tvYear: TextView = itemView.findViewById(R.id.tv_year_item_similar)
-        private val tvVote: TextView = itemView.findViewById(R.id.tv_vote_item_similar)
+        private val ivPoster: ImageView = itemView.findViewById(R.id.iv_poster_item_films_secondary)
+        private val tvTitle: TextView = itemView.findViewById(R.id.tv_title_item_films_secondary)
+        private val tvYear: TextView = itemView.findViewById(R.id.tv_year_item_films_secondary)
+        private val tvVote: TextView = itemView.findViewById(R.id.tv_vote_item_films_secondary)
 
         init {
             itemView.setOnClickListener {
-                clickListener.onSimilarClicked(similarList[absoluteAdapterPosition])
+                clickListener.onSimilarClicked(tvShowList[absoluteAdapterPosition])
             }
         }
 

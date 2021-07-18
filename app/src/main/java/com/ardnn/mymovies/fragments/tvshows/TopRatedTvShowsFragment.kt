@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.ardnn.mymovies.R
 import com.ardnn.mymovies.activities.TvShowDetailActivity
-import com.ardnn.mymovies.adapters.TvShowsOutlineAdapter
+import com.ardnn.mymovies.adapters.TvShowsPrimaryAdapter
 import com.ardnn.mymovies.api.callbacks.TvShowOutlineCallback
 import com.ardnn.mymovies.models.TvShowOutline
 import com.ardnn.mymovies.api.repositories.TvShowRepository
@@ -23,7 +23,7 @@ class TopRatedTvShowsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener
 
     // recyclerview attr
     private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: TvShowsOutlineAdapter
+    private lateinit var adapter: TvShowsPrimaryAdapter
     private val tvShowList = mutableListOf<TvShowOutline>()
 
     // widgets
@@ -113,7 +113,7 @@ class TopRatedTvShowsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener
         recyclerView.layoutManager = layoutManager
 
         // set adapter
-        adapter = TvShowsOutlineAdapter(tvShowList, this)
+        adapter = TvShowsPrimaryAdapter(tvShowList, this)
         recyclerView.adapter = adapter
 
         // listener if recyclerview reached last item then fetch next page

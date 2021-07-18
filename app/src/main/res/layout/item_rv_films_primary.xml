@@ -23,7 +23,7 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/iv_poster_item_films"
+                android:id="@+id/iv_poster_item_films_primary"
                 android:layout_width="match_parent"
                 android:layout_height="188dp"
                 android:scaleType="centerCrop"
@@ -49,7 +49,7 @@
                     android:src="@drawable/ic_star_yellow" />
 
                 <TextView
-                    android:id="@+id/tv_vote_item_films"
+                    android:id="@+id/tv_vote_item_films_primary"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     tools:text="8.2"
@@ -70,10 +70,10 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/iv_poster_item_films">
+                app:layout_constraintTop_toBottomOf="@+id/iv_poster_item_films_primary">
 
                 <TextView
-                    android:id="@+id/tv_title_item_films"
+                    android:id="@+id/tv_title_item_films_primary"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
@@ -86,7 +86,7 @@
                     tools:text="Title" />
 
                 <TextView
-                    android:id="@+id/tv_year_item_films"
+                    android:id="@+id/tv_year_item_films_primary"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
