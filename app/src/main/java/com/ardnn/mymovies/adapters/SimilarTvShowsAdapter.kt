@@ -47,7 +47,7 @@ class SimilarTvShowsAdapter(
 
         fun onBind(tvShowOutline: TvShowOutline) {
             // set data to widgets
-            if (tvShowOutline.posterUrl != null || tvShowOutline.posterUrl == "") {
+            if (tvShowOutline.posterUrl != null && tvShowOutline.posterUrl != "") {
                 Utils.setImageGlide(
                     itemView.context,
                     tvShowOutline.getPosterUrl(ImageSize.W342),
@@ -57,9 +57,12 @@ class SimilarTvShowsAdapter(
             }
             tvTitle.text = tvShowOutline.title ?: "-"
             tvYear.text =
-                if (tvShowOutline.releaseDate == null || tvShowOutline.releaseDate == "") "-"
-                else tvShowOutline.releaseDate.substring(0, 4)
-            tvVote.text = "%.1f".format(tvShowOutline.rating ?: "-")
+                if (tvShowOutline.releaseDate != null && tvShowOutline.releaseDate != "")
+                    tvShowOutline.releaseDate.substring(0, 4)
+                else "-"
+            tvVote.text =
+                if (tvShowOutline.rating != null) "%.1f".format(tvShowOutline.rating)
+                else "-"
         }
 
     }

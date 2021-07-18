@@ -47,7 +47,7 @@ class SimilarMoviesAdapter(
 
         fun onBind(movieOutline: MovieOutline) {
             // set data to widgets
-            if (movieOutline.posterUrl != null || movieOutline.posterUrl == "") {
+            if (movieOutline.posterUrl != null && movieOutline.posterUrl != "") {
                 Utils.setImageGlide(
                     itemView.context,
                     movieOutline.getPosterUrl(ImageSize.W342),
@@ -57,9 +57,12 @@ class SimilarMoviesAdapter(
             }
             tvTitle.text = movieOutline.title ?: "-"
             tvYear.text =
-                if (movieOutline.releaseDate == null || movieOutline.releaseDate == "") "-"
-                else movieOutline.releaseDate.substring(0, 4)
-            tvVote.text = "%.1f".format(movieOutline.rating ?: "-")
+                if (movieOutline.releaseDate != null && movieOutline.releaseDate != "")
+                    movieOutline.releaseDate.substring(0, 4)
+                else "-"
+            tvVote.text =
+                if (movieOutline.rating != null) "%.1f".format(movieOutline.rating)
+                else "-"
         }
 
 
