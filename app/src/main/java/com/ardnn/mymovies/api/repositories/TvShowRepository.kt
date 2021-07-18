@@ -255,4 +255,34 @@ object TvShowRepository {
 
             })
     }
+
+    // method to get tv show recommendations
+    fun getTvShowRecommendations(tvShowId: Int, callback: TvShowOutlineCallback) {
+        TV_SHOW_SERVICE.getTvShowRecommendations(tvShowId, Consts.API_KEY)
+            .enqueue(object : Callback<TvShowOutline> {
+                override fun onResponse(
+                    call: Call<TvShowOutline>,
+                    response: Response<TvShowOutline>
+                ) {
+                    if (response.isSuccessful) {
+                        if (response.body() != null) {
+                            if (response.body()?.tvShowOutlineList != null) {
+                                callback.onSuccess(response.body()?.tvShowOutlineList ?: mutableListOf())
+                            } else {
+                                callback.onFailure("response.body().tvShowOutlineList is null")
+                            }
+                        } else {
+                            callback.onFailure("response.body() is null")
+                        }
+                    } else {
+                        callback.onFailure(response.message())
+                    }
+                }
+
+                override fun onFailure(call: Call<TvShowOutline>, t: Throwable) {
+                    callback.onFailure(t.localizedMessage ?: "getSimilarTvShows failure")
+                }
+
+            })
+    }
 }

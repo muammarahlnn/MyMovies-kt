@@ -187,6 +187,7 @@ class TvShowDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDeta
         loadTvShowCasts()
         loadTvShowVideos()
         loadSimilarTvShows()
+        loadTvShowRecommendations()
     }
 
     private fun loadTvShowDetails() {
@@ -244,6 +245,22 @@ class TvShowDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDeta
 
             override fun onFailure(message: String) {
                 Toast.makeText(this@TvShowDetailActivity, message, Toast.LENGTH_SHORT).show()
+            }
+
+        })
+    }
+
+    private fun loadTvShowRecommendations() {
+        TvShowRepository.getTvShowRecommendations(tvShowId, object : TvShowOutlineCallback {
+            override fun onSuccess(tvShowOutlineList: MutableList<TvShowOutline>) {
+                // debug
+                for (tvShow in tvShowOutlineList) {
+                    println("recommendation -> ${tvShow.title}")
+                }
+            }
+
+            override fun onFailure(message: String) {
+                TODO("Not yet implemented")
             }
 
         })

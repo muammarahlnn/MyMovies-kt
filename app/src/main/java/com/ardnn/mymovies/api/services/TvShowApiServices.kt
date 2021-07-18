@@ -38,6 +38,12 @@ interface TvShowApiServices {
         @Query("api_key") apiKey: String
     ): Call<TvShowOutline>
 
+    @GET("{tv_id}/recommendations")
+    fun getTvShowRecommendations(
+        @Path("tv_id") tvShowId: Int,
+        @Query("api_key") apiKey: String
+    ): Call<TvShowOutline>
+
     @GET("airing_today")
     fun getAiringTodayTvShows(
         @Query("api_key") apiKey: String,
