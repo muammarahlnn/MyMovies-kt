@@ -48,6 +48,10 @@ class TvShowDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDeta
     private lateinit var rvSimilar: RecyclerView
     private lateinit var similarAdapter: SimilarTvShowsAdapter
 
+    // recommendations
+    private lateinit var rvRecommendations: RecyclerView
+    private lateinit var recommendationsAdapter: SimilarTvShowsAdapter
+
     // widgets
     private lateinit var tvTitle: TextView
     private lateinit var tvEpisodes: TextView
@@ -162,6 +166,13 @@ class TvShowDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDeta
             LinearLayoutManager.HORIZONTAL,
             false)
 
+        // recommendations
+        rvRecommendations = findViewById(R.id.rv_recommendations_tv_show_detail)
+        rvRecommendations.layoutManager = LinearLayoutManager(
+            this,
+            LinearLayoutManager.HORIZONTAL,
+            false)
+
         // widgets
         tvTitle = findViewById(R.id.tv_title_tv_show_detail)
         tvEpisodes = findViewById(R.id.tv_episodes_tv_show_detail)
@@ -253,10 +264,9 @@ class TvShowDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDeta
     private fun loadTvShowRecommendations() {
         TvShowRepository.getTvShowRecommendations(tvShowId, object : TvShowOutlineCallback {
             override fun onSuccess(tvShowOutlineList: MutableList<TvShowOutline>) {
-                // debug
-                for (tvShow in tvShowOutlineList) {
-                    println("recommendation -> ${tvShow.title}")
-                }
+                // setup recyclerview recommendations
+                recommendationsAdapter = SimilarTvShowsAdapter(tvShowOutlineList, this@TvShowDetailActivity)
+                rvRecommendations.adapter = recommendationsAdapter
             }
 
             override fun onFailure(message: String) {
