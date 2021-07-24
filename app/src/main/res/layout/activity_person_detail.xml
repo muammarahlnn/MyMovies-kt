@@ -19,8 +19,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="50dp">
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/iv_wallpaper_person_detail"
@@ -401,6 +400,127 @@
                     app:layout_constraintEnd_toEndOf="@+id/tv_biography_person_detail"
                     app:layout_constraintStart_toStartOf="@+id/tv_biography_person_detail"
                     app:layout_constraintTop_toBottomOf="@+id/tv_biography_person_detail" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_wrapper_person_movies"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/black_primary"
+                android:paddingTop="12dp"
+                android:paddingBottom="24dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cl_wrapper_biography_person_detail">
+
+                <View
+                    android:id="@+id/view6"
+                    android:layout_width="6dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="16dp"
+                    android:background="@color/yellow_primary"
+                    app:layout_constraintBottom_toBottomOf="@+id/temp5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/temp5" />
+
+                <TextView
+                    android:id="@+id/temp5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="@string/movies"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toEndOf="@+id/view6"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_movies_person_detail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:paddingStart="16dp"
+                    android:clipToPadding="false"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/temp5"
+                    tools:itemCount="1"
+                    tools:listitem="@layout/item_rv_films_secondary" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_wrapper_person_tv_shows"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/black_primary"
+                android:paddingTop="12dp"
+                android:paddingBottom="24dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cl_wrapper_person_movies">
+
+                <View
+                    android:id="@+id/view_person_tv_shows"
+                    android:layout_width="6dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="16dp"
+                    android:background="@color/yellow_primary"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_person_tv_shows"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/tv_person_tv_shows" />
+
+                <TextView
+                    android:id="@+id/tv_person_tv_shows"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="@string/tv_shows"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toEndOf="@+id/view_person_tv_shows"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_tv_shows_person_detail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:paddingStart="16dp"
+                    android:clipToPadding="false"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_person_tv_shows"
+                    tools:itemCount="1"
+                    tools:listitem="@layout/item_rv_films_secondary" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_home_person_detail"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginHorizontal="16dp"
+                    android:paddingVertical="10dp"
+                    android:textAllCaps="false"
+                    android:text="@string/home"
+                    android:textColor="@color/gray_primary"
+                    android:backgroundTint="@color/black_primary"
+                    app:cornerRadius="7dp"
+                    app:icon="@drawable/ic_home_white"
+                    app:iconGravity="textStart"
+                    app:iconTint="@color/gray_primary"
+                    app:strokeColor="@color/gray_border"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/rv_tv_shows_person_detail" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

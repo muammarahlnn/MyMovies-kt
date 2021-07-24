@@ -260,7 +260,8 @@ class TvShowDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDeta
         TvShowRepository.getSimilarTvShows(tvShowId, object : TvShowOutlineCallback {
             override fun onSuccess(tvShowOutlineList: MutableList<TvShowOutline>) {
                 // setup recyclerview similar tv shows
-                similarAdapter = TvShowsSecondaryAdapter(tvShowOutlineList, this@TvShowDetailActivity)
+                similarAdapter = TvShowsSecondaryAdapter(tvShowOutlineList)
+                similarAdapter.setFilmClickListener(this@TvShowDetailActivity)
                 rvSimilar.adapter = similarAdapter
             }
 
@@ -275,7 +276,8 @@ class TvShowDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDeta
         TvShowRepository.getTvShowRecommendations(tvShowId, object : TvShowOutlineCallback {
             override fun onSuccess(tvShowOutlineList: MutableList<TvShowOutline>) {
                 // setup recyclerview recommendations
-                recommendationsAdapter = TvShowsSecondaryAdapter(tvShowOutlineList, this@TvShowDetailActivity)
+                recommendationsAdapter = TvShowsSecondaryAdapter(tvShowOutlineList)
+                recommendationsAdapter.setFilmClickListener(this@TvShowDetailActivity)
                 rvRecommendations.adapter = recommendationsAdapter
             }
 

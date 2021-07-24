@@ -1,5 +1,6 @@
 package com.ardnn.mymovies.activities
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -13,17 +14,19 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ardnn.mymovies.R
 import com.ardnn.mymovies.adapters.AlsoKnownAsAdapter
+import com.ardnn.mymovies.adapters.MoviesSecondaryAdapter
+import com.ardnn.mymovies.adapters.TvShowsSecondaryAdapter
 import com.ardnn.mymovies.api.callbacks.MovieOutlineCallback
 import com.ardnn.mymovies.api.callbacks.PersonDetailsCallback
 import com.ardnn.mymovies.api.callbacks.TvShowOutlineCallback
 import com.ardnn.mymovies.api.repositories.PersonRepository
 import com.ardnn.mymovies.helpers.Utils
-import com.ardnn.mymovies.models.ImageSize
-import com.ardnn.mymovies.models.MovieOutline
-import com.ardnn.mymovies.models.Person
-import com.ardnn.mymovies.models.TvShowOutline
+import com.ardnn.mymovies.listeners.FilmDetailClickListener
+import com.ardnn.mymovies.listeners.PersonDetailClickListener
+import com.ardnn.mymovies.models.*
+import com.google.android.material.button.MaterialButton
 
-class PersonDetailActivity : AppCompatActivity(), View.OnClickListener {
+class PersonDetailActivity : AppCompatActivity(), View.OnClickListener, PersonDetailClickListener {
     companion object {
         const val EXTRA_ID = "extra_id"
         const val EXTRA_KNOWN_AS = "extra_known_as"
@@ -39,6 +42,14 @@ class PersonDetailActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var rvAka: RecyclerView
     private lateinit var akaAdapter: AlsoKnownAsAdapter
 
+    // movies
+    private lateinit var rvMovies: RecyclerView
+    private lateinit var moviesAdapter: MoviesSecondaryAdapter
+
+    // tv shows
+    private lateinit var rvTvShows: RecyclerView
+    private lateinit var tvShowsAdapter: TvShowsSecondaryAdapter
+
     // widgets
     private lateinit var tvName: TextView
     private lateinit var tvKnownAs: TextView
@@ -52,6 +63,7 @@ class PersonDetailActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var ivProfile: ImageView
     private lateinit var ivWallpaper: ImageView
     private lateinit var btnBack: ImageView
+    private lateinit var btnHome: MaterialButton
     private lateinit var progressBar: ProgressBar
     private lateinit var clWrapperBiography: ConstraintLayout
 
@@ -68,6 +80,7 @@ class PersonDetailActivity : AppCompatActivity(), View.OnClickListener {
 
         // if button clicked
         btnBack.setOnClickListener(this)
+        btnHome.setOnClickListener(this)
         clWrapperBiography.setOnClickListener(this)
 
         // load person detail data
@@ -92,6 +105,12 @@ class PersonDetailActivity : AppCompatActivity(), View.OnClickListener {
                     tvMore.text = "more"
                 }
             }
+            R.id.btn_home_person_detail -> {
+                // go to home and remove all activity
+                val goToHome = Intent(this, MainActivity::class.java)
+                goToHome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                startActivity(goToHome)
+            }
         }
     }
 
@@ -102,6 +121,22 @@ class PersonDetailActivity : AppCompatActivity(), View.OnClickListener {
         // also known as
         rvAka = findViewById(R.id.rv_aka_person_detail)
         rvAka.layoutManager = LinearLayoutManager(
+            this,
+            LinearLayoutManager.HORIZONTAL,
+            false
+        )
+
+        // movies
+        rvMovies = findViewById(R.id.rv_movies_person_detail)
+        rvMovies.layoutManager = LinearLayoutManager(
+            this,
+            LinearLayoutManager.HORIZONTAL,
+            false
+        )
+
+        // tv shows
+        rvTvShows = findViewById(R.id.rv_tv_shows_person_detail)
+        rvTvShows.layoutManager = LinearLayoutManager(
             this,
             LinearLayoutManager.HORIZONTAL,
             false
@@ -121,6 +156,7 @@ class PersonDetailActivity : AppCompatActivity(), View.OnClickListener {
         ivWallpaper = findViewById(R.id.iv_wallpaper_person_detail)
         clWrapperBiography = findViewById(R.id.cl_wrapper_biography_person_detail)
         btnBack = findViewById(R.id.btn_back_person_detail)
+        btnHome = findViewById(R.id.btn_home_person_detail)
         progressBar = findViewById(R.id.pb_person_detail)
     }
 
@@ -145,6 +181,11 @@ class PersonDetailActivity : AppCompatActivity(), View.OnClickListener {
                 for (movie in movieOutlineList) {
                     Log.d("PERSON MOVIE", movie.title ?: "-")
                 }
+
+                // setup recyclerview movies
+                moviesAdapter = MoviesSecondaryAdapter(movieOutlineList)
+                moviesAdapter.setPersonClickListener(this@PersonDetailActivity)
+                rvMovies.adapter = moviesAdapter
             }
 
             override fun onFailure(message: String) {
@@ -160,6 +201,11 @@ class PersonDetailActivity : AppCompatActivity(), View.OnClickListener {
                 for (tvShow in tvShowOutlineList) {
                     Log.d("PERSON TV", tvShow.title ?: "-")
                 }
+
+                // setup recyclerview tv shows
+                tvShowsAdapter = TvShowsSecondaryAdapter(tvShowOutlineList)
+                tvShowsAdapter.setPersonClickListener(this@PersonDetailActivity)
+                rvTvShows.adapter = tvShowsAdapter
             }
 
             override fun onFailure(message: String) {
@@ -198,6 +244,20 @@ class PersonDetailActivity : AppCompatActivity(), View.OnClickListener {
 
         // remove progress bar
         progressBar.visibility = View.GONE
+    }
+
+    override fun onMovieClicked(movie: MovieOutline) {
+        // go to movie detail
+        val goToMovieDetail = Intent(this, MovieDetailActivity::class.java)
+        goToMovieDetail.putExtra(MovieDetailActivity.EXTRA_ID, movie.id)
+        startActivity(goToMovieDetail)
+    }
+
+    override fun onTvShowClicked(tvShow: TvShowOutline) {
+        // go to tv show detail
+        val goToTvShowDetail = Intent(this, TvShowDetailActivity::class.java)
+        goToTvShowDetail.putExtra(TvShowDetailActivity.EXTRA_ID, tvShow.id)
+        startActivity(goToTvShowDetail)
     }
 
 }

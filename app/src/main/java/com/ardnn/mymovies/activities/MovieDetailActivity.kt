@@ -255,7 +255,8 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetai
         MovieRepository.getSimilarMovies(movieId, object : MovieOutlineCallback {
             override fun onSuccess(movieOutlineList: MutableList<MovieOutline>) {
                 // setup recyclerview similar movies
-                similarAdapter = MoviesSecondaryAdapter(movieOutlineList, this@MovieDetailActivity)
+                similarAdapter = MoviesSecondaryAdapter(movieOutlineList)
+                similarAdapter.setFilmClickListener(this@MovieDetailActivity)
                 rvSimilar.adapter = similarAdapter
             }
 
@@ -270,7 +271,8 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetai
         MovieRepository.getMovieRecommendations(movieId, object : MovieOutlineCallback {
             override fun onSuccess(movieOutlineList: MutableList<MovieOutline>) {
                 // setup recyclerview recommendations
-                recommendationsAdapter = MoviesSecondaryAdapter(movieOutlineList, this@MovieDetailActivity)
+                recommendationsAdapter = MoviesSecondaryAdapter(movieOutlineList)
+                recommendationsAdapter.setFilmClickListener(this@MovieDetailActivity)
                 rvRecommendations.adapter = recommendationsAdapter
             }
 
