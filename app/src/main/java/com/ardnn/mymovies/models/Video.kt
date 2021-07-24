@@ -16,6 +16,7 @@ data class Video(
     val videoList: List<Video>
 ) {
     fun getImageUrl(): String {
-        return "http://img.youtube.com/vi/${key}/mqdefault.jpg"
+        return "https://i.ytimg.com/vi/$key/mqdefault.jpg"
+//        return "http://img.youtube.com/vi/${key}/hqdefault.jpg"
     }
 }
