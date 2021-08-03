@@ -31,13 +31,12 @@ interface FavoriteFilmDao {
     @Delete
     suspend fun deleteTvShow(favoriteTvShow: FavoriteTvShows)
 
-    @Query("SELECT * FROM favorite_tv_shows")
-    fun getAllTvShows(): LiveData<List<FavoriteTvShows>>
-
     @Query("SELECT * FROM favorite_tv_shows WHERE id = :id LIMIT 1")
-    fun getTvShow(id: Int): FavoriteTvShows
+    suspend fun getTvShow(id: Int): FavoriteTvShows
 
     @Query("SELECT EXISTS (SELECT * FROM favorite_tv_shows WHERE id = :id)")
-    fun isTvShowExists(id: Int): Boolean
+    suspend fun isTvShowExists(id: Int): Boolean
 
+    @Query("SELECT * FROM favorite_tv_shows")
+    fun getAllTvShows(): LiveData<List<FavoriteTvShows>>
 }

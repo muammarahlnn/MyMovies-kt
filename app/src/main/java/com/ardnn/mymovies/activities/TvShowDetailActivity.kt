@@ -9,6 +9,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ardnn.mymovies.R
@@ -18,10 +19,13 @@ import com.ardnn.mymovies.adapters.TvShowsSecondaryAdapter
 import com.ardnn.mymovies.adapters.VideosAdapter
 import com.ardnn.mymovies.api.callbacks.*
 import com.ardnn.mymovies.api.repositories.TvShowRepository
+import com.ardnn.mymovies.database.FavoriteFilmViewModel
+import com.ardnn.mymovies.database.entities.FavoriteTvShows
 import com.ardnn.mymovies.helpers.Utils
 import com.ardnn.mymovies.listeners.FilmDetailClickListener
 import com.ardnn.mymovies.models.*
 import com.google.android.material.button.MaterialButton
+import kotlinx.coroutines.runBlocking
 
 class TvShowDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetailClickListener {
     companion object {
@@ -51,6 +55,9 @@ class TvShowDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDeta
     // recommendations
     private lateinit var rvRecommendations: RecyclerView
     private lateinit var recommendationsAdapter: TvShowsSecondaryAdapter
+
+    // view model
+    private lateinit var viewModel: FavoriteFilmViewModel
 
     // widgets
     private lateinit var tvTitle: TextView
@@ -108,11 +115,9 @@ class TvShowDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDeta
             R.id.btn_favorite_tv_show_detail -> {
                 isFavorite = !isFavorite
                 if (isFavorite) { // like
-                    btnFavorite.setImageResource(R.drawable.ic_favorite_true)
-                    Toast.makeText(this, "You liked ${tvShow.title}", Toast.LENGTH_SHORT).show()
+                    addTvShowToDatabase()
                 } else { // dislike
-                    btnFavorite.setImageResource(R.drawable.ic_favorite_false)
-                    Toast.makeText(this, "You disliked ${tvShow.title}", Toast.LENGTH_SHORT).show()
+                    deleteTvShowFromDatabase()
                 }
             }
             R.id.cl_wrapper_synopsis_tv_show_detail -> {
@@ -144,6 +149,9 @@ class TvShowDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDeta
     }
 
     private fun initialization() {
+        // view model
+        viewModel = ViewModelProvider(this).get(FavoriteFilmViewModel::class.java)
+
         // tv show
         tvShowId = intent.getIntExtra(EXTRA_ID, 0)
 
@@ -182,6 +190,14 @@ class TvShowDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDeta
             LinearLayoutManager.HORIZONTAL,
             false)
 
+        // set btn favorite
+        runBlocking {
+            isFavorite = viewModel.isTvShowExists(tvShowId)
+        }
+        btnFavorite = findViewById(R.id.btn_favorite_tv_show_detail)
+        btnFavorite.setImageResource(
+            if (isFavorite) R.drawable.ic_favorite_true else R.drawable.ic_favorite_false)
+
         // widgets
         tvTitle = findViewById(R.id.tv_title_tv_show_detail)
         tvEpisodes = findViewById(R.id.tv_episodes_tv_show_detail)
@@ -197,10 +213,45 @@ class TvShowDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDeta
         ivImgsPosters = findViewById(R.id.iv_imgs_posters_tv_show_detail)
         ivImgsBackdrops = findViewById(R.id.iv_imgs_backdrops_tv_show_detail)
         btnBack = findViewById(R.id.btn_back_tv_show_detail)
-        btnFavorite = findViewById(R.id.btn_favorite_tv_show_detail)
         btnHome = findViewById(R.id.btn_home_tv_show_detail)
         clWrapperSynopsis = findViewById(R.id.cl_wrapper_synopsis_tv_show_detail)
         pbDetail = findViewById(R.id.pb_tv_show_detail)
+    }
+
+    private fun addTvShowToDatabase() {
+        // create favorite tv show object
+        val id: Int = tvShowId
+        val title: String = tvShow.title ?: "-"
+        val releaseDate: String = tvShow.firstAirDate ?: "-"
+        val posterUrl: String = tvShow.getPosterUrl(ImageSize.W200)
+        val rating: Float = tvShow.rating ?: -1F
+        val favoriteTvShow = FavoriteTvShows(id, title, releaseDate, posterUrl, rating)
+
+        // insert to database
+        viewModel.addTvShow(favoriteTvShow)
+
+        // set icon favorite to true and notify the user
+        btnFavorite.setImageResource(R.drawable.ic_favorite_true)
+        Toast.makeText(this, "$title has added to favorites", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun deleteTvShowFromDatabase() {
+        // get tv show from database
+        lateinit var favoriteTvShow: FavoriteTvShows
+        runBlocking {
+            favoriteTvShow = viewModel.getTvShow(tvShowId)
+        }
+
+        // delete it from database
+        viewModel.deleteTvShow(favoriteTvShow)
+
+        // set icon favorite to false and notify the user
+        btnFavorite.setImageResource(R.drawable.ic_favorite_false)
+        Toast.makeText(
+            this,
+            "${favoriteTvShow.title} has removed from favorites",
+            Toast.LENGTH_SHORT
+        ).show()
     }
 
     private fun loadTvShowData() {

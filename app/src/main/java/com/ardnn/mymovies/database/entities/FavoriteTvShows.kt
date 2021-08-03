@@ -20,5 +20,5 @@ data class FavoriteTvShows(
     val posterUrl: String,
 
     @ColumnInfo(name = "rating")
-    val rating: Double,
+    val rating: Float,
 )

@@ -36,11 +36,11 @@ class FavoriteFilmRepository(private val dao: FavoriteFilmDao) {
         dao.deleteTvShow(favoriteTvShow)
     }
 
-    fun getTvShow(id: Int): FavoriteTvShows {
+    suspend fun getTvShow(id: Int): FavoriteTvShows {
         return dao.getTvShow(id)
     }
 
-    fun isTvShowExists(id: Int): Boolean {
+    suspend fun isTvShowExists(id: Int): Boolean {
         return dao.isTvShowExists(id)
     }
 }

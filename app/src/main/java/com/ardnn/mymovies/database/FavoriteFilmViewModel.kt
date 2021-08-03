@@ -38,7 +38,6 @@ class FavoriteFilmViewModel(application: Application) : AndroidViewModel(applica
     }
 
 
-
     // tv shows
     private val favoriteTvShowList: LiveData<List<FavoriteTvShows>> = repository.favoriteTvShowList
 
@@ -54,11 +53,11 @@ class FavoriteFilmViewModel(application: Application) : AndroidViewModel(applica
         }
     }
 
-    fun getTvShow(id: Int): FavoriteTvShows {
+    suspend fun getTvShow(id: Int): FavoriteTvShows {
         return repository.getTvShow(id)
     }
 
-    fun isTvShowExists(id: Int): Boolean {
+    suspend fun isTvShowExists(id: Int): Boolean {
         return repository.isTvShowExists(id)
     }
 
