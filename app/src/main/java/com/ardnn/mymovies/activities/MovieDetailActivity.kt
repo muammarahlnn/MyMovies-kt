@@ -9,6 +9,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ardnn.mymovies.R
@@ -18,10 +19,13 @@ import com.ardnn.mymovies.adapters.MoviesSecondaryAdapter
 import com.ardnn.mymovies.adapters.VideosAdapter
 import com.ardnn.mymovies.api.callbacks.*
 import com.ardnn.mymovies.api.repositories.MovieRepository
+import com.ardnn.mymovies.database.FavoriteFilmViewModel
+import com.ardnn.mymovies.database.entities.FavoriteMovies
 import com.ardnn.mymovies.helpers.Utils
 import com.ardnn.mymovies.listeners.FilmDetailClickListener
 import com.ardnn.mymovies.models.*
 import com.google.android.material.button.MaterialButton
+import kotlinx.coroutines.runBlocking
 
 class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetailClickListener {
     companion object {
@@ -51,6 +55,9 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetai
     // recommendations
     private lateinit var rvRecommendations: RecyclerView
     private lateinit var recommendationsAdapter: MoviesSecondaryAdapter
+
+    // view model
+    private lateinit var viewModel: FavoriteFilmViewModel
 
     // widgets
     private lateinit var tvTitle: TextView
@@ -105,11 +112,9 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetai
             R.id.btn_favorite_movie_detail -> {
                 isFavorite = !isFavorite
                 if (isFavorite) { // like
-                    btnFavorite.setImageResource(R.drawable.ic_favorite_true)
-                    Toast.makeText(this, "You liked ${movie.title}", Toast.LENGTH_SHORT).show()
+                    addMovieToDatabase()
                 } else { // dislike
-                    btnFavorite.setImageResource(R.drawable.ic_favorite_false)
-                    Toast.makeText(this, "You disliked ${movie.title}", Toast.LENGTH_SHORT).show()
+                    deleteMovieFromDatabase()
                 }
             }
             R.id.cl_wrapper_synopsis_movie_detail -> {
@@ -141,6 +146,9 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetai
     }
 
     private fun initialization() {
+        // view model
+        viewModel = ViewModelProvider(this).get(FavoriteFilmViewModel::class.java)
+
         // movie
         movieId = intent.getIntExtra(EXTRA_ID, 0)
 
@@ -179,6 +187,15 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetai
             LinearLayoutManager.HORIZONTAL,
             false)
 
+        // set btn favorite
+        runBlocking {
+            isFavorite = viewModel.isMovieExists(movieId)
+        }
+        btnFavorite = findViewById(R.id.btn_favorite_movie_detail)
+        btnFavorite.setImageResource(
+            if (isFavorite) R.drawable.ic_favorite_true else R.drawable.ic_favorite_false)
+
+
         // widgets
         tvTitle = findViewById(R.id.tv_title_movie_detail)
         tvReleaseDate = findViewById(R.id.tv_release_date_movie_detail)
@@ -191,10 +208,46 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetai
         ivImgsPosters = findViewById(R.id.iv_imgs_posters_movie_detail)
         ivImgsBackdrops = findViewById(R.id.iv_imgs_backdrops_movie_detail)
         btnBack = findViewById(R.id.btn_back_movie_detail)
-        btnFavorite = findViewById(R.id.btn_favorite_movie_detail)
         btnHome = findViewById(R.id.btn_home_movie_detail)
         clWrapperSynopsis = findViewById(R.id.cl_wrapper_synopsis_movie_detail)
         pbDetail = findViewById(R.id.pb_movie_detail)
+    }
+
+
+    private fun addMovieToDatabase() {
+        // create favorite movie object
+        val id: Int = movieId
+        val title: String = movie.title ?: "-"
+        val releaseDate: String = movie.releaseDate ?: "-"
+        val posterUrl: String = movie.getPosterUrl(ImageSize.W200)
+        val rating: Float = movie.rating ?: -1F
+        val favoriteMovie = FavoriteMovies(id, title, releaseDate, posterUrl, rating)
+        
+        // insert to database
+        viewModel.addMovie(favoriteMovie)
+
+        // set icon favorite to true and notify the user
+        btnFavorite.setImageResource(R.drawable.ic_favorite_true)
+        Toast.makeText(this, "$title has added to favorites", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun deleteMovieFromDatabase() {
+        // get movie from database
+        lateinit var favoriteMovie: FavoriteMovies
+        runBlocking {
+            favoriteMovie = viewModel.getMovie(movieId)
+        }
+
+        // delete it from database
+        viewModel.deleteMovie(favoriteMovie)
+
+        // set icon favorite to false and notify the user
+        btnFavorite.setImageResource(R.drawable.ic_favorite_false)
+        Toast.makeText(
+            this,
+            "${favoriteMovie.title} has removed from favorites",
+            Toast.LENGTH_SHORT
+        ).show()
     }
 
     private fun loadMovieData() {

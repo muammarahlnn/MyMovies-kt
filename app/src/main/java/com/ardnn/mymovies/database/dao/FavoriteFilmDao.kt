@@ -15,14 +15,14 @@ interface FavoriteFilmDao {
     @Delete
     suspend fun deleteMovie(favoriteMovie: FavoriteMovies)
 
-    @Query("SELECT * FROM favorite_movies")
-    fun getAllMovies(): LiveData<List<FavoriteMovies>>
-
     @Query("SELECT * FROM favorite_movies WHERE id = :id LIMIT 1")
-    fun getMovie(id: Int): FavoriteMovies
+    suspend fun getMovie(id: Int): FavoriteMovies
 
     @Query("SELECT EXISTS (SELECT * FROM favorite_movies WHERE id = :id)")
-    fun isMovieExist(id: Int): Boolean
+    suspend fun isMovieExist(id: Int): Boolean
+
+    @Query("SELECT * FROM favorite_movies")
+    fun getAllMovies(): LiveData<List<FavoriteMovies>>
 
     // favorite tv shows ==================================================
     @Insert(onConflict = OnConflictStrategy.IGNORE)

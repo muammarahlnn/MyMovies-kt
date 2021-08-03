@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.ardnn.mymovies.database.entities.FavoriteMovies
 import com.ardnn.mymovies.database.entities.FavoriteTvShows
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 class FavoriteFilmViewModel(application: Application) : AndroidViewModel(application) {
@@ -28,11 +29,11 @@ class FavoriteFilmViewModel(application: Application) : AndroidViewModel(applica
         }
     }
 
-    fun getMovie(id: Int): FavoriteMovies {
+    suspend fun getMovie(id: Int): FavoriteMovies {
         return repository.getMovie(id)
     }
 
-    fun isMovieExists(id: Int): Boolean {
+    suspend fun isMovieExists(id: Int): Boolean {
         return repository.isMovieExists(id)
     }
 
