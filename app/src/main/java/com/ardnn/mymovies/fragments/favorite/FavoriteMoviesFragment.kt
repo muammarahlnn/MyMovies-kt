@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ardnn.mymovies.R
+import com.ardnn.mymovies.activities.MainActivity
 import com.ardnn.mymovies.activities.MovieDetailActivity
 import com.ardnn.mymovies.adapters.FavoriteMoviesAdapter
 import com.ardnn.mymovies.database.FavoriteFilmViewModel
@@ -57,6 +58,9 @@ class FavoriteMoviesFragment : Fragment(), SingleClickListener<FavoriteMovies> {
     }
 
     override fun onItemClicked(item: FavoriteMovies) {
+        // set nav key
+        MainActivity.setNavKey(4)
+
         // go to movie detail
         val goToMovieDetail = Intent(activity, MovieDetailActivity::class.java)
         goToMovieDetail.putExtra(MovieDetailActivity.EXTRA_ID, item.id)

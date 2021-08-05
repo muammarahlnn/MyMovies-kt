@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.ardnn.mymovies.R
+import com.ardnn.mymovies.activities.MainActivity
 import com.ardnn.mymovies.activities.TvShowDetailActivity
 import com.ardnn.mymovies.adapters.TvShowsPrimaryAdapter
 import com.ardnn.mymovies.api.callbacks.TvShowOutlineCallback
@@ -144,6 +145,9 @@ class AiringTodayFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener,
     }
 
     override fun onItemClicked(item: TvShowOutline) {
+        // set nav key
+        MainActivity.setNavKey(2)
+
         // go to tv show detail
         val goToTvShowDetail = Intent(activity, TvShowDetailActivity::class.java)
         goToTvShowDetail.putExtra(TvShowDetailActivity.EXTRA_ID, item.id)

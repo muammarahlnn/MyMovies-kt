@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ardnn.mymovies.R
+import com.ardnn.mymovies.activities.MainActivity
 import com.ardnn.mymovies.activities.MovieDetailActivity
 import com.ardnn.mymovies.activities.TvShowDetailActivity
 import com.ardnn.mymovies.adapters.FavoriteTvShowsAdapter
@@ -57,6 +58,9 @@ class FavoriteTvShowsFragment : Fragment(), SingleClickListener<FavoriteTvShows>
     }
 
     override fun onItemClicked(item: FavoriteTvShows) {
+        // set nav key
+        MainActivity.setNavKey(4)
+
         // go to tv show detail
         val goToTvShowDetail = Intent(activity, TvShowDetailActivity::class.java)
         goToTvShowDetail.putExtra(TvShowDetailActivity.EXTRA_ID, item.id)

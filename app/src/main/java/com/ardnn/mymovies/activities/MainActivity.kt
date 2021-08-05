@@ -18,7 +18,10 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener {
     companion object {
-        const val EXTRA_NAV_KEY = "extra_nav_key"
+        private var navKey = 0
+        fun setNavKey(navKey: Int) {
+            this.navKey = navKey
+        }
     }
 
     // widgets
@@ -45,10 +48,11 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         bnvMain.setOnNavigationItemSelectedListener(this)
         bnvMain.itemIconTintList = null
 
-        val navKey: Int = intent.getIntExtra(EXTRA_NAV_KEY, 0)
         bnvMain.selectedItemId =  when (navKey) {
             1 -> R.id.item_movies_main
             2 -> R.id.item_tv_shows_main
+            3 -> R.id.item_recent_main
+            4 -> R.id.item_favorite_main
             else -> R.id.item_movies_main
         }
 

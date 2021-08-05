@@ -138,7 +138,6 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetai
             R.id.btn_home_movie_detail -> {
                 // go to home and remove all activity
                 val goToHome = Intent(this, MainActivity::class.java)
-                goToHome.putExtra(MainActivity.EXTRA_NAV_KEY, 1)
                 goToHome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 startActivity(goToHome)
             }
