@@ -1,10 +1,8 @@
 package com.ardnn.mymovies.fragments.favorite
 
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.viewpager2.widget.ViewPager2
 import com.ardnn.mymovies.R
 import com.ardnn.mymovies.adapters.FavoritePagerAdapter
@@ -18,6 +16,11 @@ class FavoriteFragment : Fragment() {
     private lateinit var favoritePagerAdapter: FavoritePagerAdapter
     private lateinit var tlFavorite: TabLayout
     private lateinit var favoritePager: ViewPager2
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,4 +47,11 @@ class FavoriteFragment : Fragment() {
         return view
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+
+        // hide toolbar search item
+        val searchItem: MenuItem = menu.findItem(R.id.toolbar_item_search)
+        searchItem.isVisible = false
+    }
 }
