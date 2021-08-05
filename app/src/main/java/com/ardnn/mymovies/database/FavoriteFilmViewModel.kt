@@ -15,7 +15,7 @@ class FavoriteFilmViewModel(application: Application) : AndroidViewModel(applica
         FavoriteFilmRepository(AppDatabase.getDatabase(application).favoriteFilmDao())
 
     // movies
-    private val favoriteMovieList: LiveData<List<FavoriteMovies>> = repository.favoriteMovieList
+    val favoriteMovieList: LiveData<List<FavoriteMovies>> = repository.favoriteMovieList
 
     fun addMovie(favoriteMovie: FavoriteMovies) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -39,7 +39,7 @@ class FavoriteFilmViewModel(application: Application) : AndroidViewModel(applica
 
 
     // tv shows
-    private val favoriteTvShowList: LiveData<List<FavoriteTvShows>> = repository.favoriteTvShowList
+    val favoriteTvShowList: LiveData<List<FavoriteTvShows>> = repository.favoriteTvShowList
 
     fun addTvShow(favoriteTvShow: FavoriteTvShows) {
         viewModelScope.launch(Dispatchers.IO) {

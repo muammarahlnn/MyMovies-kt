@@ -31,4 +31,6 @@
     <string name="similar_movies">Similar Movies</string>
     <string name="similar_tv_shows">Similar TV Shows</string>
     <string name="recommendations">Recommendations</string>
+    <string name="empty_favorite_movies">You haven\'t favorited\nany Movies yet</string>
+    <string name="empty_favorite_tv_shows">You haven\'t favorited\nany TV Shows yet</string>
 </resources>
