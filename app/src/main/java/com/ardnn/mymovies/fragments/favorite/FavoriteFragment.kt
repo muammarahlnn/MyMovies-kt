@@ -26,8 +26,10 @@ class FavoriteFragment : Fragment() {
 
     // others
     private lateinit var viewModel: FavoriteFilmViewModel
-    private var isFavoriteMovieListEmpty: Boolean = false
-    private var isFavoriteTvShowListEmpty: Boolean = false
+    private val isListsEmpty = booleanArrayOf(
+        false, // favorite movie list
+        false // favorite tv show list
+    )
     private var pos: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,12 +65,12 @@ class FavoriteFragment : Fragment() {
         // check if favorites is empty or not
         viewModel.favoriteMovieList.observe(viewLifecycleOwner, { favoriteMovieList ->
             if (favoriteMovieList.isEmpty()) {
-                isFavoriteMovieListEmpty = true
+                isListsEmpty[0] = true
             }
         })
         viewModel.favoriteTvShowList.observe(viewLifecycleOwner, { favoriteTvShowList ->
             if (favoriteTvShowList.isEmpty()) {
-                isFavoriteTvShowListEmpty = true
+                isListsEmpty[1] = true
             }
         })
 
@@ -95,11 +97,9 @@ class FavoriteFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.toolbar_item_delete) {
             when (pos) {
-                0 -> {
-                    deleteAllFavoriteMovies()
-                }
-                1 -> deleteAllFavoriteTvShows()
-                -1 -> {
+                0 -> deleteAllFavorites(0)
+                1 -> deleteAllFavorites(1)
+                else -> {
                     Toast.makeText(
                         activity,
                         "Can't cleared favorites currently due an error occurred",
@@ -111,54 +111,42 @@ class FavoriteFragment : Fragment() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun deleteAllFavoriteMovies() {
-        // check if favorite movies is already empty
-        if (isFavoriteMovieListEmpty) {
+    private fun deleteAllFavorites(tabPosition: Int) {
+        val flag: Boolean
+        val favoritesType: String
+        if (tabPosition == 0) {
+            flag = isListsEmpty[0]
+            favoritesType = "movies"
+
+        } else {
+            flag = isListsEmpty[1]
+            favoritesType = "tv shows"
+        }
+
+        // check if favorites is already empty
+        if (flag) {
             Toast.makeText(
                 activity,
-                "Your favorite movies is already empty",
+                "Your favorite $favoritesType is already empty",
                 Toast.LENGTH_SHORT
             ).show()
             return
         }
 
         // create an alert
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setMessage("Are you sure want to clear your favorite movies?")
-        builder.setPositiveButton("Yes") { _, _ ->
-            viewModel.deleteAllMovies()
-            Toast.makeText(
-                activity,
-                "Favorite Movies successfully cleared",
-                Toast.LENGTH_SHORT
-            ).show()
-        }
-        builder.setNegativeButton("No", null)
-        builder.create().show()
-    }
+        val alert = AlertDialog.Builder(requireContext())
+        alert.setMessage("Are you sure want to clear your $favoritesType?")
+        alert.setPositiveButton("Yes") { _, _ ->
+            if (tabPosition == 0) viewModel.deleteAllMovies()
+            else viewModel.deleteALlTvShows()
 
-    private fun deleteAllFavoriteTvShows() {
-        // check if favorite tv shows is already empty
-        if (isFavoriteTvShowListEmpty) {
             Toast.makeText(
                 activity,
-                "Your favorite tv shows is already empty",
-                Toast.LENGTH_SHORT
-            ).show()
-            return
-        }
-
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setMessage("Are you sure want to clear your favorite tv shows?")
-        builder.setPositiveButton("Yes") { _, _ ->
-            viewModel.deleteALlTvShows()
-            Toast.makeText(
-                activity,
-                "Favorite TV Shows successfully cleared",
+                "Your favorite $favoritesType successfully cleared",
                 Toast.LENGTH_SHORT
             ).show()
         }
-        builder.setNegativeButton("No", null)
-        builder.create().show()
+        alert.setNegativeButton("No", null)
+        alert.create().show()
     }
 }
