@@ -6,6 +6,7 @@
         <entry key="app/src/main/res/drawable/bg_border_gray.xml" value="0.35833333333333334" />
         <entry key="app/src/main/res/drawable/bg_item_favorite.xml" value="0.35833333333333334" />
         <entry key="app/src/main/res/drawable/bg_vote_item_favorited.xml" value="0.35833333333333334" />
+        <entry key="app/src/main/res/drawable/ic_delete_yellow.xml" value="0.35833333333333334" />
         <entry key="app/src/main/res/layout/fragment_favorite.xml" value="0.3421875" />
         <entry key="app/src/main/res/layout/fragment_favorite_movies.xml" value="0.3421875" />
         <entry key="app/src/main/res/layout/fragment_favorite_tv_shows.xml" value="0.32708333333333334" />
@@ -13,7 +14,9 @@
         <entry key="app/src/main/res/layout/item_rv_favorite.xml" value="0.3421875" />
         <entry key="app/src/main/res/layout/item_rv_films_primary.xml" value="0.3421875" />
         <entry key="app/src/main/res/layout/item_rv_films_secondary.xml" value="0.3421875" />
+        <entry key="app/src/main/res/layout/toolbar_delete.xml" value="0.3421875" />
         <entry key="app/src/main/res/layout/toolbar_main.xml" value="0.3421875" />
+        <entry key="app/src/main/res/menu/item_toolbar_delete.xml" value="0.3421875" />
         <entry key="app/src/main/res/menu/item_toolbar_main.xml" value="0.3421875" />
       </map>
     </option>

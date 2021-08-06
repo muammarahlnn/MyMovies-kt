@@ -28,6 +28,7 @@
         android:textAlignment="center"
         android:textColor='@color/yellow_primary'
         android:textSize="21sp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

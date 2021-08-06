@@ -2,18 +2,14 @@ package com.ardnn.mymovies.fragments.favorite
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ardnn.mymovies.R
 import com.ardnn.mymovies.activities.MainActivity
-import com.ardnn.mymovies.activities.MovieDetailActivity
 import com.ardnn.mymovies.activities.TvShowDetailActivity
 import com.ardnn.mymovies.adapters.FavoriteTvShowsAdapter
 import com.ardnn.mymovies.database.FavoriteFilmViewModel
@@ -29,7 +25,6 @@ class FavoriteTvShowsFragment : Fragment(), SingleClickListener<FavoriteTvShows>
 
     // widgets
     private lateinit var tvEmpty: TextView
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,8 +45,8 @@ class FavoriteTvShowsFragment : Fragment(), SingleClickListener<FavoriteTvShows>
             adapter = FavoriteTvShowsAdapter(favoriteTvShowList, this)
             recyclerView.adapter = adapter
 
-            // check if favorite tv shows is not empty then remove the alert text and vice versa
-            tvEmpty.visibility = if (favoriteTvShowList.isNotEmpty()) View.GONE else View.VISIBLE
+            // check if favorite tv shows is empty then show the alert text and vice versa
+            tvEmpty.visibility = if (favoriteTvShowList.isEmpty()) View.VISIBLE else View.GONE
         })
 
         return view

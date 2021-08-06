@@ -14,7 +14,7 @@ class FavoriteFilmViewModel(application: Application) : AndroidViewModel(applica
     private val repository: FavoriteFilmRepository =
         FavoriteFilmRepository(AppDatabase.getDatabase(application).favoriteFilmDao())
 
-    // movies
+    // movies ==========================================================================
     val favoriteMovieList: LiveData<List<FavoriteMovies>> = repository.favoriteMovieList
 
     fun addMovie(favoriteMovie: FavoriteMovies) {
@@ -29,6 +29,12 @@ class FavoriteFilmViewModel(application: Application) : AndroidViewModel(applica
         }
     }
 
+    fun deleteAllMovies() {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteAllMovies()
+        }
+    }
+
     suspend fun getMovie(id: Int): FavoriteMovies {
         return repository.getMovie(id)
     }
@@ -38,7 +44,7 @@ class FavoriteFilmViewModel(application: Application) : AndroidViewModel(applica
     }
 
 
-    // tv shows
+    // tv shows ===========================================================================
     val favoriteTvShowList: LiveData<List<FavoriteTvShows>> = repository.favoriteTvShowList
 
     fun addTvShow(favoriteTvShow: FavoriteTvShows) {
@@ -50,6 +56,12 @@ class FavoriteFilmViewModel(application: Application) : AndroidViewModel(applica
     fun deleteTvShow(favoriteTvShow: FavoriteTvShows) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.deleteTvShow(favoriteTvShow)
+        }
+    }
+
+    fun deleteALlTvShows() {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteAllTvShows()
         }
     }
 

@@ -6,7 +6,8 @@ import com.ardnn.mymovies.database.entities.FavoriteMovies
 import com.ardnn.mymovies.database.entities.FavoriteTvShows
 
 class FavoriteFilmRepository(private val dao: FavoriteFilmDao) {
-    // favorite movies
+
+    // movies =======================================================
     val favoriteMovieList: LiveData<List<FavoriteMovies>> = dao.getAllMovies()
 
     suspend fun addMovie(favoriteMovie: FavoriteMovies) {
@@ -17,6 +18,10 @@ class FavoriteFilmRepository(private val dao: FavoriteFilmDao) {
         dao.deleteMovie(favoriteMovie)
     }
 
+    suspend fun deleteAllMovies() {
+        dao.deleteAllMovies()
+    }
+
     suspend fun getMovie(id: Int): FavoriteMovies {
         return dao.getMovie(id)
     }
@@ -25,7 +30,7 @@ class FavoriteFilmRepository(private val dao: FavoriteFilmDao) {
         return dao.isMovieExist(id)
     }
 
-    // tv shows
+    // tv shows ==================================================================
     val favoriteTvShowList: LiveData<List<FavoriteTvShows>> = dao.getAllTvShows()
 
     suspend fun addTvShow(favoriteTvShow: FavoriteTvShows) {
@@ -34,6 +39,10 @@ class FavoriteFilmRepository(private val dao: FavoriteFilmDao) {
 
     suspend fun deleteTvShow(favoriteTvShow: FavoriteTvShows) {
         dao.deleteTvShow(favoriteTvShow)
+    }
+
+    suspend fun deleteAllTvShows() {
+        dao.deleteAllTvShows()
     }
 
     suspend fun getTvShow(id: Int): FavoriteTvShows {
