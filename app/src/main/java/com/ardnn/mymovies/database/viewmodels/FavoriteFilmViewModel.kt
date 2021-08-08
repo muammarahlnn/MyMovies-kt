@@ -1,13 +1,14 @@
-package com.ardnn.mymovies.database
+package com.ardnn.mymovies.database.viewmodels
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
+import com.ardnn.mymovies.database.AppDatabase
 import com.ardnn.mymovies.database.entities.FavoriteMovies
 import com.ardnn.mymovies.database.entities.FavoriteTvShows
+import com.ardnn.mymovies.database.repositories.FavoriteFilmRepository
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 class FavoriteFilmViewModel(application: Application) : AndroidViewModel(application) {

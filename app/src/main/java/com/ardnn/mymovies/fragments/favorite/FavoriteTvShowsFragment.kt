@@ -12,7 +12,7 @@ import com.ardnn.mymovies.R
 import com.ardnn.mymovies.activities.MainActivity
 import com.ardnn.mymovies.activities.TvShowDetailActivity
 import com.ardnn.mymovies.adapters.FavoriteTvShowsAdapter
-import com.ardnn.mymovies.database.FavoriteFilmViewModel
+import com.ardnn.mymovies.database.viewmodels.FavoriteFilmViewModel
 import com.ardnn.mymovies.database.entities.FavoriteTvShows
 import com.ardnn.mymovies.listeners.SingleClickListener
 

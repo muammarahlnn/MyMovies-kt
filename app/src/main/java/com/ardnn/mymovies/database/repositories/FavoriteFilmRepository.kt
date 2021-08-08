@@ -1,4 +1,4 @@
-package com.ardnn.mymovies.database
+package com.ardnn.mymovies.database.repositories
 
 import androidx.lifecycle.LiveData
 import com.ardnn.mymovies.database.dao.FavoriteFilmDao

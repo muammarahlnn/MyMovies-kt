@@ -5,15 +5,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black_taskbar"
-    tools:context=".fragments.RecentFragment">
+    android:paddingHorizontal="24dp"
+    tools:context=".fragments.recent.RecentFragment">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_recents"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:itemCount="1"
+        tools:listitem="@layout/item_rv_recents"/>
 
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/tv_empty_recents"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/recent"
-        android:textSize="21sp"
-        android:textColor="@color/yellow_primary"
         android:fontFamily="@font/roboto_medium"
+        android:text="@string/empty_recents"
+        android:textAlignment="center"
+        android:textColor='@color/yellow_primary'
+        android:textSize="21sp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

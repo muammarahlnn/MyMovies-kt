@@ -9,6 +9,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -19,8 +20,10 @@ import com.ardnn.mymovies.adapters.MoviesSecondaryAdapter
 import com.ardnn.mymovies.adapters.VideosAdapter
 import com.ardnn.mymovies.api.callbacks.*
 import com.ardnn.mymovies.api.repositories.MovieRepository
-import com.ardnn.mymovies.database.FavoriteFilmViewModel
+import com.ardnn.mymovies.database.viewmodels.FavoriteFilmViewModel
 import com.ardnn.mymovies.database.entities.FavoriteMovies
+import com.ardnn.mymovies.database.entities.RecentFilms
+import com.ardnn.mymovies.database.viewmodels.RecentFilmViewModel
 import com.ardnn.mymovies.helpers.Utils
 import com.ardnn.mymovies.listeners.FilmDetailClickListener
 import com.ardnn.mymovies.models.*
@@ -57,7 +60,8 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetai
     private lateinit var recommendationsAdapter: MoviesSecondaryAdapter
 
     // view model
-    private lateinit var viewModel: FavoriteFilmViewModel
+    private lateinit var favoriteViewModel: FavoriteFilmViewModel
+    private lateinit var recentViewModel: RecentFilmViewModel
 
     // widgets
     private lateinit var tvTitle: TextView
@@ -79,6 +83,7 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetai
     // variables
     private var isSynopsisExtended: Boolean = false
     private var isFavorite: Boolean = false
+    private var isRecent: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -146,7 +151,8 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetai
 
     private fun initialization() {
         // view model
-        viewModel = ViewModelProvider(this).get(FavoriteFilmViewModel::class.java)
+        favoriteViewModel = ViewModelProvider(this).get(FavoriteFilmViewModel::class.java)
+        recentViewModel = ViewModelProvider(this).get(RecentFilmViewModel::class.java)
 
         // movie
         movieId = intent.getIntExtra(EXTRA_ID, 0)
@@ -188,7 +194,7 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetai
 
         // set btn favorite
         runBlocking {
-            isFavorite = viewModel.isMovieExists(movieId)
+            isFavorite = favoriteViewModel.isMovieExists(movieId)
         }
         btnFavorite = findViewById(R.id.btn_favorite_movie_detail)
         btnFavorite.setImageResource(
@@ -223,7 +229,7 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetai
         val favoriteMovie = FavoriteMovies(id, title, releaseDate, posterUrl, rating)
         
         // insert to database
-        viewModel.addMovie(favoriteMovie)
+        favoriteViewModel.addMovie(favoriteMovie)
 
         // set icon favorite to true and notify the user
         btnFavorite.setImageResource(R.drawable.ic_favorite_true)
@@ -234,11 +240,11 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetai
         // get movie from database
         lateinit var favoriteMovie: FavoriteMovies
         runBlocking {
-            favoriteMovie = viewModel.getMovie(movieId)
+            favoriteMovie = favoriteViewModel.getMovie(movieId)
         }
 
         // delete it from database
-        viewModel.deleteMovie(favoriteMovie)
+        favoriteViewModel.deleteMovie(favoriteMovie)
 
         // set icon favorite to false and notify the user
         btnFavorite.setImageResource(R.drawable.ic_favorite_false)
@@ -247,6 +253,42 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetai
             "${favoriteMovie.title} has removed from favorites",
             Toast.LENGTH_SHORT
         ).show()
+    }
+
+    private fun addToRecents() {
+        // check if already in recent
+        runBlocking {
+            isRecent = recentViewModel.isRecentMovieExists(movieId)
+        }
+
+        // if already in recent then delete it
+        if (isRecent) {
+            lateinit var recentFilm: RecentFilms
+            runBlocking {
+                recentFilm = recentViewModel.getRecentMovie(movieId)
+            }
+            recentViewModel.deleteRecentFilm(recentFilm)
+        }
+
+        // crate recent film object
+        val id = 0
+        val recentId: Int = movieId
+        val title: String = movie.title ?: "-"
+        val releaseDate: String = movie.releaseDate ?: "-"
+        val posterUrl: String = movie.getPosterUrl(ImageSize.W200)
+        val rating: Float = movie.rating ?: -1F
+        val recentFilm = RecentFilms(
+            id,
+            movieId = recentId,
+            title = title,
+            releaseDate = releaseDate,
+            posterUrl = posterUrl,
+            rating = rating,
+        )
+
+        // insert to database
+        recentViewModel.addRecentFilm(recentFilm)
+
     }
 
     private fun loadMovieData() {
@@ -373,6 +415,9 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetai
 
         // remove progress bar
         pbDetail.visibility = View.GONE
+
+        // add to recent films
+        addToRecents()
     }
 
 

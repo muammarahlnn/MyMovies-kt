@@ -11,7 +11,7 @@ import androidx.appcompat.widget.Toolbar
 import com.ardnn.mymovies.R
 import androidx.fragment.app.Fragment
 import com.ardnn.mymovies.fragments.movies.MoviesFragment
-import com.ardnn.mymovies.fragments.RecentFragment
+import com.ardnn.mymovies.fragments.recent.RecentFragment
 import com.ardnn.mymovies.fragments.favorite.FavoriteFragment
 import com.ardnn.mymovies.fragments.tvshows.TvShowsFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView

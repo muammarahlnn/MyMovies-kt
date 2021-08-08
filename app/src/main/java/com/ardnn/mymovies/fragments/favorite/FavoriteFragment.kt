@@ -5,14 +5,11 @@ import android.os.Bundle
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.ardnn.mymovies.R
 import com.ardnn.mymovies.adapters.FavoritePagerAdapter
-import com.ardnn.mymovies.database.FavoriteFilmViewModel
-import com.ardnn.mymovies.database.entities.FavoriteMovies
-import com.ardnn.mymovies.database.entities.FavoriteTvShows
+import com.ardnn.mymovies.database.viewmodels.FavoriteFilmViewModel
 import com.ardnn.mymovies.helpers.Utils
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator

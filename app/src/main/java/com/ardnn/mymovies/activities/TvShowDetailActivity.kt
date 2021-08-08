@@ -19,8 +19,10 @@ import com.ardnn.mymovies.adapters.TvShowsSecondaryAdapter
 import com.ardnn.mymovies.adapters.VideosAdapter
 import com.ardnn.mymovies.api.callbacks.*
 import com.ardnn.mymovies.api.repositories.TvShowRepository
-import com.ardnn.mymovies.database.FavoriteFilmViewModel
+import com.ardnn.mymovies.database.viewmodels.FavoriteFilmViewModel
 import com.ardnn.mymovies.database.entities.FavoriteTvShows
+import com.ardnn.mymovies.database.entities.RecentFilms
+import com.ardnn.mymovies.database.viewmodels.RecentFilmViewModel
 import com.ardnn.mymovies.helpers.Utils
 import com.ardnn.mymovies.listeners.FilmDetailClickListener
 import com.ardnn.mymovies.models.*
@@ -57,7 +59,8 @@ class TvShowDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDeta
     private lateinit var recommendationsAdapter: TvShowsSecondaryAdapter
 
     // view model
-    private lateinit var viewModel: FavoriteFilmViewModel
+    private lateinit var favoriteViewModel: FavoriteFilmViewModel
+    private lateinit var recentViewModel: RecentFilmViewModel
 
     // widgets
     private lateinit var tvTitle: TextView
@@ -82,6 +85,7 @@ class TvShowDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDeta
     // variables
     private var isSynopsisExtended: Boolean = false
     private var isFavorite: Boolean = false
+    private var isRecent: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -149,7 +153,8 @@ class TvShowDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDeta
 
     private fun initialization() {
         // view model
-        viewModel = ViewModelProvider(this).get(FavoriteFilmViewModel::class.java)
+        favoriteViewModel = ViewModelProvider(this).get(FavoriteFilmViewModel::class.java)
+        recentViewModel = ViewModelProvider(this).get(RecentFilmViewModel::class.java)
 
         // tv show
         tvShowId = intent.getIntExtra(EXTRA_ID, 0)
@@ -191,7 +196,7 @@ class TvShowDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDeta
 
         // set btn favorite
         runBlocking {
-            isFavorite = viewModel.isTvShowExists(tvShowId)
+            isFavorite = favoriteViewModel.isTvShowExists(tvShowId)
         }
         btnFavorite = findViewById(R.id.btn_favorite_tv_show_detail)
         btnFavorite.setImageResource(
@@ -227,7 +232,7 @@ class TvShowDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDeta
         val favoriteTvShow = FavoriteTvShows(id, title, releaseDate, posterUrl, rating)
 
         // insert to database
-        viewModel.addTvShow(favoriteTvShow)
+        favoriteViewModel.addTvShow(favoriteTvShow)
 
         // set icon favorite to true and notify the user
         btnFavorite.setImageResource(R.drawable.ic_favorite_true)
@@ -238,11 +243,11 @@ class TvShowDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDeta
         // get tv show from database
         lateinit var favoriteTvShow: FavoriteTvShows
         runBlocking {
-            favoriteTvShow = viewModel.getTvShow(tvShowId)
+            favoriteTvShow = favoriteViewModel.getTvShow(tvShowId)
         }
 
         // delete it from database
-        viewModel.deleteTvShow(favoriteTvShow)
+        favoriteViewModel.deleteTvShow(favoriteTvShow)
 
         // set icon favorite to false and notify the user
         btnFavorite.setImageResource(R.drawable.ic_favorite_false)
@@ -251,6 +256,41 @@ class TvShowDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDeta
             "${favoriteTvShow.title} has removed from favorites",
             Toast.LENGTH_SHORT
         ).show()
+    }
+
+    private fun addToRecents() {
+        // check if already in recent
+        runBlocking {
+            isRecent = recentViewModel.isRecentTvShowExists(tvShowId)
+        }
+
+        // if already in recent then delete it
+        if (isRecent) {
+            lateinit var recentFilm: RecentFilms
+            runBlocking {
+                recentFilm = recentViewModel.getRecentTvShow(tvShowId)
+            }
+            recentViewModel.deleteRecentFilm(recentFilm)
+        }
+
+        // create recent film object
+        val id = 0
+        val recentId: Int = tvShowId
+        val title: String = tvShow.title ?: "-"
+        val releaseDate: String = tvShow.firstAirDate ?: "-"
+        val posterUrl: String = tvShow.getPosterUrl(ImageSize.W200)
+        val rating: Float = tvShow.rating ?: -1F
+        val recentFilms = RecentFilms(
+            id,
+            tvShowId = recentId,
+            title = title,
+            releaseDate = releaseDate,
+            posterUrl = posterUrl,
+            rating = rating
+        )
+
+        // insert to database
+        recentViewModel.addRecentFilm(recentFilms)
     }
 
     private fun loadTvShowData() {
@@ -332,7 +372,7 @@ class TvShowDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDeta
             }
 
             override fun onFailure(message: String) {
-                TODO("Not yet implemented")
+                Toast.makeText(this@TvShowDetailActivity, message, Toast.LENGTH_SHORT).show()
             }
 
         })
@@ -383,6 +423,9 @@ class TvShowDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDeta
 
         // remove progress bar
         pbDetail.visibility = View.GONE
+
+        // add to recent films
+        addToRecents()
 
     }
     override fun onGenreClicked(genre: Genre) {
