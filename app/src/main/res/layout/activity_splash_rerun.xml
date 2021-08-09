@@ -9,7 +9,7 @@
         android:id="@+id/iv_movies_splash"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:src="@drawable/ic_movies_yellow"
+        android:src="@drawable/ic_logo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
