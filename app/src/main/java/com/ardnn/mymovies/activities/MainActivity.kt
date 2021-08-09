@@ -8,6 +8,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import com.ardnn.mymovies.R
 import androidx.fragment.app.Fragment
@@ -17,6 +18,7 @@ import com.ardnn.mymovies.fragments.favorite.FavoriteFragment
 import com.ardnn.mymovies.fragments.tvshows.TvShowsFragment
 import com.ardnn.mymovies.helpers.AppEndedService
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.android.synthetic.main.activity_images_detail.*
 
 class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener {
     companion object {
@@ -31,6 +33,10 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
     private lateinit var tvSection: TextView
     private lateinit var ivIcon: ImageView
     private lateinit var bnvMain: BottomNavigationView
+
+    // vars
+    private val TIME_INTERVAL = 2000
+    private var timeBackPressed: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -106,6 +112,16 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         }
 
         return false
+    }
+
+    override fun onBackPressed() {
+        if (timeBackPressed + TIME_INTERVAL > System.currentTimeMillis()) {
+            super.onBackPressed()
+            return
+        } else {
+            Toast.makeText(this, "Press back button again to exit", Toast.LENGTH_SHORT).show()
+        }
+        timeBackPressed = System.currentTimeMillis()
     }
 
 }
