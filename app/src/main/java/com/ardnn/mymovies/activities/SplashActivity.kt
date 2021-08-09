@@ -5,32 +5,53 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import com.ardnn.mymovies.R
 import com.ardnn.mymovies.helpers.Animation
+import com.ardnn.mymovies.helpers.AppEndedService
+import com.ardnn.mymovies.helpers.Utils
 
 class SplashActivity : AppCompatActivity() {
 
-    // widgets
-    private lateinit var tvTitle: TextView
-    private lateinit var ivMovies: ImageView
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_splash)
 
-        // initialization\
-        ivMovies = findViewById(R.id.iv_movies_splash)
-        tvTitle = findViewById(R.id.tv_title_splash)
+        // start service if app is ended
+        val appEndedService = Intent(this@SplashActivity, AppEndedService::class.java)
+        startService(appEndedService)
 
-        // set timer for 2 seconds
+        // check if first run or not
+        val isRerun: Boolean = Utils.getRerunFlag(this)
+        if (!isRerun) { // first run app
+
+            // set the rerun flag to true
+            Utils.saveRerunFlag(this, true)
+
+            // set content
+            setContentView(R.layout.activity_splash)
+
+            // go to main
+            delayIntentToMain(1200)
+        } else { // re run app
+            // set content
+            setContentView(R.layout.activity_splash_rerun)
+
+            // go to main
+            delayIntentToMain(120)
+        }
+
+    }
+
+    private fun delayIntentToMain(duration: Long) {
         Handler(Looper.getMainLooper()).postDelayed({
+            // go to main activity
             val goToMain = Intent(this@SplashActivity, MainActivity::class.java)
             startActivity(goToMain)
             overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
             finish()
-        }, 2000)
+        }, duration)
     }
 }

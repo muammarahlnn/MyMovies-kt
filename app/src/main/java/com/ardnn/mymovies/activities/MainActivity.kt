@@ -1,5 +1,6 @@
 package com.ardnn.mymovies.activities
 
+import android.content.Intent
 import android.graphics.Rect
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -14,6 +15,7 @@ import com.ardnn.mymovies.fragments.movies.MoviesFragment
 import com.ardnn.mymovies.fragments.recent.RecentFragment
 import com.ardnn.mymovies.fragments.favorite.FavoriteFragment
 import com.ardnn.mymovies.fragments.tvshows.TvShowsFragment
+import com.ardnn.mymovies.helpers.AppEndedService
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener {

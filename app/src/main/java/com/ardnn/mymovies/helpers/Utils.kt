@@ -13,6 +13,22 @@ import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.tabs.TabLayout
 
 object Utils {
+    private const val SHARED_PREFERENCES = "shared_preferences"
+    private const val RERUN_KEY = "rerun_key"
+
+    fun saveRerunFlag(context: Context, flag: Boolean) {
+        val pref = context.getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE)
+        val editor = pref.edit()
+
+        editor.putBoolean(RERUN_KEY, flag)
+        editor.apply()
+    }
+
+    fun getRerunFlag(context: Context): Boolean {
+        val pref = context.getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE)
+        return pref.getBoolean(RERUN_KEY, false)
+    }
+
     fun convertToDate(date: String?): String {
         if (date == null || date == "") return "-"
 

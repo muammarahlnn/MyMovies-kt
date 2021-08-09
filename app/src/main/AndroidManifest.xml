@@ -42,6 +42,13 @@
             android:name=".activities.MainActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
+
+        <service
+            android:name=".helpers.AppEndedService"
+            android:enabled="true"
+            android:exported="false"
+            android:stopWithTask="false" />
+
     </application>
 
 </manifest>

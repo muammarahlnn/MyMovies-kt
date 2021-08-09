@@ -10,6 +10,8 @@
         <entry key="app/src/main/res/drawable/bg_vote_item_films.xml" value="0.20052083333333334" />
         <entry key="app/src/main/res/drawable/ic_close_yellow.xml" value="0.20052083333333334" />
         <entry key="app/src/main/res/drawable/ic_delete_yellow.xml" value="0.35833333333333334" />
+        <entry key="app/src/main/res/layout/activity_splash.xml" value="0.3421875" />
+        <entry key="app/src/main/res/layout/activity_splash_rerun.xml" value="0.3421875" />
         <entry key="app/src/main/res/layout/fragment_favorite.xml" value="0.3421875" />
         <entry key="app/src/main/res/layout/fragment_favorite_movies.xml" value="0.3421875" />
         <entry key="app/src/main/res/layout/fragment_favorite_tv_shows.xml" value="0.32708333333333334" />
