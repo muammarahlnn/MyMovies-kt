@@ -428,9 +428,7 @@ class TvShowDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDeta
         addToRecents()
 
     }
-    override fun onGenreClicked(genre: Genre) {
-        Toast.makeText(this, genre.name, Toast.LENGTH_SHORT).show()
-    }
+    override fun onGenreClicked(genre: Genre) {}
 
     override fun onCastClicked(cast: Cast) {
         // go to person detail

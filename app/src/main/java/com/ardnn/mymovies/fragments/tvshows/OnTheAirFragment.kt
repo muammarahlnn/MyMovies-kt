@@ -102,9 +102,7 @@ class OnTheAirFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener,
                 swipeRefresh.isRefreshing = false
             }
 
-            override fun onFailure(message: String) {
-                Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
-            }
+            override fun onFailure(message: String) {}
 
         })
     }

@@ -421,9 +421,7 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetai
     }
 
 
-    override fun onGenreClicked(genre: Genre) {
-        Toast.makeText(this@MovieDetailActivity, genre.name, Toast.LENGTH_SHORT).show()
-    }
+    override fun onGenreClicked(genre: Genre) {}
 
     override fun onCastClicked(cast: Cast) {
         // go to person detail
