@@ -1,24 +1,22 @@
 package com.ardnn.mymovies.activities
 
-import android.content.Intent
 import android.graphics.Rect
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import com.ardnn.mymovies.R
 import androidx.fragment.app.Fragment
+import com.ardnn.mymovies.R
+import com.ardnn.mymovies.databinding.ActivityMainBinding
+import com.ardnn.mymovies.fragments.favorite.FavoriteFragment
 import com.ardnn.mymovies.fragments.movies.MoviesFragment
 import com.ardnn.mymovies.fragments.recent.RecentFragment
-import com.ardnn.mymovies.fragments.favorite.FavoriteFragment
 import com.ardnn.mymovies.fragments.tvshows.TvShowsFragment
-import com.ardnn.mymovies.helpers.AppEndedService
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import kotlinx.android.synthetic.main.activity_images_detail.*
 
 class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener {
     companion object {
@@ -28,11 +26,13 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         }
     }
 
-    // widgets
+    // view binding
+    private lateinit var binding: ActivityMainBinding
+
+    // toolbar
     private lateinit var toolbar: Toolbar
     private lateinit var tvSection: TextView
     private lateinit var ivIcon: ImageView
-    private lateinit var bnvMain: BottomNavigationView
 
     // vars
     private val TIME_INTERVAL = 2000
@@ -40,19 +40,21 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         // initialize widgets
         toolbar = findViewById(R.id.toolbar_main)
         tvSection = findViewById(R.id.tv_section_toolbar)
         ivIcon = findViewById(R.id.iv_icon_toolbar)
 
+
         // set action bar
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
         // set bottom navigation view
-        bnvMain = findViewById(R.id.bnv_navigation_main)
+        val bnvMain = binding.bnvNavigationMain
         bnvMain.setOnNavigationItemSelectedListener(this)
         bnvMain.itemIconTintList = null
 

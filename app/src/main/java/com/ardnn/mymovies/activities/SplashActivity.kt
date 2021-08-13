@@ -1,16 +1,11 @@
 package com.ardnn.mymovies.activities
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.ardnn.mymovies.R
-import com.ardnn.mymovies.helpers.Animation
 import com.ardnn.mymovies.helpers.AppEndedService
 import com.ardnn.mymovies.helpers.Utils
 

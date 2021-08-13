@@ -5,10 +5,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.ardnn.mymovies.R
+import com.ardnn.mymovies.databinding.ItemRvFilmsPrimaryBinding
 import com.ardnn.mymovies.helpers.Utils
 import com.ardnn.mymovies.listeners.SingleClickListener
 import com.ardnn.mymovies.models.ImageSize
@@ -47,37 +46,33 @@ class MoviesPrimaryAdapter(
         return movieList.size
     }
 
-    inner class ViewHolder(itemView: View, clickListener: SingleClickListener<MovieOutline>) : RecyclerView.ViewHolder(itemView) {
-        private val ivPoster: ImageView
-        private val tvTitle: TextView
-        private val tvYear: TextView
-        private val tvVote: TextView
+    inner class ViewHolder(itemView: View, clickListener: SingleClickListener<MovieOutline>)
+        : RecyclerView.ViewHolder(itemView) {
+        private val binding = ItemRvFilmsPrimaryBinding.bind(itemView)
 
         init {
             itemView.setOnClickListener {
                 clickListener.onItemClicked(movieList[absoluteAdapterPosition])
             }
-            ivPoster = itemView.findViewById(R.id.iv_poster_item_films_primary)
-            tvTitle = itemView.findViewById(R.id.tv_title_item_films_primary)
-            tvYear = itemView.findViewById(R.id.tv_year_item_films_primary)
-            tvVote = itemView.findViewById(R.id.tv_vote_item_films_primary)
         }
 
         fun onBind(movieOutline: MovieOutline) {
-            // set data to widgets
-            if (movieOutline.posterUrl != null || movieOutline.posterUrl == "") {
-                Utils.setImageGlide(
-                    itemView.context,
-                    movieOutline.getPosterUrl(ImageSize.W342),
-                    ivPoster)
-            } else {
-                ivPoster.setImageResource(R.drawable.img_placeholder)
+            with (binding) {
+                // set data to widgets
+                if (movieOutline.posterUrl != null || movieOutline.posterUrl == "") {
+                    Utils.setImageGlide(
+                        itemView.context,
+                        movieOutline.getPosterUrl(ImageSize.W342),
+                        ivPosterItemFilmsPrimary)
+                } else {
+                    ivPosterItemFilmsPrimary.setImageResource(R.drawable.img_placeholder)
+                }
+                tvTitleItemFilmsPrimary.text = movieOutline.title ?: "-"
+                tvYearItemFilmsPrimary.text =
+                    if (movieOutline.releaseDate == null || movieOutline.releaseDate == "") "-"
+                    else movieOutline.releaseDate.substring(0, 4)
+                tvVoteItemFilmsPrimary.text = movieOutline.rating?.toString() ?: "-"
             }
-            tvTitle.text = movieOutline.title ?: "-"
-            tvYear.text =
-                if (movieOutline.releaseDate == null || movieOutline.releaseDate == "") "-"
-                else movieOutline.releaseDate.substring(0, 4)
-            tvVote.text = movieOutline.rating?.toString() ?: "-"
         }
     }
 

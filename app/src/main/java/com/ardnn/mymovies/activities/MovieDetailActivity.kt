@@ -1,18 +1,12 @@
 package com.ardnn.mymovies.activities
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.ImageView
-import android.widget.ProgressBar
-import android.widget.TextView
 import android.widget.Toast
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.lifecycle.ViewModel
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.ardnn.mymovies.R
 import com.ardnn.mymovies.adapters.CastsAdapter
 import com.ardnn.mymovies.adapters.GenresAdapter
@@ -20,14 +14,14 @@ import com.ardnn.mymovies.adapters.MoviesSecondaryAdapter
 import com.ardnn.mymovies.adapters.VideosAdapter
 import com.ardnn.mymovies.api.callbacks.*
 import com.ardnn.mymovies.api.repositories.MovieRepository
-import com.ardnn.mymovies.database.viewmodels.FavoriteFilmViewModel
 import com.ardnn.mymovies.database.entities.FavoriteMovies
 import com.ardnn.mymovies.database.entities.RecentFilms
+import com.ardnn.mymovies.database.viewmodels.FavoriteFilmViewModel
 import com.ardnn.mymovies.database.viewmodels.RecentFilmViewModel
+import com.ardnn.mymovies.databinding.ActivityMovieDetailBinding
 import com.ardnn.mymovies.helpers.Utils
 import com.ardnn.mymovies.listeners.FilmDetailClickListener
 import com.ardnn.mymovies.models.*
-import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.runBlocking
 
 class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetailClickListener {
@@ -35,50 +29,24 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetai
         const val EXTRA_ID = "extra_id"
     }
 
-    // movie
-    private lateinit var movie: Movie
-    private var movieId: Int = 0
-
-    // genres
-    private lateinit var rvGenres: RecyclerView
-    private lateinit var genresAdapter: GenresAdapter
-
-    // casts
-    private lateinit var rvCasts: RecyclerView
-    private lateinit var castsAdapter: CastsAdapter
-
-    // videos
-    private lateinit var rvVideos: RecyclerView
-    private lateinit var videosAdapter: VideosAdapter
-
-    // similar movies
-    private lateinit var rvSimilar: RecyclerView
-    private lateinit var similarAdapter: MoviesSecondaryAdapter
-
-    // recommendations
-    private lateinit var rvRecommendations: RecyclerView
-    private lateinit var recommendationsAdapter: MoviesSecondaryAdapter
-
     // view model
     private lateinit var favoriteViewModel: FavoriteFilmViewModel
     private lateinit var recentViewModel: RecentFilmViewModel
 
-    // widgets
-    private lateinit var tvTitle: TextView
-    private lateinit var tvReleaseDate: TextView
-    private lateinit var tvRuntime: TextView
-    private lateinit var tvRating: TextView
-    private lateinit var tvSynopsis: TextView
-    private lateinit var tvMore: TextView
-    private lateinit var ivWallpaper: ImageView
-    private lateinit var ivPoster: ImageView
-    private lateinit var ivImgsPosters: ImageView
-    private lateinit var ivImgsBackdrops: ImageView
-    private lateinit var btnBack: ImageView
-    private lateinit var btnFavorite: ImageView
-    private lateinit var btnHome: MaterialButton
-    private lateinit var pbDetail: ProgressBar
-    private lateinit var clWrapperSynopsis: ConstraintLayout
+    // view binding
+    private lateinit var binding: ActivityMovieDetailBinding
+
+    // movie
+    private lateinit var movie: Movie
+    private var movieId: Int = 0
+
+    // adapters
+    private lateinit var genresAdapter: GenresAdapter
+    private lateinit var castsAdapter: CastsAdapter
+    private lateinit var videosAdapter: VideosAdapter
+    private lateinit var similarAdapter: MoviesSecondaryAdapter
+    private lateinit var recommendationsAdapter: MoviesSecondaryAdapter
+
 
     // variables
     private var isSynopsisExtended: Boolean = false
@@ -87,7 +55,8 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetai
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_movie_detail)
+        binding = ActivityMovieDetailBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         // initialization
         initialization()
@@ -96,12 +65,12 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetai
         loadMovieData()
 
         // if button clicked
-        btnBack.setOnClickListener(this)
-        btnFavorite.setOnClickListener(this)
-        btnHome.setOnClickListener(this)
-        clWrapperSynopsis.setOnClickListener(this)
-        ivImgsPosters.setOnClickListener(this)
-        ivImgsBackdrops.setOnClickListener(this)
+        binding.btnBackMovieDetail.setOnClickListener(this)
+        binding.btnFavoriteMovieDetail.setOnClickListener(this)
+        binding.btnHomeMovieDetail.setOnClickListener(this)
+        binding.clWrapperSynopsisMovieDetail.setOnClickListener(this)
+        binding.ivImgsPostersMovieDetail.setOnClickListener(this)
+        binding.ivImgsBackdropsMovieDetail.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
@@ -125,11 +94,11 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetai
             R.id.cl_wrapper_synopsis_movie_detail -> {
                 isSynopsisExtended = !isSynopsisExtended
                 if (isSynopsisExtended) {
-                    tvSynopsis.maxLines = Int.MAX_VALUE
-                    tvMore.text = "less"
+                    binding.tvSynopsisMovieDetail.maxLines = Int.MAX_VALUE
+                    binding.tvMoreMovieDetail.text = "less"
                 } else {
-                    tvSynopsis.maxLines = 2
-                    tvMore.text = "more"
+                    binding.tvSynopsisMovieDetail.maxLines = 2
+                    binding.tvMoreMovieDetail.text = "more"
                 }
             }
             R.id.iv_imgs_posters_movie_detail -> {
@@ -158,36 +127,31 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetai
         movieId = intent.getIntExtra(EXTRA_ID, 0)
 
         // genres
-        rvGenres = findViewById(R.id.rv_genre_movie_detail)
-        rvGenres.layoutManager = LinearLayoutManager(
+        binding.rvGenreMovieDetail.layoutManager = LinearLayoutManager(
             this,
             LinearLayoutManager.HORIZONTAL,
             false)
 
         // casts
-        rvCasts = findViewById(R.id.rv_casts_movie_detail)
-        rvCasts.layoutManager = LinearLayoutManager(
+        binding.rvCastsMovieDetail.layoutManager = LinearLayoutManager(
             this,
             LinearLayoutManager.HORIZONTAL,
             false)
 
         // videos
-        rvVideos = findViewById(R.id.rv_videos_movie_detail)
-        rvVideos.layoutManager = LinearLayoutManager(
+        binding.rvVideosMovieDetail.layoutManager = LinearLayoutManager(
             this,
             LinearLayoutManager.HORIZONTAL,
             false)
 
         // similar movies
-        rvSimilar = findViewById(R.id.rv_similar_movies)
-        rvSimilar.layoutManager = LinearLayoutManager(
+        binding.rvSimilarMovies.layoutManager = LinearLayoutManager(
             this,
             LinearLayoutManager.HORIZONTAL,
             false)
 
         // recommendations
-        rvRecommendations = findViewById(R.id.rv_recommendations_movie_detail)
-        rvRecommendations.layoutManager = LinearLayoutManager(
+        binding.rvRecommendationsMovieDetail.layoutManager = LinearLayoutManager(
             this,
             LinearLayoutManager.HORIZONTAL,
             false)
@@ -196,26 +160,8 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetai
         runBlocking {
             isFavorite = favoriteViewModel.isMovieExists(movieId)
         }
-        btnFavorite = findViewById(R.id.btn_favorite_movie_detail)
-        btnFavorite.setImageResource(
+        binding.btnFavoriteMovieDetail.setImageResource(
             if (isFavorite) R.drawable.ic_favorite_true else R.drawable.ic_favorite_false)
-
-
-        // widgets
-        tvTitle = findViewById(R.id.tv_title_movie_detail)
-        tvReleaseDate = findViewById(R.id.tv_release_date_movie_detail)
-        tvRuntime = findViewById(R.id.tv_runtime_movie_detail)
-        tvRating = findViewById(R.id.tv_rating_movie_detail)
-        tvSynopsis = findViewById(R.id.tv_synopsis_movie_detail)
-        tvMore = findViewById(R.id.tv_more_movie_detail)
-        ivWallpaper = findViewById(R.id.iv_wallpaper_movie_detail)
-        ivPoster = findViewById(R.id.iv_poster_movie_detail)
-        ivImgsPosters = findViewById(R.id.iv_imgs_posters_movie_detail)
-        ivImgsBackdrops = findViewById(R.id.iv_imgs_backdrops_movie_detail)
-        btnBack = findViewById(R.id.btn_back_movie_detail)
-        btnHome = findViewById(R.id.btn_home_movie_detail)
-        clWrapperSynopsis = findViewById(R.id.cl_wrapper_synopsis_movie_detail)
-        pbDetail = findViewById(R.id.pb_movie_detail)
     }
 
 
@@ -232,7 +178,7 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetai
         favoriteViewModel.addMovie(favoriteMovie)
 
         // set icon favorite to true and notify the user
-        btnFavorite.setImageResource(R.drawable.ic_favorite_true)
+        binding.btnFavoriteMovieDetail.setImageResource(R.drawable.ic_favorite_true)
         Toast.makeText(this, "$title has added to favorites", Toast.LENGTH_SHORT).show()
     }
 
@@ -247,7 +193,7 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetai
         favoriteViewModel.deleteMovie(favoriteMovie)
 
         // set icon favorite to false and notify the user
-        btnFavorite.setImageResource(R.drawable.ic_favorite_false)
+        binding.btnFavoriteMovieDetail.setImageResource(R.drawable.ic_favorite_false)
         Toast.makeText(
             this,
             "${favoriteMovie.title} has removed from favorites",
@@ -319,7 +265,7 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetai
             override fun onSuccess(castList: List<Cast>) {
                 // setup recyclerview casts
                 castsAdapter = CastsAdapter(castList, this@MovieDetailActivity)
-                rvCasts.adapter = castsAdapter
+                binding.rvCastsMovieDetail.adapter = castsAdapter
             }
 
             override fun onFailure(message: String) {
@@ -335,7 +281,7 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetai
             override fun onSuccess(videoList: List<Video>) {
                 // setup recyclerview videos
                 videosAdapter = VideosAdapter(videoList, this@MovieDetailActivity)
-                rvVideos.adapter = videosAdapter
+                binding.rvVideosMovieDetail.adapter = videosAdapter
             }
 
             override fun onFailure(message: String) {
@@ -351,7 +297,7 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetai
                 // setup recyclerview similar movies
                 similarAdapter = MoviesSecondaryAdapter(movieOutlineList)
                 similarAdapter.setFilmClickListener(this@MovieDetailActivity)
-                rvSimilar.adapter = similarAdapter
+                binding.rvSimilarMovies.adapter = similarAdapter
             }
 
             override fun onFailure(message: String) {
@@ -367,7 +313,7 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetai
                 // setup recyclerview recommendations
                 recommendationsAdapter = MoviesSecondaryAdapter(movieOutlineList)
                 recommendationsAdapter.setFilmClickListener(this@MovieDetailActivity)
-                rvRecommendations.adapter = recommendationsAdapter
+                binding.rvRecommendationsMovieDetail.adapter = recommendationsAdapter
             }
 
             override fun onFailure(message: String) {
@@ -379,42 +325,42 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetai
 
     private fun setDataToWidgets() {
         // set to widgets
-        tvTitle.text = movie.title ?: "-"
-        tvReleaseDate.text =
+        binding.tvTitleMovieDetail.text = movie.title ?: "-"
+        binding.tvReleaseDateMovieDetail.text =
             if (movie.releaseDate != null)
                 Utils.convertToDate(movie.releaseDate)
             else
                 "-"
-        tvRuntime.text =
+        binding.tvRuntimeMovieDetail.text =
             if (movie.runtime != null)
                 "${movie.runtime} mins"
             else
                 "-"
-        tvRating.text = (movie.rating ?: "-").toString()
-        tvSynopsis.text = movie.overview ?: "-"
+        binding.tvRatingMovieDetail.text = (movie.rating ?: "-").toString()
+        binding.tvSynopsisMovieDetail.text = movie.overview ?: "-"
         Utils.setImageGlide(
             this,
             movie.getWallpaperUrl(ImageSize.W780),
-            ivWallpaper, true)
+            binding.ivWallpaperMovieDetail, true)
         Utils.setImageGlide(
             this,
             movie.getPosterUrl(ImageSize.W342),
-            ivPoster, true)
+            binding.ivPosterMovieDetail, true)
         Utils.setImageGlide(
             this,
             movie.getPosterUrl(ImageSize.W200),
-            ivImgsPosters, true)
+            binding.ivImgsPostersMovieDetail, true)
         Utils.setImageGlide(
             this,
             movie.getWallpaperUrl(ImageSize.W500),
-            ivImgsBackdrops, true)
+            binding.ivImgsBackdropsMovieDetail, true)
 
         // set rv genres
         genresAdapter = GenresAdapter(movie.genreList, this@MovieDetailActivity)
-        rvGenres.adapter = genresAdapter
+        binding.rvGenreMovieDetail.adapter = genresAdapter
 
         // remove progress bar
-        pbDetail.visibility = View.GONE
+        binding.pbMovieDetail.visibility = View.GONE
 
         // add to recent films
         addToRecents()

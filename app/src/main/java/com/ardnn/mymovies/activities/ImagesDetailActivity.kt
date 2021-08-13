@@ -1,19 +1,16 @@
 package com.ardnn.mymovies.activities
 
 import android.content.pm.ActivityInfo
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
-import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
-import com.ardnn.mymovies.R
 import com.ardnn.mymovies.adapters.ImagesPagerAdapter
 import com.ardnn.mymovies.api.callbacks.ImagesCallback
 import com.ardnn.mymovies.api.repositories.MovieRepository
 import com.ardnn.mymovies.api.repositories.TvShowRepository
+import com.ardnn.mymovies.databinding.ActivityImagesDetailBinding
 import com.ardnn.mymovies.listeners.SingleClickListener
 import com.ardnn.mymovies.models.Image
 
@@ -28,15 +25,11 @@ class ImagesDetailActivity : AppCompatActivity(), SingleClickListener<Image> {
         const val BACKDROPS = "backdrops"
     }
 
-    // viewpager attr
-    private lateinit var imagesPager: ViewPager2
-    private lateinit var imagesPagerAdapter: ImagesPagerAdapter
+    // view binding
+    private lateinit var binding: ActivityImagesDetailBinding
 
-    // widgets
-    private lateinit var clToolbar: ConstraintLayout
-    private lateinit var btnBack: ImageView
-    private lateinit var tvCurrentImage: TextView
-    private lateinit var tvTotalImage: TextView
+    // adapters
+    private lateinit var imagesPagerAdapter: ImagesPagerAdapter
 
     // variables
     private var filmId: Int = 0
@@ -46,17 +39,13 @@ class ImagesDetailActivity : AppCompatActivity(), SingleClickListener<Image> {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_images_detail)
+        binding = ActivityImagesDetailBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         // initialization
         filmId = intent.getIntExtra(EXTRA_ID, 0)
         activityKey = intent.getStringExtra(EXTRA_ACTIVITY_KEY) ?: ""
         imagesKey = intent.getStringExtra(EXTRA_IMAGES_KEY) ?: ""
-        imagesPager = findViewById(R.id.vp2_images_detail)
-        clToolbar = findViewById(R.id.cl_toolbar_images_detail)
-        btnBack = findViewById(R.id.btn_back_images_detail)
-        tvCurrentImage = findViewById(R.id.tv_current_image)
-        tvTotalImage = findViewById(R.id.tv_total_image)
 
         // set screen orientation
         if (imagesKey == POSTERS) {
@@ -69,15 +58,15 @@ class ImagesDetailActivity : AppCompatActivity(), SingleClickListener<Image> {
         loadImagesData()
 
         // if viewpager item change
-        imagesPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+        binding.vp2ImagesDetail.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                tvCurrentImage.text = (position + 1).toString()
+                binding.tvCurrentImage.text = (position + 1).toString()
             }
         })
 
         // if widget clicked
-        btnBack.setOnClickListener {
+        binding.btnBackImagesDetail.setOnClickListener {
             finish()
         }
 
@@ -102,7 +91,10 @@ class ImagesDetailActivity : AppCompatActivity(), SingleClickListener<Image> {
             }
 
             override fun onFailure(message: String) {
-                Toast.makeText(this@ImagesDetailActivity, message, Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@ImagesDetailActivity,
+                    message,
+                    Toast.LENGTH_SHORT
+                ).show()
             }
 
         })
@@ -119,7 +111,11 @@ class ImagesDetailActivity : AppCompatActivity(), SingleClickListener<Image> {
             }
 
             override fun onFailure(message: String) {
-                Toast.makeText(this@ImagesDetailActivity, message, Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this@ImagesDetailActivity,
+                    message,
+                    Toast.LENGTH_SHORT
+                ).show()
             }
 
         })
@@ -152,17 +148,18 @@ class ImagesDetailActivity : AppCompatActivity(), SingleClickListener<Image> {
     private fun setDataToWidgets(imageList: List<Image>) {
         // viewpager
         imagesPagerAdapter = ImagesPagerAdapter(imageList, this)
-        imagesPager.adapter = imagesPagerAdapter
-        imagesPager.currentItem = 0
+        binding.vp2ImagesDetail.adapter = imagesPagerAdapter
+        binding.vp2ImagesDetail.currentItem = 0
 
         // widgets
-        tvCurrentImage.text = "1"
-        tvTotalImage.text = imageList.size.toString()
+        binding.tvCurrentImage.text = "1"
+        binding.tvTotalImage.text = imageList.size.toString()
     }
 
     override fun onItemClicked(item: Image) {
         isToolbarActive = !isToolbarActive
-        clToolbar.visibility = if (isToolbarActive) View.VISIBLE else View.GONE
+        binding.clToolbarImagesDetail.visibility =
+            if (isToolbarActive) View.VISIBLE else View.GONE
     }
 
 }

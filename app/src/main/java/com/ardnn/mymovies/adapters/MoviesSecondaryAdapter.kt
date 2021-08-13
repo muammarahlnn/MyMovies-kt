@@ -3,10 +3,9 @@ package com.ardnn.mymovies.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.ardnn.mymovies.R
+import com.ardnn.mymovies.databinding.ItemRvFilmsSecondaryBinding
 import com.ardnn.mymovies.helpers.Utils
 import com.ardnn.mymovies.listeners.FilmDetailClickListener
 import com.ardnn.mymovies.listeners.PersonDetailClickListener
@@ -53,29 +52,28 @@ class MoviesSecondaryAdapter(
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val ivPoster: ImageView = itemView.findViewById(R.id.iv_poster_item_films_secondary)
-        private val tvTitle: TextView = itemView.findViewById(R.id.tv_title_item_films_secondary)
-        private val tvYear: TextView = itemView.findViewById(R.id.tv_year_item_films_secondary)
-        private val tvVote: TextView = itemView.findViewById(R.id.tv_vote_item_films_secondary)
+        private val binding = ItemRvFilmsSecondaryBinding.bind(itemView)
 
         fun onBind(movieOutline: MovieOutline) {
-            // set data to widgets
-            if (movieOutline.posterUrl != null && movieOutline.posterUrl != "") {
-                Utils.setImageGlide(
-                    itemView.context,
-                    movieOutline.getPosterUrl(ImageSize.W342),
-                    ivPoster)
-            } else {
-                ivPoster.setImageResource(R.drawable.img_placeholder)
+            with (binding) {
+                // set data to widgets
+                if (movieOutline.posterUrl != null && movieOutline.posterUrl != "") {
+                    Utils.setImageGlide(
+                        itemView.context,
+                        movieOutline.getPosterUrl(ImageSize.W342),
+                        ivPosterItemFilmsSecondary)
+                } else {
+                    ivPosterItemFilmsSecondary.setImageResource(R.drawable.img_placeholder)
+                }
+                tvTitleItemFilmsSecondary.text = movieOutline.title ?: "-"
+                tvYearItemFilmsSecondary.text =
+                    if (movieOutline.releaseDate != null && movieOutline.releaseDate != "")
+                        movieOutline.releaseDate.substring(0, 4)
+                    else "-"
+                tvVoteItemFilmsSecondary.text =
+                    if (movieOutline.rating != null) "%.1f".format(movieOutline.rating)
+                    else "-"
             }
-            tvTitle.text = movieOutline.title ?: "-"
-            tvYear.text =
-                if (movieOutline.releaseDate != null && movieOutline.releaseDate != "")
-                    movieOutline.releaseDate.substring(0, 4)
-                else "-"
-            tvVote.text =
-                if (movieOutline.rating != null) "%.1f".format(movieOutline.rating)
-                else "-"
         }
 
 

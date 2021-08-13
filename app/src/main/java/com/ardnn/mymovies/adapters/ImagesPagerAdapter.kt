@@ -4,10 +4,9 @@ import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.ProgressBar
 import androidx.recyclerview.widget.RecyclerView
 import com.ardnn.mymovies.R
+import com.ardnn.mymovies.databinding.ItemRvImagesBinding
 import com.ardnn.mymovies.listeners.SingleClickListener
 import com.ardnn.mymovies.models.Image
 import com.ardnn.mymovies.models.ImageSize
@@ -40,8 +39,7 @@ class ImagesPagerAdapter(
 
     inner class ViewHolder(itemView: View, clickListener: SingleClickListener<Image>)
         : RecyclerView.ViewHolder(itemView), RequestListener<Drawable> {
-        private val ivImage: ImageView = itemView.findViewById(R.id.iv_item_images)
-        private val progressBar: ProgressBar = itemView.findViewById(R.id.pb_item_images)
+        private val binding = ItemRvImagesBinding.bind(itemView)
 
         init {
             itemView.setOnClickListener {
@@ -53,7 +51,7 @@ class ImagesPagerAdapter(
             Glide.with(itemView.context)
                 .load(image.getImageUrl(ImageSize.ORI))
                 .listener(this)
-                .into(ivImage)
+                .into(binding.ivItemImages)
         }
 
         override fun onLoadFailed(
@@ -78,7 +76,7 @@ class ImagesPagerAdapter(
                     DrawableCrossFadeTransition(500, isFirstResource)
                 )
             }
-            progressBar.visibility = View.GONE
+            binding.pbItemImages.visibility = View.GONE
             return true
         }
     }

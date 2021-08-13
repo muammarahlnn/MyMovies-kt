@@ -3,10 +3,9 @@ package com.ardnn.mymovies.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.ardnn.mymovies.R
+import com.ardnn.mymovies.databinding.ItemRvVideosBinding
 import com.ardnn.mymovies.helpers.Utils
 import com.ardnn.mymovies.listeners.FilmDetailClickListener
 import com.ardnn.mymovies.models.Video
@@ -34,8 +33,7 @@ class VideosAdapter(
 
     inner class ViewHolder(itemView: View, clickListener: FilmDetailClickListener)
         : RecyclerView.ViewHolder(itemView) {
-        private val ivImage: ImageView = itemView.findViewById(R.id.iv_image_item_videos)
-        private val tvTitle: TextView = itemView.findViewById(R.id.tv_title_item_videos)
+        private val binding = ItemRvVideosBinding.bind(itemView)
 
         init {
             itemView.setOnClickListener {
@@ -44,15 +42,17 @@ class VideosAdapter(
         }
 
         fun onBind(video: Video) {
-            if (video.key != null || video.key == "") {
-                Utils.setImageGlide(
-                    itemView.context,
-                    video.getImageUrl(),
-                    ivImage)
-            } else {
-                ivImage.setBackgroundResource(R.drawable.img_placeholder)
+            with (binding) {
+                if (video.key != null || video.key == "") {
+                    Utils.setImageGlide(
+                        itemView.context,
+                        video.getImageUrl(),
+                        ivImageItemVideos)
+                } else {
+                    ivImageItemVideos.setBackgroundResource(R.drawable.img_placeholder)
+                }
+                tvTitleItemVideos.text = video.name ?: ""
             }
-            tvTitle.text = video.name ?: ""
         }
 
     }

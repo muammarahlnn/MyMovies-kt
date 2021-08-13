@@ -3,9 +3,9 @@ package com.ardnn.mymovies.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.ardnn.mymovies.R
+import com.ardnn.mymovies.databinding.ItemRvRectBinding
 import com.ardnn.mymovies.listeners.FilmDetailClickListener
 import com.ardnn.mymovies.models.Genre
 
@@ -29,18 +29,18 @@ class GenresAdapter(
         return genreList.size
     }
 
-    inner class ViewHolder(itemView: View, clickListener: FilmDetailClickListener) : RecyclerView.ViewHolder(itemView) {
-        private val tvGenre: TextView
+    inner class ViewHolder(itemView: View, clickListener: FilmDetailClickListener)
+        : RecyclerView.ViewHolder(itemView) {
+        private val binding = ItemRvRectBinding.bind(itemView)
 
         init {
             itemView.setOnClickListener {
                 clickListener.onGenreClicked(genreList[absoluteAdapterPosition])
             }
-            tvGenre = itemView.findViewById(R.id.tv_name)
         }
 
         fun onBind(genre: Genre) {
-            tvGenre.text = genre.name
+            binding.tvName.text = genre.name
         }
     }
 }

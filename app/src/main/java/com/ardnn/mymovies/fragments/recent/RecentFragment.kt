@@ -4,31 +4,26 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
-import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.ardnn.mymovies.R
 import com.ardnn.mymovies.activities.MovieDetailActivity
 import com.ardnn.mymovies.activities.TvShowDetailActivity
 import com.ardnn.mymovies.adapters.RecentsAdapter
 import com.ardnn.mymovies.database.entities.RecentFilms
 import com.ardnn.mymovies.database.viewmodels.RecentFilmViewModel
+import com.ardnn.mymovies.databinding.FragmentRecentBinding
 import com.ardnn.mymovies.listeners.RecentsClickListener
 
 class RecentFragment : Fragment(), RecentsClickListener {
 
-    // recycler view film
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: RecentsAdapter
+    private var _binding: FragmentRecentBinding? = null
+    private val binding get() = _binding!!
 
-    // widgets
-    private lateinit var tvEmpty: TextView
-
-    // others
     private lateinit var viewModel: RecentFilmViewModel
+    private lateinit var adapter: RecentsAdapter
     private var isListEmpty: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,22 +36,21 @@ class RecentFragment : Fragment(), RecentsClickListener {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view =  inflater.inflate(R.layout.fragment_recent, container, false)
+        _binding = FragmentRecentBinding.inflate(inflater, container, false)
 
         // initialization
         viewModel = ViewModelProvider(this).get(RecentFilmViewModel::class.java)
-        tvEmpty = view.findViewById(R.id.tv_empty_recents)
-        recyclerView = view.findViewById(R.id.rv_recents)
-        recyclerView.layoutManager = LinearLayoutManager(activity)
+        binding.rvRecents.layoutManager = LinearLayoutManager(activity)
 
         // get recent list from database
         viewModel.recentFilmList.observe(viewLifecycleOwner, { recentFilmList ->
             // set recyclerview adapter
             adapter = RecentsAdapter(recentFilmList, this)
-            recyclerView.adapter = adapter
+            binding.rvRecents.adapter = adapter
 
             // check if favorite movies is not empty then show the alert text and vice versa
-            tvEmpty.visibility = if (recentFilmList.isEmpty()) View.VISIBLE else View.GONE
+            binding.tvEmptyRecents.visibility =
+                if (recentFilmList.isEmpty()) View.VISIBLE else View.GONE
         })
 
         // check if recents is empty or not
@@ -67,7 +61,12 @@ class RecentFragment : Fragment(), RecentsClickListener {
         })
 
 
-        return view
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

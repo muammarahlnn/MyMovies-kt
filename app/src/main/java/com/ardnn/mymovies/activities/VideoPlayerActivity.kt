@@ -1,29 +1,28 @@
 package com.ardnn.mymovies.activities
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.ardnn.mymovies.R
+import androidx.appcompat.app.AppCompatActivity
+import com.ardnn.mymovies.databinding.ActivityVideoPlayerBinding
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 
 class VideoPlayerActivity : AppCompatActivity() {
     companion object {
         const val EXTRA_VIDEO_KEY = "extra_video_key"
     }
 
-    // widgets
-    private lateinit var youtubePlayer: YouTubePlayerView
+    // view binding
+    private lateinit var binding: ActivityVideoPlayerBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_video_player)
+        binding = ActivityVideoPlayerBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         // initialization
-        youtubePlayer = findViewById(R.id.youtube_player_view)
-        lifecycle.addObserver(youtubePlayer)
+        lifecycle.addObserver(binding.youtubePlayerView)
 
-        youtubePlayer.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
+        binding.youtubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
             override fun onReady(youTubePlayer: YouTubePlayer) {
                 val videoKey: String = intent.getStringExtra(EXTRA_VIDEO_KEY).toString()
                 youTubePlayer.cueVideo(videoKey, 0F)
@@ -36,6 +35,6 @@ class VideoPlayerActivity : AppCompatActivity() {
         super.onDestroy()
 
         // release youtube player view when we're done using it
-        youtubePlayer.release()
+        binding.youtubePlayerView.release()
     }
 }

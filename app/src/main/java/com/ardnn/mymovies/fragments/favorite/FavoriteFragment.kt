@@ -6,23 +6,23 @@ import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.viewpager2.widget.ViewPager2
 import com.ardnn.mymovies.R
 import com.ardnn.mymovies.adapters.FavoritePagerAdapter
 import com.ardnn.mymovies.database.viewmodels.FavoriteFilmViewModel
+import com.ardnn.mymovies.databinding.FragmentFavoriteBinding
 import com.ardnn.mymovies.helpers.Utils
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
 class FavoriteFragment : Fragment() {
 
-    // viewpager attr
-    private lateinit var favoritePagerAdapter: FavoritePagerAdapter
-    private lateinit var tlFavorite: TabLayout
-    private lateinit var favoritePager: ViewPager2
+    // view binding
+    private var _binding: FragmentFavoriteBinding? = null
+    private val binding get() = _binding!!
 
     // others
     private lateinit var viewModel: FavoriteFilmViewModel
+    private lateinit var favoritePagerAdapter: FavoritePagerAdapter
     private val isListsEmpty = booleanArrayOf(
         false, // favorite movie list
         false // favorite tv show list
@@ -39,25 +39,23 @@ class FavoriteFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_favorite, container, false)
+        _binding = FragmentFavoriteBinding.inflate(inflater, container, false)
 
         // initialize view model
         viewModel = ViewModelProvider(this).get(FavoriteFilmViewModel::class.java)
 
         // set viewpager
         favoritePagerAdapter = FavoritePagerAdapter(activity)
-        favoritePager = view.findViewById(R.id.vp2_favorite)
-        favoritePager.adapter = favoritePagerAdapter
-        favoritePager.currentItem = 0
+        binding.vp2Favorite.adapter = favoritePagerAdapter
+        binding.vp2Favorite.currentItem = 0
 
         // set tablayout
-        tlFavorite = view.findViewById(R.id.tl_favorite)
-        TabLayoutMediator(tlFavorite, favoritePager) { tab: TabLayout.Tab, position: Int ->
+        TabLayoutMediator(binding.tlFavorite, binding.vp2Favorite) { tab: TabLayout.Tab, position: Int ->
             tab.text = "OBJECT ${(position + 1)}"
         }.attach()
-        tlFavorite.getTabAt(0)?.text = "Movies"
-        tlFavorite.getTabAt(1)?.text = "TV Shows"
-        Utils.equalingEachTabWidth(tlFavorite) // to allow equal width for each tab, while (TabLayout.MODE_SCROLLABLE)
+        binding.tlFavorite.getTabAt(0)?.text = "Movies"
+        binding.tlFavorite.getTabAt(1)?.text = "TV Shows"
+        Utils.equalingEachTabWidth(binding.tlFavorite) // to allow equal width for each tab, while (TabLayout.MODE_SCROLLABLE)
 
         // check if favorites is empty or not
         viewModel.favoriteMovieList.observe(viewLifecycleOwner, { favoriteMovieList ->
@@ -72,7 +70,7 @@ class FavoriteFragment : Fragment() {
         })
 
         // get tab position
-        tlFavorite.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+        binding.tlFavorite.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 pos = tab?.position ?: -1
             }
@@ -81,7 +79,12 @@ class FavoriteFragment : Fragment() {
             override fun onTabReselected(tab: TabLayout.Tab?) {}
         })
 
-        return view
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

@@ -1,17 +1,12 @@
 package com.ardnn.mymovies.activities
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.ImageView
-import android.widget.ProgressBar
-import android.widget.TextView
 import android.widget.Toast
-import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.ardnn.mymovies.R
 import com.ardnn.mymovies.adapters.CastsAdapter
 import com.ardnn.mymovies.adapters.GenresAdapter
@@ -19,14 +14,14 @@ import com.ardnn.mymovies.adapters.TvShowsSecondaryAdapter
 import com.ardnn.mymovies.adapters.VideosAdapter
 import com.ardnn.mymovies.api.callbacks.*
 import com.ardnn.mymovies.api.repositories.TvShowRepository
-import com.ardnn.mymovies.database.viewmodels.FavoriteFilmViewModel
 import com.ardnn.mymovies.database.entities.FavoriteTvShows
 import com.ardnn.mymovies.database.entities.RecentFilms
+import com.ardnn.mymovies.database.viewmodels.FavoriteFilmViewModel
 import com.ardnn.mymovies.database.viewmodels.RecentFilmViewModel
+import com.ardnn.mymovies.databinding.ActivityTvShowDetailBinding
 import com.ardnn.mymovies.helpers.Utils
 import com.ardnn.mymovies.listeners.FilmDetailClickListener
 import com.ardnn.mymovies.models.*
-import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.runBlocking
 
 class TvShowDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetailClickListener {
@@ -34,53 +29,23 @@ class TvShowDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDeta
         const val EXTRA_ID = "extra_id"
     }
 
-    // tv show
-    private lateinit var tvShow: TvShow
-    private var tvShowId: Int = 0
-
-    // genres
-    private lateinit var rvGenres: RecyclerView
-    private lateinit var genresAdapter: GenresAdapter
-
-    // casts
-    private lateinit var rvCasts: RecyclerView
-    private lateinit var castsAdapter: CastsAdapter
-
-    // videos
-    private lateinit var rvVideos: RecyclerView
-    private lateinit var videosAdapter: VideosAdapter
-
-    // similar tv shows
-    private lateinit var rvSimilar: RecyclerView
-    private lateinit var similarAdapter: TvShowsSecondaryAdapter
-
-    // recommendations
-    private lateinit var rvRecommendations: RecyclerView
-    private lateinit var recommendationsAdapter: TvShowsSecondaryAdapter
-
     // view model
     private lateinit var favoriteViewModel: FavoriteFilmViewModel
     private lateinit var recentViewModel: RecentFilmViewModel
 
-    // widgets
-    private lateinit var tvTitle: TextView
-    private lateinit var tvEpisodes: TextView
-    private lateinit var tvSeasons: TextView
-    private lateinit var tvRuntime: TextView
-    private lateinit var tvRating: TextView
-    private lateinit var tvFirstAiring: TextView
-    private lateinit var tvLastAiring: TextView
-    private lateinit var tvSynopsis: TextView
-    private lateinit var tvMore: TextView
-    private lateinit var ivWallpaper: ImageView
-    private lateinit var ivPoster: ImageView
-    private lateinit var ivImgsPosters: ImageView
-    private lateinit var ivImgsBackdrops: ImageView
-    private lateinit var btnBack: ImageView
-    private lateinit var btnFavorite: ImageView
-    private lateinit var btnHome: MaterialButton
-    private lateinit var clWrapperSynopsis: ConstraintLayout
-    private lateinit var pbDetail: ProgressBar
+    // view binding
+    private lateinit var binding: ActivityTvShowDetailBinding
+
+    // tv show
+    private lateinit var tvShow: TvShow
+    private var tvShowId: Int = 0
+
+    // adapters
+    private lateinit var genresAdapter: GenresAdapter
+    private lateinit var castsAdapter: CastsAdapter
+    private lateinit var videosAdapter: VideosAdapter
+    private lateinit var similarAdapter: TvShowsSecondaryAdapter
+    private lateinit var recommendationsAdapter: TvShowsSecondaryAdapter
 
     // variables
     private var isSynopsisExtended: Boolean = false
@@ -98,12 +63,12 @@ class TvShowDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDeta
         loadTvShowData()
 
         // if button clicked
-        btnBack.setOnClickListener(this)
-        btnFavorite.setOnClickListener(this)
-        btnHome.setOnClickListener(this)
-        clWrapperSynopsis.setOnClickListener(this)
-        ivImgsPosters.setOnClickListener(this)
-        ivImgsBackdrops.setOnClickListener(this)
+        binding.btnBackTvShowDetail.setOnClickListener(this)
+        binding.btnFavoriteTvShowDetail.setOnClickListener(this)
+        binding.btnHomeTvShowDetail.setOnClickListener(this)
+        binding.clWrapperSynopsisTvShowDetail.setOnClickListener(this)
+        binding.ivImgsPostersTvShowDetail.setOnClickListener(this)
+        binding.ivImgsBackdropsTvShowDetail.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
@@ -127,11 +92,11 @@ class TvShowDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDeta
             R.id.cl_wrapper_synopsis_tv_show_detail -> {
                 isSynopsisExtended = !isSynopsisExtended
                 if (isSynopsisExtended) {
-                    tvSynopsis.maxLines = Int.MAX_VALUE
-                    tvMore.text = "less"
+                    binding.tvSynopsisTvShowDetail.maxLines = Int.MAX_VALUE
+                    binding.tvMoreTvShowDetail.text = "less"
                 } else {
-                    tvSynopsis.maxLines = 2
-                    tvMore.text = "more"
+                    binding.tvSynopsisTvShowDetail.maxLines = 2
+                    binding.tvMoreTvShowDetail.text = "more"
                 }
             }
             R.id.iv_imgs_posters_tv_show_detail -> {
@@ -160,36 +125,31 @@ class TvShowDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDeta
         tvShowId = intent.getIntExtra(EXTRA_ID, 0)
 
         // genres
-        rvGenres = findViewById(R.id.rv_genre_tv_show_detail)
-        rvGenres.layoutManager = LinearLayoutManager(
+        binding.rvGenreTvShowDetail.layoutManager = LinearLayoutManager(
             this,
             LinearLayoutManager.HORIZONTAL,
             false)
 
         // casts
-        rvCasts = findViewById(R.id.rv_casts_tv_show_detail)
-        rvCasts.layoutManager = LinearLayoutManager(
+        binding.rvCastsTvShowDetail.layoutManager = LinearLayoutManager(
             this,
             LinearLayoutManager.HORIZONTAL,
             false)
 
         // videos
-        rvVideos = findViewById(R.id.rv_videos_tv_show_detail)
-        rvVideos.layoutManager = LinearLayoutManager(
+        binding.rvVideosTvShowDetail.layoutManager = LinearLayoutManager(
             this,
             LinearLayoutManager.HORIZONTAL,
             false)
 
         // similar tv shows
-        rvSimilar = findViewById(R.id.rv_similar_tv_shows)
-        rvSimilar.layoutManager = LinearLayoutManager(
+        binding.rvSimilarTvShows.layoutManager = LinearLayoutManager(
             this,
             LinearLayoutManager.HORIZONTAL,
             false)
 
         // recommendations
-        rvRecommendations = findViewById(R.id.rv_recommendations_tv_show_detail)
-        rvRecommendations.layoutManager = LinearLayoutManager(
+        binding.rvRecommendationsTvShowDetail.layoutManager = LinearLayoutManager(
             this,
             LinearLayoutManager.HORIZONTAL,
             false)
@@ -198,28 +158,9 @@ class TvShowDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDeta
         runBlocking {
             isFavorite = favoriteViewModel.isTvShowExists(tvShowId)
         }
-        btnFavorite = findViewById(R.id.btn_favorite_tv_show_detail)
-        btnFavorite.setImageResource(
+        binding.btnFavoriteTvShowDetail.setImageResource(
             if (isFavorite) R.drawable.ic_favorite_true else R.drawable.ic_favorite_false)
 
-        // widgets
-        tvTitle = findViewById(R.id.tv_title_tv_show_detail)
-        tvEpisodes = findViewById(R.id.tv_episodes_tv_show_detail)
-        tvSeasons = findViewById(R.id.tv_seasons_tv_show_detail)
-        tvRuntime = findViewById(R.id.tv_runtime_tv_show_detail)
-        tvRating = findViewById(R.id.tv_rating_tv_show_detail)
-        tvFirstAiring = findViewById(R.id.tv_first_airing)
-        tvLastAiring = findViewById(R.id.tv_last_airing)
-        tvSynopsis = findViewById(R.id.tv_synopsis_tv_show_detail)
-        tvMore = findViewById(R.id.tv_more_tv_show_detail)
-        ivWallpaper = findViewById(R.id.iv_wallpaper_tv_show_detail)
-        ivPoster = findViewById(R.id.iv_poster_tv_show_detail)
-        ivImgsPosters = findViewById(R.id.iv_imgs_posters_tv_show_detail)
-        ivImgsBackdrops = findViewById(R.id.iv_imgs_backdrops_tv_show_detail)
-        btnBack = findViewById(R.id.btn_back_tv_show_detail)
-        btnHome = findViewById(R.id.btn_home_tv_show_detail)
-        clWrapperSynopsis = findViewById(R.id.cl_wrapper_synopsis_tv_show_detail)
-        pbDetail = findViewById(R.id.pb_tv_show_detail)
     }
 
     private fun addTvShowToDatabase() {
@@ -235,7 +176,7 @@ class TvShowDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDeta
         favoriteViewModel.addTvShow(favoriteTvShow)
 
         // set icon favorite to true and notify the user
-        btnFavorite.setImageResource(R.drawable.ic_favorite_true)
+        binding.btnFavoriteTvShowDetail.setImageResource(R.drawable.ic_favorite_true)
         Toast.makeText(this, "$title has added to favorites", Toast.LENGTH_SHORT).show()
     }
 
@@ -250,7 +191,7 @@ class TvShowDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDeta
         favoriteViewModel.deleteTvShow(favoriteTvShow)
 
         // set icon favorite to false and notify the user
-        btnFavorite.setImageResource(R.drawable.ic_favorite_false)
+        binding.btnFavoriteTvShowDetail.setImageResource(R.drawable.ic_favorite_false)
         Toast.makeText(
             this,
             "${favoriteTvShow.title} has removed from favorites",
@@ -321,7 +262,7 @@ class TvShowDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDeta
             override fun onSuccess(castList: List<Cast>) {
                 // set recyclerview casts
                 castsAdapter = CastsAdapter(castList, this@TvShowDetailActivity)
-                rvCasts.adapter = castsAdapter
+                binding.rvCastsTvShowDetail.adapter = castsAdapter
             }
 
             override fun onFailure(message: String) {
@@ -336,7 +277,7 @@ class TvShowDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDeta
             override fun onSuccess(videoList: List<Video>) {
                 // setup recyclerview videos
                 videosAdapter = VideosAdapter(videoList, this@TvShowDetailActivity)
-                rvVideos.adapter = videosAdapter
+                binding.rvVideosTvShowDetail.adapter = videosAdapter
             }
 
             override fun onFailure(message: String) {
@@ -352,7 +293,7 @@ class TvShowDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDeta
                 // setup recyclerview similar tv shows
                 similarAdapter = TvShowsSecondaryAdapter(tvShowOutlineList)
                 similarAdapter.setFilmClickListener(this@TvShowDetailActivity)
-                rvSimilar.adapter = similarAdapter
+                binding.rvSimilarTvShows.adapter = similarAdapter
             }
 
             override fun onFailure(message: String) {
@@ -368,7 +309,7 @@ class TvShowDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDeta
                 // setup recyclerview recommendations
                 recommendationsAdapter = TvShowsSecondaryAdapter(tvShowOutlineList)
                 recommendationsAdapter.setFilmClickListener(this@TvShowDetailActivity)
-                rvRecommendations.adapter = recommendationsAdapter
+                binding.rvRecommendationsTvShowDetail.adapter = recommendationsAdapter
             }
 
             override fun onFailure(message: String) {
@@ -380,49 +321,49 @@ class TvShowDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDeta
 
     private fun setDataToWidgets() {
         // set to widgets
-        tvTitle.text = tvShow.title ?: "-"
-        tvEpisodes.text = (tvShow.numberOfEpisodes ?: "-").toString()
-        tvSeasons.text = (tvShow.numberOfSeasons ?: "-").toString()
-        tvRuntime.text =
+        binding.tvTitleTvShowDetail.text = tvShow.title ?: "-"
+        binding.tvEpisodesTvShowDetail.text = (tvShow.numberOfEpisodes ?: "-").toString()
+        binding.tvSeasonsTvShowDetail.text = (tvShow.numberOfSeasons ?: "-").toString()
+        binding.tvRuntimeTvShowDetail.text =
             if (tvShow.runtimes != null && tvShow.runtimes?.size != 0)
                 "${tvShow.runtimes?.get(0)} mins"
             else
                 "-"
-        tvRating.text = (tvShow.rating ?: "-").toString()
-        tvFirstAiring.text =
+        binding.tvRatingTvShowDetail.text = (tvShow.rating ?: "-").toString()
+        binding.tvFirstAiring.text =
             if (tvShow.firstAirDate != null)
                 Utils.convertToDate(tvShow.firstAirDate)
             else
                 "-"
-        tvLastAiring.text =
+        binding.tvLastAiring.text =
             if (tvShow.lastAirDate != null)
                 Utils.convertToDate(tvShow.lastAirDate)
             else
                 "-"
-        tvSynopsis.text = tvShow.overview ?: "-"
+        binding.tvSynopsisTvShowDetail.text = tvShow.overview ?: "-"
         Utils.setImageGlide(
             this,
             tvShow.getWallpaperUrl(ImageSize.W780),
-            ivWallpaper, true)
+            binding.ivWallpaperTvShowDetail, true)
         Utils.setImageGlide(
             this,
             tvShow.getPosterUrl(ImageSize.W342),
-            ivPoster, true)
+            binding.ivPosterTvShowDetail, true)
         Utils.setImageGlide(
             this,
             tvShow.getPosterUrl(ImageSize.W342),
-            ivImgsPosters, true)
+            binding.ivImgsPostersTvShowDetail, true)
         Utils.setImageGlide(
             this,
             tvShow.getWallpaperUrl(ImageSize.W780),
-            ivImgsBackdrops, true)
+            binding.ivImgsBackdropsTvShowDetail, true)
 
         // set rv genres
         genresAdapter = GenresAdapter(tvShow.genreList, this)
-        rvGenres.adapter = genresAdapter
+        binding.rvGenreTvShowDetail.adapter = genresAdapter
 
         // remove progress bar
-        pbDetail.visibility = View.GONE
+        binding.pbTvShowDetail.visibility = View.GONE
 
         // add to recent films
         addToRecents()

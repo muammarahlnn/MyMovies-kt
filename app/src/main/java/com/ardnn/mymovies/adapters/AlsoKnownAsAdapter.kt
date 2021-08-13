@@ -3,9 +3,9 @@ package com.ardnn.mymovies.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.ardnn.mymovies.R
+import com.ardnn.mymovies.databinding.ItemRvRectBinding
 
 class AlsoKnownAsAdapter(
     private val akaList: List<String>
@@ -19,7 +19,7 @@ class AlsoKnownAsAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.tvName.text = akaList[position]
+        holder.bind(akaList[position])
     }
 
     override fun getItemCount(): Int {
@@ -27,7 +27,13 @@ class AlsoKnownAsAdapter(
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val tvName: TextView = itemView.findViewById(R.id.tv_name)
+        private val binding = ItemRvRectBinding.bind(itemView)
+
+        fun bind(aka: String) {
+            with(binding) {
+                tvName.text = aka
+            }
+        }
     }
 
 }

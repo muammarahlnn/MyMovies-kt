@@ -3,11 +3,10 @@ package com.ardnn.mymovies.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.ardnn.mymovies.R
 import com.ardnn.mymovies.database.entities.FavoriteMovies
+import com.ardnn.mymovies.databinding.ItemRvFavoriteBinding
 import com.ardnn.mymovies.helpers.Utils
 import com.ardnn.mymovies.listeners.SingleClickListener
 
@@ -33,10 +32,7 @@ class FavoriteMoviesAdapter(
 
     inner class ViewHolder(itemView: View, clickListener: SingleClickListener<FavoriteMovies>)
         : RecyclerView.ViewHolder(itemView) {
-        private val ivPoster: ImageView = itemView.findViewById(R.id.iv_poster_item_favorite)
-        private val tvTitle: TextView = itemView.findViewById(R.id.tv_title_item_favorite)
-        private val tvYear: TextView = itemView.findViewById(R.id.tv_year_item_favorite)
-        private val tvRating: TextView = itemView.findViewById(R.id.tv_rating_item_favorite)
+        private val binding = ItemRvFavoriteBinding.bind(itemView)
 
         init {
             itemView.setOnClickListener {
@@ -45,17 +41,19 @@ class FavoriteMoviesAdapter(
         }
 
         fun onBind(favoriteMovie: FavoriteMovies) {
-            if (favoriteMovie.posterUrl != null || favoriteMovie.posterUrl == "") {
-                Utils.setImageGlide(
-                    itemView.context,
-                    favoriteMovie.posterUrl,
-                    ivPoster)
-            } else {
-                ivPoster.setImageResource(R.drawable.img_placeholder)
+            with (binding) {
+                if (favoriteMovie.posterUrl != null || favoriteMovie.posterUrl == "") {
+                    Utils.setImageGlide(
+                        itemView.context,
+                        favoriteMovie.posterUrl,
+                        ivPosterItemFavorite)
+                } else {
+                    ivPosterItemFavorite.setImageResource(R.drawable.img_placeholder)
+                }
+                tvTitleItemFavorite.text = favoriteMovie.title
+                tvYearItemFavorite.text = favoriteMovie.releaseDate.substring(0, 4)
+                tvRatingItemFavorite.text = favoriteMovie.rating.toString()
             }
-            tvTitle.text = favoriteMovie.title
-            tvYear.text = favoriteMovie.releaseDate.substring(0, 4)
-            tvRating.text = favoriteMovie.rating.toString()
         }
     }
 

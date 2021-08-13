@@ -3,10 +3,8 @@ package com.ardnn.mymovies.fragments.movies
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
-import androidx.fragment.app.Fragment
-import android.widget.ProgressBar
-import android.widget.Toast
 import androidx.appcompat.widget.SearchView
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -15,21 +13,21 @@ import com.ardnn.mymovies.activities.MainActivity
 import com.ardnn.mymovies.activities.MovieDetailActivity
 import com.ardnn.mymovies.adapters.MoviesPrimaryAdapter
 import com.ardnn.mymovies.api.callbacks.MovieOutlineCallback
-import com.ardnn.mymovies.models.MovieOutline
 import com.ardnn.mymovies.api.repositories.MovieRepository
+import com.ardnn.mymovies.databinding.FragmentUpcomingBinding
 import com.ardnn.mymovies.listeners.SingleClickListener
+import com.ardnn.mymovies.models.MovieOutline
 
 class UpcomingFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener,
     SingleClickListener<MovieOutline> {
 
+    // view binding
+    private var _binding: FragmentUpcomingBinding? = null
+    private val binding get() = _binding!!
+
     // recyclerview attr
-    private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: MoviesPrimaryAdapter
     private val movieList = mutableListOf<MovieOutline>()
-
-    // widgets
-    private lateinit var progressBar: ProgressBar
-    private lateinit var swipeRefresh: SwipeRefreshLayout
 
     // variables
     private var currentPage: Int = 1
@@ -45,23 +43,23 @@ class UpcomingFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener,
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        val view : View =  inflater.inflate(R.layout.fragment_upcoming, container, false)
-
-        // initialize widgets
-        progressBar = view.findViewById(R.id.pb_upcoming)
+        _binding = FragmentUpcomingBinding.inflate(inflater, container, false)
 
         // set swipe refresh layout
-        swipeRefresh = view.findViewById(R.id.srl_upcoming)
-        swipeRefresh.setOnRefreshListener(this)
+        binding.srlUpcoming.setOnRefreshListener(this)
 
         // set recyclerview
-        recyclerView = view.findViewById(R.id.rv_upcoming)
         setRecyclerView()
 
         // load MoviesNowPlaying's data from TMDB API
         loadData(currentPage)
 
-        return view
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -96,9 +94,9 @@ class UpcomingFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener,
                 adapter.updateList(movieList)
 
                 // done fetching
-                progressBar.visibility = View.GONE
+                binding.pbUpcoming.visibility = View.GONE
                 isFetching = false
-                swipeRefresh.isRefreshing = false
+                binding.srlUpcoming.isRefreshing = false
             }
 
             override fun onFailure(message: String) {}
@@ -109,14 +107,14 @@ class UpcomingFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener,
     private fun setRecyclerView() {
         // set layout manager
         val layoutManager = GridLayoutManager(activity, 2)
-        recyclerView.layoutManager = layoutManager
+        binding.rvUpcoming.layoutManager = layoutManager
 
         // set adapter
         adapter = MoviesPrimaryAdapter(movieList, this)
-        recyclerView.adapter = adapter
+        binding.rvUpcoming.adapter = adapter
 
         // listener if recyclerview reached last item then fetch next page
-        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        binding.rvUpcoming.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 val totalItem: Int = layoutManager.itemCount
                 val visibleItem: Int = layoutManager.childCount
@@ -137,7 +135,7 @@ class UpcomingFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener,
     override fun onRefresh() {
         // reset fetching
         currentPage = 1
-        progressBar.visibility = View.VISIBLE
+        binding.pbUpcoming.visibility = View.VISIBLE
         loadData(currentPage)
     }
 
