@@ -54,7 +54,8 @@ class TvShowDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDeta
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_tv_show_detail)
+        binding = ActivityTvShowDetailBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         // initialization
         initialization()
