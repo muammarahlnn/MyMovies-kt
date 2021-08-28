@@ -11,6 +11,8 @@ import com.ardnn.mymovies.api.callbacks.ImagesCallback
 import com.ardnn.mymovies.api.repositories.MovieRepository
 import com.ardnn.mymovies.api.repositories.TvShowRepository
 import com.ardnn.mymovies.databinding.ActivityImagesDetailBinding
+import com.ardnn.mymovies.helpers.DepthPageTransformer
+import com.ardnn.mymovies.helpers.ZoomOutPageTransformer
 import com.ardnn.mymovies.listeners.SingleClickListener
 import com.ardnn.mymovies.models.Image
 
@@ -56,6 +58,9 @@ class ImagesDetailActivity : AppCompatActivity(), SingleClickListener<Image> {
 
         // load data
         loadImagesData()
+
+        // set view pager transformer
+        binding.vp2ImagesDetail.setPageTransformer(ZoomOutPageTransformer())
 
         // if viewpager item change
         binding.vp2ImagesDetail.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
