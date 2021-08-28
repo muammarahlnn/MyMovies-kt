@@ -17,7 +17,8 @@
         <entry key="app/src/main/res/layout/fragment_favorite_movies.xml" value="0.3421875" />
         <entry key="app/src/main/res/layout/fragment_favorite_tv_shows.xml" value="0.32708333333333334" />
         <entry key="app/src/main/res/layout/fragment_movies.xml" value="0.3421875" />
-        <entry key="app/src/main/res/layout/fragment_recent.xml" value="0.38146551724137934" />
+        <entry key="app/src/main/res/layout/fragment_popular_movies.xml" value="0.19583333333333333" />
+        <entry key="app/src/main/res/layout/fragment_recent.xml" value="0.33" />
         <entry key="app/src/main/res/layout/item_rv_favorite.xml" value="0.33" />
         <entry key="app/src/main/res/layout/item_rv_films_primary.xml" value="0.3421875" />
         <entry key="app/src/main/res/layout/item_rv_films_secondary.xml" value="0.3421875" />
