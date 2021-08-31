@@ -15,7 +15,7 @@ import com.ardnn.mymovies.databinding.ActivityMainBinding
 import com.ardnn.mymovies.fragments.favorite.FavoriteFragment
 import com.ardnn.mymovies.fragments.movies.MoviesPagerFragment
 import com.ardnn.mymovies.fragments.recent.RecentFragment
-import com.ardnn.mymovies.fragments.tvshows.TvShowsFragment
+import com.ardnn.mymovies.fragments.tvshows.TvShowsPagerFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener {
@@ -91,7 +91,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
             R.id.item_tv_shows_main -> {
                 tvSection.text = resources.getString(R.string.tv_shows)
                 ivIcon.setImageResource(R.drawable.ic_tv_shows_yellow)
-                selectedFragment = TvShowsFragment()
+                selectedFragment = TvShowsPagerFragment()
             }
             R.id.item_recent_main -> {
                 tvSection.text = resources.getString(R.string.recent)
