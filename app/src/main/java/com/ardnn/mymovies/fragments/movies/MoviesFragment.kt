@@ -58,7 +58,7 @@ class MoviesFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener,
         section = arguments?.getInt(ARG_SECTION_NUMBER, 0) ?: 0
 
         // set swipe refresh layout listener
-        binding.srlMoviesRoot.setOnRefreshListener(this)
+        binding.srlMovies.setOnRefreshListener(this)
 
         // set recycler view
         setRecyclerView()
@@ -77,21 +77,21 @@ class MoviesFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener,
     override fun onRefresh() {
         // reset fetching
         currentPage = 1
-        binding.pbMoviesRoot.visibility = View.VISIBLE
+        binding.pbMovies.visibility = View.VISIBLE
         loadData(currentPage, section)
     }
 
     private fun setRecyclerView() {
         // set layout manager
         val layoutManager = GridLayoutManager(activity, 2)
-        binding.rvMoviesRoot.layoutManager = layoutManager
+        binding.rvMovies.layoutManager = layoutManager
 
         // set adapter
         adapter = MoviesPrimaryAdapter(movieList, this)
-        binding.rvMoviesRoot.adapter = adapter
+        binding.rvMovies.adapter = adapter
 
         // listener if recyclerview reached last item then fetch next page
-        binding.rvMoviesRoot.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        binding.rvMovies.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 val totalItem = layoutManager.itemCount
                 val visibleItem = layoutManager.childCount
@@ -162,8 +162,8 @@ class MoviesFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener,
 
         // done fetching
         with (binding) {
-            pbMoviesRoot.visibility = View.GONE
-            srlMoviesRoot.isRefreshing = false
+            pbMovies.visibility = View.GONE
+            srlMovies.isRefreshing = false
         }
         isFetching = false
     }

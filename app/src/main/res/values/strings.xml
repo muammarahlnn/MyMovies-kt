@@ -4,6 +4,12 @@
     <string name="recent">Recent</string>
     <string name="favorite">Favorite</string>
     <string name="home">Home</string>
+    <string name="now_playing">Now Playing</string>
+    <string name="upcoming">Upcoming</string>
+    <string name="airing_today">Airing Today</string>
+    <string name="on_the_air">On The Air</string>
+    <string name="popular">Popular</string>
+    <string name="top_rated">Top Rated</string>
     <string name="synopsis">Synopsis</string>
     <string name="tv_shows">TV Shows</string>
     <string name="bullet">•</string>
@@ -27,6 +33,4 @@
     <string name="empty_favorite_movies">You haven\'t favorited\nany movies yet</string>
     <string name="empty_favorite_tv_shows">You haven\'t favorited\nany tv shows yet</string>
     <string name="empty_recents">You haven\'t opened\nany films yet</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

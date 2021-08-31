@@ -5,8 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.ardnn.mymovies.R
 import com.ardnn.mymovies.adapters.TvShowsPagerAdapter
 import com.ardnn.mymovies.databinding.FragmentTvShowsPagerBinding
+import com.ardnn.mymovies.fragments.movies.MoviesPagerFragment
 import com.ardnn.mymovies.helpers.Utils
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -14,11 +16,11 @@ import com.google.android.material.tabs.TabLayoutMediator
 class TvShowsPagerFragment : Fragment() {
 
     companion object {
-        val tabTitles = arrayOf(
-            "Airing Today",
-            "On The Air",
-            "Popular",
-            "Top Rated"
+        val tabTitles = intArrayOf(
+            R.string.airing_today,
+            R.string.on_the_air,
+            R.string.popular,
+            R.string.top_rated,
         )
     }
 
@@ -39,7 +41,7 @@ class TvShowsPagerFragment : Fragment() {
 
         // set tab layout
         TabLayoutMediator(binding.tlTvShows, binding.vp2TvShows) { tab, pos ->
-            tab.text = tabTitles[pos]
+            tab.text = resources.getString(tabTitles[pos])
         }.attach()
 
         // to allow equal width for each tab, while (TabLayout.MODE_SCROLLABLE)

@@ -6,13 +6,13 @@
     android:background="@color/black_taskbar">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/srl_movies_root"
+        android:id="@+id/srl_movies"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingHorizontal="12dp">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_movies_root"
+            android:id="@+id/rv_movies"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:itemCount="2"
@@ -21,7 +21,7 @@
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <ProgressBar
-        android:id="@+id/pb_movies_root"
+        android:id="@+id/pb_movies"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_gravity="center"
