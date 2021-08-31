@@ -13,7 +13,7 @@ import androidx.fragment.app.Fragment
 import com.ardnn.mymovies.R
 import com.ardnn.mymovies.databinding.ActivityMainBinding
 import com.ardnn.mymovies.fragments.favorite.FavoriteFragment
-import com.ardnn.mymovies.fragments.movies.MoviesFragment
+import com.ardnn.mymovies.fragments.movies.MoviesPagerFragment
 import com.ardnn.mymovies.fragments.recent.RecentFragment
 import com.ardnn.mymovies.fragments.tvshows.TvShowsFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -55,15 +55,15 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
         // set bottom navigation view
         val bnvMain = binding.bnvNavigationMain
-        bnvMain.setOnNavigationItemSelectedListener(this)
+        bnvMain.setOnItemSelectedListener(this)
         bnvMain.itemIconTintList = null
 
         bnvMain.selectedItemId =  when (navKey) {
-            1 -> R.id.item_movies_main
-            2 -> R.id.item_tv_shows_main
-            3 -> R.id.item_recent_main
-            4 -> R.id.item_favorite_main
-            else -> R.id.item_movies_main
+            1 -> R.id.item_movies_main // home / movies
+            2 -> R.id.item_tv_shows_main // tv shows
+            3 -> R.id.item_recent_main // recent
+            4 -> R.id.item_favorite_main // favorite
+            else -> R.id.item_movies_main // home
         }
 
         // check if keyboard shows up
@@ -86,7 +86,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
             R.id.item_movies_main -> {
                 tvSection.text = resources.getString(R.string.movies)
                 ivIcon.setImageResource(R.drawable.ic_movies_yellow)
-                selectedFragment = MoviesFragment()
+                selectedFragment = MoviesPagerFragment()
             }
             R.id.item_tv_shows_main -> {
                 tvSection.text = resources.getString(R.string.tv_shows)
