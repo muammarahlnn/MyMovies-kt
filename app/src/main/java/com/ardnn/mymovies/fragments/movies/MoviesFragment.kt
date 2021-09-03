@@ -1,15 +1,16 @@
 package com.ardnn.mymovies.fragments.movies
 
+import android.app.SearchManager
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.*
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.ardnn.mymovies.R
 import com.ardnn.mymovies.activities.MainActivity
 import com.ardnn.mymovies.activities.MovieDetailActivity
 import com.ardnn.mymovies.adapters.MoviesPrimaryAdapter
@@ -47,6 +48,11 @@ class MoviesFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener,
     private var currentPage = 1
     private var isFetching = false
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -74,6 +80,34 @@ class MoviesFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener,
         _binding = null
     }
 
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+
+        menu.clear() // prevent duplicated menu item
+        inflater.inflate(R.menu.item_toolbar_main, menu)
+
+        // if user is searching a movie
+        val searchManager = activity?.getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        val searchView = menu.findItem(R.id.toolbar_item_search).actionView as SearchView
+
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(activity?.componentName))
+        searchView.queryHint = resources.getString(R.string.search_hint_movies)
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                adapter.setIsSearching(true)
+                adapter.filter.filter(newText)
+                return true
+            }
+
+        })
+
+    }
+
     override fun onRefresh() {
         // reset fetching
         currentPage = 1
@@ -82,30 +116,32 @@ class MoviesFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener,
     }
 
     private fun setRecyclerView() {
-        // set layout manager
-        val layoutManager = GridLayoutManager(activity, 2)
-        binding.rvMovies.layoutManager = layoutManager
+        with (binding) {
+            // set layout manager
+            val layoutManager = GridLayoutManager(activity, 2)
+            rvMovies.layoutManager = layoutManager
 
-        // set adapter
-        adapter = MoviesPrimaryAdapter(movieList, this)
-        binding.rvMovies.adapter = adapter
+            // set adapter
+            adapter = MoviesPrimaryAdapter(movieList, this@MoviesFragment)
+            rvMovies.adapter = adapter
 
-        // listener if recyclerview reached last item then fetch next page
-        binding.rvMovies.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                val totalItem = layoutManager.itemCount
-                val visibleItem = layoutManager.childCount
-                val firstVisibleItem = layoutManager.findFirstVisibleItemPosition()
+            // listener if recyclerview reached last item then fetch next page
+            rvMovies.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    val totalItem = layoutManager.itemCount
+                    val visibleItem = layoutManager.childCount
+                    val firstVisibleItem = layoutManager.findFirstVisibleItemPosition()
 
-                if (firstVisibleItem + visibleItem >= totalItem / 2) {
-                    if (!isFetching && !adapter.getIsSearching()) {
-                        isFetching = true
-                        loadData(++currentPage, section)
-                        isFetching = false
+                    if (firstVisibleItem + visibleItem >= totalItem / 2) {
+                        if (!isFetching && !adapter.getIsSearching()) {
+                            isFetching = true
+                            loadData(++currentPage, section)
+                            isFetching = false
+                        }
                     }
                 }
-            }
-        })
+            })
+        }
 
     }
 

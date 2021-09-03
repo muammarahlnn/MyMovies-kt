@@ -1,14 +1,16 @@
 package com.ardnn.mymovies.fragments.tvshows
 
+import android.app.SearchManager
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.*
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.ardnn.mymovies.R
 import com.ardnn.mymovies.activities.MainActivity
 import com.ardnn.mymovies.activities.TvShowDetailActivity
 import com.ardnn.mymovies.adapters.TvShowsPrimaryAdapter
@@ -46,6 +48,11 @@ class TvShowsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener,
     private var currentPage = 1
     private var isFetching = false
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -71,6 +78,33 @@ class TvShowsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener,
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+
+        menu.clear() // prevent duplicated menu item
+        inflater.inflate(R.menu.item_toolbar_main, menu)
+
+        // if user is searching a movie
+        val searchManager = activity?.getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        val searchView = menu.findItem(R.id.toolbar_item_search).actionView as SearchView
+
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(activity?.componentName))
+        searchView.queryHint = resources.getString(R.string.search_hint_tv_shows)
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                adapter.setIsSearching(true)
+                adapter.filter.filter(newText)
+                return true
+            }
+
+        })
+
     }
 
     override fun onRefresh() {

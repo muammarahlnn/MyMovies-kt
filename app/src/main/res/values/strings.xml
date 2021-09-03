@@ -33,6 +33,8 @@
     <string name="empty_favorite_movies">You haven\'t favorited\nany movies yet</string>
     <string name="empty_favorite_tv_shows">You haven\'t favorited\nany tv shows yet</string>
     <string name="empty_recents">You haven\'t opened\nany films yet</string>
+    <string name="search_hint_movies">Search movies...</string>
+    <string name="search_hint_tv_shows">Search tv shows...</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
