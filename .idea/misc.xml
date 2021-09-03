@@ -14,6 +14,7 @@
         <entry key="app/src/main/res/layout/activity_movie_detail.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_splash.xml" value="0.67" />
         <entry key="app/src/main/res/layout/activity_splash_rerun.xml" value="0.3421875" />
+        <entry key="app/src/main/res/layout/activity_tv_show_detail.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_airing_today.xml" value="0.184375" />
         <entry key="app/src/main/res/layout/fragment_favorite.xml" value="0.3421875" />
         <entry key="app/src/main/res/layout/fragment_favorite_movies.xml" value="0.3421875" />

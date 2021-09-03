@@ -429,6 +429,20 @@
                     app:layout_constraintStart_toEndOf="@+id/view2"
                     app:layout_constraintTop_toTopOf="parent" />
 
+                <TextView
+                    android:id="@+id/tv_casts_empty"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/roboto_medium"
+                    android:text="@string/hyphen"
+                    android:textColor="@color/white"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="@+id/view2"
+                    app:layout_constraintTop_toBottomOf="@+id/view2" />
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_casts_tv_show_detail"
                     android:layout_width="match_parent"
@@ -633,6 +647,20 @@
                     app:layout_constraintStart_toEndOf="@+id/view6"
                     app:layout_constraintTop_toTopOf="parent" />
 
+                <TextView
+                    android:id="@+id/tv_similar_empty"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/roboto_medium"
+                    android:text="@string/hyphen"
+                    android:textColor="@color/white"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="@+id/view6"
+                    app:layout_constraintTop_toBottomOf="@+id/view6" />
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_similar_tv_shows"
                     android:layout_width="match_parent"
@@ -681,6 +709,20 @@
                     android:textStyle="bold"
                     app:layout_constraintStart_toEndOf="@+id/view7"
                     app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_recommendations_empty"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/roboto_medium"
+                    android:text="@string/hyphen"
+                    android:textColor="@color/white"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="@+id/view7"
+                    app:layout_constraintTop_toBottomOf="@+id/view7" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_recommendations_tv_show_detail"

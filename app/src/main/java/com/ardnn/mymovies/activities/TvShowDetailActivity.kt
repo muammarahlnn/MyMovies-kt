@@ -64,12 +64,14 @@ class TvShowDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDeta
         loadTvShowData()
 
         // if button clicked
-        binding.btnBackTvShowDetail.setOnClickListener(this)
-        binding.btnFavoriteTvShowDetail.setOnClickListener(this)
-        binding.btnHomeTvShowDetail.setOnClickListener(this)
-        binding.clWrapperSynopsisTvShowDetail.setOnClickListener(this)
-        binding.ivImgsPostersTvShowDetail.setOnClickListener(this)
-        binding.ivImgsBackdropsTvShowDetail.setOnClickListener(this)
+        with (binding) {
+            btnBackTvShowDetail.setOnClickListener(this@TvShowDetailActivity)
+            btnFavoriteTvShowDetail.setOnClickListener(this@TvShowDetailActivity)
+            btnHomeTvShowDetail.setOnClickListener(this@TvShowDetailActivity)
+            clWrapperSynopsisTvShowDetail.setOnClickListener(this@TvShowDetailActivity)
+            ivImgsPostersTvShowDetail.setOnClickListener(this@TvShowDetailActivity)
+            ivImgsBackdropsTvShowDetail.setOnClickListener(this@TvShowDetailActivity)
+        }
     }
 
     override fun onClick(v: View?) {
@@ -126,41 +128,44 @@ class TvShowDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDeta
         tvShowId = intent.getIntExtra(EXTRA_ID, 0)
 
         // genres
-        binding.rvGenreTvShowDetail.layoutManager = LinearLayoutManager(
-            this,
-            LinearLayoutManager.HORIZONTAL,
-            false)
+        with (binding) {
+            rvGenreTvShowDetail.layoutManager = LinearLayoutManager(
+                this@TvShowDetailActivity,
+                LinearLayoutManager.HORIZONTAL,
+                false)
 
-        // casts
-        binding.rvCastsTvShowDetail.layoutManager = LinearLayoutManager(
-            this,
-            LinearLayoutManager.HORIZONTAL,
-            false)
+            // casts
+            rvCastsTvShowDetail.layoutManager = LinearLayoutManager(
+                this@TvShowDetailActivity,
+                LinearLayoutManager.HORIZONTAL,
+                false)
 
-        // videos
-        binding.rvVideosTvShowDetail.layoutManager = LinearLayoutManager(
-            this,
-            LinearLayoutManager.HORIZONTAL,
-            false)
+            // videos
+            rvVideosTvShowDetail.layoutManager = LinearLayoutManager(
+                this@TvShowDetailActivity,
+                LinearLayoutManager.HORIZONTAL,
+                false)
 
-        // similar tv shows
-        binding.rvSimilarTvShows.layoutManager = LinearLayoutManager(
-            this,
-            LinearLayoutManager.HORIZONTAL,
-            false)
+            // similar tv shows
+            rvSimilarTvShows.layoutManager = LinearLayoutManager(
+                this@TvShowDetailActivity,
+                LinearLayoutManager.HORIZONTAL,
+                false)
 
-        // recommendations
-        binding.rvRecommendationsTvShowDetail.layoutManager = LinearLayoutManager(
-            this,
-            LinearLayoutManager.HORIZONTAL,
-            false)
+            // recommendations
+            rvRecommendationsTvShowDetail.layoutManager = LinearLayoutManager(
+                this@TvShowDetailActivity,
+                LinearLayoutManager.HORIZONTAL,
+                false)
 
-        // set btn favorite
-        runBlocking {
-            isFavorite = favoriteViewModel.isTvShowExists(tvShowId)
+            // set btn favorite
+            runBlocking {
+                isFavorite = favoriteViewModel.isTvShowExists(tvShowId)
+            }
+            btnFavoriteTvShowDetail.setImageResource(
+                if (isFavorite) R.drawable.ic_favorite_true else R.drawable.ic_favorite_false)
         }
-        binding.btnFavoriteTvShowDetail.setImageResource(
-            if (isFavorite) R.drawable.ic_favorite_true else R.drawable.ic_favorite_false)
+
 
     }
 
@@ -262,8 +267,12 @@ class TvShowDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDeta
         TvShowRepository.getTvShowCasts(tvShowId, object : CastsCallback {
             override fun onSuccess(castList: List<Cast>) {
                 // set recyclerview casts
-                castsAdapter = CastsAdapter(castList, this@TvShowDetailActivity)
-                binding.rvCastsTvShowDetail.adapter = castsAdapter
+                if (castList.isNotEmpty()) {
+                    castsAdapter = CastsAdapter(castList, this@TvShowDetailActivity)
+                    binding.rvCastsTvShowDetail.adapter = castsAdapter
+                } else {
+                    binding.tvCastsEmpty.visibility = View.VISIBLE
+                }
             }
 
             override fun onFailure(message: String) {
@@ -292,9 +301,13 @@ class TvShowDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDeta
         TvShowRepository.getSimilarTvShows(tvShowId, object : TvShowOutlineCallback {
             override fun onSuccess(tvShowOutlineList: MutableList<TvShowOutline>) {
                 // setup recyclerview similar tv shows
-                similarAdapter = TvShowsSecondaryAdapter(tvShowOutlineList)
-                similarAdapter.setFilmClickListener(this@TvShowDetailActivity)
-                binding.rvSimilarTvShows.adapter = similarAdapter
+                if (tvShowOutlineList.isNotEmpty()) {
+                    similarAdapter = TvShowsSecondaryAdapter(tvShowOutlineList)
+                    similarAdapter.setFilmClickListener(this@TvShowDetailActivity)
+                    binding.rvSimilarTvShows.adapter = similarAdapter
+                } else {
+                    binding.tvSimilarEmpty.visibility = View.VISIBLE
+                }
             }
 
             override fun onFailure(message: String) {
@@ -308,9 +321,13 @@ class TvShowDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDeta
         TvShowRepository.getTvShowRecommendations(tvShowId, object : TvShowOutlineCallback {
             override fun onSuccess(tvShowOutlineList: MutableList<TvShowOutline>) {
                 // setup recyclerview recommendations
-                recommendationsAdapter = TvShowsSecondaryAdapter(tvShowOutlineList)
-                recommendationsAdapter.setFilmClickListener(this@TvShowDetailActivity)
-                binding.rvRecommendationsTvShowDetail.adapter = recommendationsAdapter
+                if (tvShowOutlineList.isNotEmpty()) {
+                    recommendationsAdapter = TvShowsSecondaryAdapter(tvShowOutlineList)
+                    recommendationsAdapter.setFilmClickListener(this@TvShowDetailActivity)
+                    binding.rvRecommendationsTvShowDetail.adapter = recommendationsAdapter
+                } else {
+                    binding.tvRecommendationsEmpty.visibility = View.VISIBLE
+                }
             }
 
             override fun onFailure(message: String) {
