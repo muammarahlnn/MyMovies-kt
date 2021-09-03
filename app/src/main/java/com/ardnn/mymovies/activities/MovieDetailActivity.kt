@@ -65,12 +65,14 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetai
         loadMovieData()
 
         // if button clicked
-        binding.btnBackMovieDetail.setOnClickListener(this)
-        binding.btnFavoriteMovieDetail.setOnClickListener(this)
-        binding.btnHomeMovieDetail.setOnClickListener(this)
-        binding.clWrapperSynopsisMovieDetail.setOnClickListener(this)
-        binding.ivImgsPostersMovieDetail.setOnClickListener(this)
-        binding.ivImgsBackdropsMovieDetail.setOnClickListener(this)
+        with (binding) {
+            btnBackMovieDetail.setOnClickListener(this@MovieDetailActivity)
+            btnFavoriteMovieDetail.setOnClickListener(this@MovieDetailActivity)
+            btnHomeMovieDetail.setOnClickListener(this@MovieDetailActivity)
+            clWrapperSynopsisMovieDetail.setOnClickListener(this@MovieDetailActivity)
+            ivImgsPostersMovieDetail.setOnClickListener(this@MovieDetailActivity)
+            ivImgsBackdropsMovieDetail.setOnClickListener(this@MovieDetailActivity)
+        }
     }
 
     override fun onClick(v: View?) {
@@ -126,42 +128,46 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetai
         // movie
         movieId = intent.getIntExtra(EXTRA_ID, 0)
 
-        // genres
-        binding.rvGenreMovieDetail.layoutManager = LinearLayoutManager(
-            this,
-            LinearLayoutManager.HORIZONTAL,
-            false)
+        with (binding) {
+            // genres
+            rvGenreMovieDetail.layoutManager = LinearLayoutManager(
+                this@MovieDetailActivity,
+                LinearLayoutManager.HORIZONTAL,
+                false)
 
-        // casts
-        binding.rvCastsMovieDetail.layoutManager = LinearLayoutManager(
-            this,
-            LinearLayoutManager.HORIZONTAL,
-            false)
+            // casts
+            rvCastsMovieDetail.layoutManager = LinearLayoutManager(
+                this@MovieDetailActivity,
+                LinearLayoutManager.HORIZONTAL,
+                false)
 
-        // videos
-        binding.rvVideosMovieDetail.layoutManager = LinearLayoutManager(
-            this,
-            LinearLayoutManager.HORIZONTAL,
-            false)
+            // videos
+            rvVideosMovieDetail.layoutManager = LinearLayoutManager(
+                this@MovieDetailActivity,
+                LinearLayoutManager.HORIZONTAL,
+                false)
 
-        // similar movies
-        binding.rvSimilarMovies.layoutManager = LinearLayoutManager(
-            this,
-            LinearLayoutManager.HORIZONTAL,
-            false)
+            // similar movies
+            rvSimilarMovies.layoutManager = LinearLayoutManager(
+                this@MovieDetailActivity,
+                LinearLayoutManager.HORIZONTAL,
+                false)
 
-        // recommendations
-        binding.rvRecommendationsMovieDetail.layoutManager = LinearLayoutManager(
-            this,
-            LinearLayoutManager.HORIZONTAL,
-            false)
+            // recommendations
+            rvRecommendationsMovieDetail.layoutManager = LinearLayoutManager(
+                this@MovieDetailActivity,
+                LinearLayoutManager.HORIZONTAL,
+                false)
 
-        // set btn favorite
-        runBlocking {
-            isFavorite = favoriteViewModel.isMovieExists(movieId)
+            // set btn favorite
+            runBlocking {
+                isFavorite = favoriteViewModel.isMovieExists(movieId)
+            }
+            btnFavoriteMovieDetail.setImageResource(
+                if (isFavorite) R.drawable.ic_favorite_true else R.drawable.ic_favorite_false)
+
         }
-        binding.btnFavoriteMovieDetail.setImageResource(
-            if (isFavorite) R.drawable.ic_favorite_true else R.drawable.ic_favorite_false)
+
     }
 
 
@@ -264,8 +270,12 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetai
         MovieRepository.getMovieCasts(movieId, object : CastsCallback {
             override fun onSuccess(castList: List<Cast>) {
                 // setup recyclerview casts
-                castsAdapter = CastsAdapter(castList, this@MovieDetailActivity)
-                binding.rvCastsMovieDetail.adapter = castsAdapter
+                if (castList.isNotEmpty()) {
+                    castsAdapter = CastsAdapter(castList, this@MovieDetailActivity)
+                    binding.rvCastsMovieDetail.adapter = castsAdapter
+                } else {
+                    binding.tvCastsEmpty.visibility = View.VISIBLE
+                }
             }
 
             override fun onFailure(message: String) {
@@ -295,9 +305,13 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetai
         MovieRepository.getSimilarMovies(movieId, object : MovieOutlineCallback {
             override fun onSuccess(movieOutlineList: MutableList<MovieOutline>) {
                 // setup recyclerview similar movies
-                similarAdapter = MoviesSecondaryAdapter(movieOutlineList)
-                similarAdapter.setFilmClickListener(this@MovieDetailActivity)
-                binding.rvSimilarMovies.adapter = similarAdapter
+                if (movieOutlineList.isNotEmpty()) {
+                    similarAdapter = MoviesSecondaryAdapter(movieOutlineList)
+                    similarAdapter.setFilmClickListener(this@MovieDetailActivity)
+                    binding.rvSimilarMovies.adapter = similarAdapter
+                } else {
+                    binding.tvSimilarEmpty.visibility = View.VISIBLE
+                }
             }
 
             override fun onFailure(message: String) {
@@ -311,9 +325,13 @@ class MovieDetailActivity : AppCompatActivity(), View.OnClickListener, FilmDetai
         MovieRepository.getMovieRecommendations(movieId, object : MovieOutlineCallback {
             override fun onSuccess(movieOutlineList: MutableList<MovieOutline>) {
                 // setup recyclerview recommendations
-                recommendationsAdapter = MoviesSecondaryAdapter(movieOutlineList)
-                recommendationsAdapter.setFilmClickListener(this@MovieDetailActivity)
-                binding.rvRecommendationsMovieDetail.adapter = recommendationsAdapter
+                if (movieOutlineList.isNotEmpty()) {
+                    recommendationsAdapter = MoviesSecondaryAdapter(movieOutlineList)
+                    recommendationsAdapter.setFilmClickListener(this@MovieDetailActivity)
+                    binding.rvRecommendationsMovieDetail.adapter = recommendationsAdapter
+                } else {
+                    binding.tvRecommendationsEmpty.visibility = View.VISIBLE
+                }
             }
 
             override fun onFailure(message: String) {

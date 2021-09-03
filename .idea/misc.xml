@@ -11,6 +11,7 @@
         <entry key="app/src/main/res/drawable/ic_close_yellow.xml" value="0.20052083333333334" />
         <entry key="app/src/main/res/drawable/ic_delete_yellow.xml" value="0.35833333333333334" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_movie_detail.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_splash.xml" value="0.67" />
         <entry key="app/src/main/res/layout/activity_splash_rerun.xml" value="0.3421875" />
         <entry key="app/src/main/res/layout/fragment_airing_today.xml" value="0.184375" />
