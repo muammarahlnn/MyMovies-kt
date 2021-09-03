@@ -1,30 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".fragments.favorite.FavoriteFragment">
+    android:background="@color/black_taskbar"
+    android:paddingHorizontal="24dp"
+    tools:context=".fragments.favorite.FavoriteMoviesFragment">
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tl_favorite"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/black_primary"
-        app:tabTextAppearance="@style/MyCustomTextAppearance"
-        app:tabMode="scrollable"
-        app:tabGravity="fill"
-        app:tabMaxWidth="0dp"
-        app:tabTextColor="@color/gray_primary"
-        app:tabSelectedTextColor="@color/yellow_primary"
-        app:tabIndicatorColor="@color/gray_border"
-        />
-
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/vp2_favorite"
-        android:layout_width="match_parent"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_favorite"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_below="@id/tl_favorite" />
+        android:layout_marginTop="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:itemCount="1"
+        tools:listitem="@layout/item_rv_favorite"/>
 
-</RelativeLayout>
+    <TextView
+        android:id="@+id/tv_empty_favorite"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_medium"
+        android:textAlignment="center"
+        android:textColor='@color/yellow_primary'
+        android:textSize="21sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
+</androidx.constraintlayout.widget.ConstraintLayout>

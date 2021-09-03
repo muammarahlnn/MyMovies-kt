@@ -1,83 +1,101 @@
 package com.ardnn.mymovies.fragments.favorite
 
-import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
-import android.view.*
-import android.widget.Toast
 import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.ardnn.mymovies.R
-import com.ardnn.mymovies.adapters.FavoritePagerAdapter
+import com.ardnn.mymovies.activities.MainActivity
+import com.ardnn.mymovies.activities.MovieDetailActivity
+import com.ardnn.mymovies.activities.TvShowDetailActivity
+import com.ardnn.mymovies.adapters.FavoriteMoviesAdapter
+import com.ardnn.mymovies.adapters.FavoriteTvShowsAdapter
+import com.ardnn.mymovies.database.entities.FavoriteMovies
+import com.ardnn.mymovies.database.entities.FavoriteTvShows
 import com.ardnn.mymovies.database.viewmodels.FavoriteFilmViewModel
 import com.ardnn.mymovies.databinding.FragmentFavoriteBinding
-import com.ardnn.mymovies.helpers.Utils
-import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayoutMediator
+import com.ardnn.mymovies.listeners.FavoriteClickListener
+import com.ardnn.mymovies.listeners.SingleClickListener
+import com.ardnn.mymovies.models.Movie
 
-class FavoriteFragment : Fragment() {
+class FavoriteFragment : Fragment(), FavoriteClickListener {
 
-    // view binding
+    companion object {
+        private const val ARG_SECTION_NUMBER = "section_number"
+
+        fun newInstance(index: Int) =
+            FavoriteFragment().apply {
+                arguments = Bundle().apply {
+                    putInt(ARG_SECTION_NUMBER, index)
+                }
+            }
+    }
+
     private var _binding: FragmentFavoriteBinding? = null
     private val binding get() = _binding!!
-
-    // others
     private lateinit var viewModel: FavoriteFilmViewModel
-    private lateinit var favoritePagerAdapter: FavoritePagerAdapter
-    private val isListsEmpty = booleanArrayOf(
-        false, // favorite movie list
-        false // favorite tv show list
-    )
-    private var pos: Int = 0
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
+    private var section = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
+    ): View? {
         // Inflate the layout for this fragment
         _binding = FragmentFavoriteBinding.inflate(inflater, container, false)
 
-        // initialize view model
+        // get section page
+        section = arguments?.getInt(ARG_SECTION_NUMBER, 0) ?: 0
+
+        // set recyclerview layout
+        binding.rvFavorite.layoutManager = LinearLayoutManager(activity)
+
+        // get favorite ada depends on its page
         viewModel = ViewModelProvider(this).get(FavoriteFilmViewModel::class.java)
+        when (section) {
+            0 ->  { // favorite movies
+                viewModel.favoriteMovieList.observe(viewLifecycleOwner, { favoriteMovieList ->
+                    val adapter = FavoriteMoviesAdapter(favoriteMovieList, this)
+                    with (binding) {
+                        // set recyclerview
+                        rvFavorite.adapter = adapter
 
-        // set viewpager
-        favoritePagerAdapter = FavoritePagerAdapter(activity)
-        binding.vp2Favorite.adapter = favoritePagerAdapter
-        binding.vp2Favorite.currentItem = 0
-
-        // set tablayout
-        TabLayoutMediator(binding.tlFavorite, binding.vp2Favorite) { tab: TabLayout.Tab, position: Int ->
-            tab.text = "OBJECT ${(position + 1)}"
-        }.attach()
-        binding.tlFavorite.getTabAt(0)?.text = "Movies"
-        binding.tlFavorite.getTabAt(1)?.text = "TV Shows"
-        Utils.equalingEachTabWidth(binding.tlFavorite) // to allow equal width for each tab, while (TabLayout.MODE_SCROLLABLE)
-
-        // check if favorites is empty or not
-        viewModel.favoriteMovieList.observe(viewLifecycleOwner, { favoriteMovieList ->
-            if (favoriteMovieList.isEmpty()) {
-                isListsEmpty[0] = true
+                        // check if favorite movies is empty then show alert to user and vice versa
+                        if (favoriteMovieList.isEmpty()) {
+                            tvEmptyFavorite.text = resources.getString(R.string.empty_favorite_movies)
+                            tvEmptyFavorite.visibility = View.VISIBLE
+                        } else {
+                            tvEmptyFavorite.visibility = View.GONE
+                        }
+                    }
+                })
             }
-        })
-        viewModel.favoriteTvShowList.observe(viewLifecycleOwner, { favoriteTvShowList ->
-            if (favoriteTvShowList.isEmpty()) {
-                isListsEmpty[1] = true
-            }
-        })
+            1 -> { // favorite tv shows
+                viewModel.favoriteTvShowList.observe(viewLifecycleOwner, { favoriteTvShowList ->
+                    val adapter = FavoriteTvShowsAdapter(favoriteTvShowList, this)
+                    with (binding) {
+                        // set recyclerview
+                        rvFavorite.adapter = adapter
 
-        // get tab position
-        binding.tlFavorite.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                pos = tab?.position ?: -1
-            }
+                        // check if favorite tv shows is empty then show alert to user and vice versa
+                        if (favoriteTvShowList.isEmpty()) {
+                            tvEmptyFavorite.text = resources.getString(R.string.empty_favorite_tv_shows)
+                            tvEmptyFavorite.visibility = View.VISIBLE
+                        } else {
+                            tvEmptyFavorite.visibility = View.GONE
+                        }
+                    }
 
-            override fun onTabUnselected(tab: TabLayout.Tab?) {}
-            override fun onTabReselected(tab: TabLayout.Tab?) {}
-        })
+                })
+            }
+            else -> {
+                // show alert to user
+                // that error occurred
+            }
+        }
 
         return binding.root
     }
@@ -87,66 +105,25 @@ class FavoriteFragment : Fragment() {
         _binding = null
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
+    override fun onItemClicked(favoriteMovie: FavoriteMovies) {
+        // set nav key
+        MainActivity.setNavKey(4)
 
-        menu.clear()
-        inflater.inflate(R.menu.item_toolbar_delete, menu)
+        // to movie detail
+        val toMovieDetail = Intent(activity, MovieDetailActivity::class.java)
+        toMovieDetail.putExtra(MovieDetailActivity.EXTRA_ID, favoriteMovie.id)
+        startActivity(toMovieDetail)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.toolbar_item_delete) {
-            when (pos) {
-                0 -> deleteAllFavorites(0)
-                1 -> deleteAllFavorites(1)
-                else -> {
-                    Toast.makeText(
-                        activity,
-                        "Can't cleared favorites currently due an error occurred",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
-        }
-        return super.onOptionsItemSelected(item)
+    override fun onItemClicked(favoriteTvShow: FavoriteTvShows) {
+        // set nav key
+        MainActivity.setNavKey(4)
+
+        // to tv show detail
+        val toTvShowDetail = Intent(activity, TvShowDetailActivity::class.java)
+        toTvShowDetail.putExtra(TvShowDetailActivity.EXTRA_ID, favoriteTvShow.id)
+        startActivity(toTvShowDetail)
     }
 
-    private fun deleteAllFavorites(tabPosition: Int) {
-        val flag: Boolean
-        val favoritesType: String
-        if (tabPosition == 0) {
-            flag = isListsEmpty[0]
-            favoritesType = "movies"
 
-        } else {
-            flag = isListsEmpty[1]
-            favoritesType = "tv shows"
-        }
-
-        // check if favorites is already empty
-        if (flag) {
-            Toast.makeText(
-                activity,
-                "Your favorite $favoritesType is already empty",
-                Toast.LENGTH_SHORT
-            ).show()
-            return
-        }
-
-        // create an alert
-        val alert = AlertDialog.Builder(requireContext())
-        alert.setMessage("Are you sure want to clear your $favoritesType?")
-        alert.setPositiveButton("Yes") { _, _ ->
-            if (tabPosition == 0) viewModel.deleteAllMovies()
-            else viewModel.deleteALlTvShows()
-
-            Toast.makeText(
-                activity,
-                "Your favorite $favoritesType successfully cleared",
-                Toast.LENGTH_SHORT
-            ).show()
-        }
-        alert.setNegativeButton("No", null)
-        alert.create().show()
-    }
 }

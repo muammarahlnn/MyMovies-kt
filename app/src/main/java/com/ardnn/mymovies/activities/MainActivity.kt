@@ -12,7 +12,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import com.ardnn.mymovies.R
 import com.ardnn.mymovies.databinding.ActivityMainBinding
-import com.ardnn.mymovies.fragments.favorite.FavoriteFragment
+import com.ardnn.mymovies.fragments.favorite.FavoritePagerFragment
 import com.ardnn.mymovies.fragments.movies.MoviesPagerFragment
 import com.ardnn.mymovies.fragments.recent.RecentFragment
 import com.ardnn.mymovies.fragments.tvshows.TvShowsPagerFragment
@@ -101,7 +101,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
             R.id.item_favorite_main -> {
                 tvSection.text = resources.getString(R.string.favorite)
                 ivIcon.setImageResource(R.drawable.ic_favorite_false)
-                selectedFragment = FavoriteFragment()
+                selectedFragment = FavoritePagerFragment()
             }
         }
 

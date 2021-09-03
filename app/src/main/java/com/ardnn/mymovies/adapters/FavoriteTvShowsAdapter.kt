@@ -8,11 +8,12 @@ import com.ardnn.mymovies.R
 import com.ardnn.mymovies.database.entities.FavoriteTvShows
 import com.ardnn.mymovies.databinding.ItemRvFavoriteBinding
 import com.ardnn.mymovies.helpers.Utils
+import com.ardnn.mymovies.listeners.FavoriteClickListener
 import com.ardnn.mymovies.listeners.SingleClickListener
 
 class FavoriteTvShowsAdapter(
     private val favoriteTvShowList: List<FavoriteTvShows>,
-    private val clickListener: SingleClickListener<FavoriteTvShows>
+    private val clickListener: FavoriteClickListener
 ) : RecyclerView.Adapter<FavoriteTvShowsAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -31,7 +32,7 @@ class FavoriteTvShowsAdapter(
     }
 
 
-    inner class ViewHolder(itemView: View, clickListener: SingleClickListener<FavoriteTvShows>)
+    inner class ViewHolder(itemView: View, clickListener: FavoriteClickListener)
         : RecyclerView.ViewHolder(itemView) {
         private val binding = ItemRvFavoriteBinding.bind(itemView)
 
